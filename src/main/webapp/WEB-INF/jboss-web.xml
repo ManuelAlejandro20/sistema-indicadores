@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-web version="14.0" xmlns="http://www.jboss.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLoxation="http://www.jboss.com/xml/ns/javaee http://www.jboss.org/schema/jbossas/jboss-web_14_0.xsd">
+  <context-root>/SistemaIndicadores-1.0-SNAPSHOT</context-root>
+      <security-domain flushOnSessionInvalidation="true">DvcmeCredencialesDomain</security-domain>
+</jboss-web>
