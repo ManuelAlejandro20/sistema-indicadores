@@ -68,6 +68,7 @@
             <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
             <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
             <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
         </auth-constraint>
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
@@ -99,5 +100,8 @@
         <description></description>
         <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
     </security-role>                    
-    
+    <security-role>
+        <description></description>
+        <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+    </security-role>             
 </web-app>
