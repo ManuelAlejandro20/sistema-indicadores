@@ -2,13 +2,14 @@
  * New Grid CSS
  * Only necessary to add if your PrimeFaces version is older than 5.3.14
  */
+
 .ui-g {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap;    
 }
             
 .ui-g:after {
