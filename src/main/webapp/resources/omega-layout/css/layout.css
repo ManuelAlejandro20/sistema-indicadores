@@ -13,6 +13,11 @@
 /* UI ICONS */
 /* positioning */
 
+.ui-g-toolbar-adm{
+    padding: 1em;
+    margin-top: 50px;
+}
+
 .ui-g-title{
     margin-top: 15px;
 }
@@ -1861,6 +1866,8 @@ html {
         .wrapper .sidebar ul li > a:hover {
           padding-left: 20px;
           color: #2399e5; }
+        .submenu:hover {
+          color: #ffbf95 !important; }        
           .wrapper .sidebar ul li > a:hover .menu-badge {
             color:   #ffffff; }
       .wrapper .sidebar ul li.active-menuitem > a {
@@ -1879,7 +1886,9 @@ html {
           text-align: center;
           font-size: 16px; }
           .wrapper .sidebar ul li.active-menuitem > a .fa:last-child:before {
-            content: ""; }
+            font-family: "Font Awesome 5 Free";
+            content: "\f106";
+            font-weight: 600;}
       .wrapper .sidebar ul li.active-menuitem > ul {
         background-color: #FF6600; }
       .wrapper .sidebar ul li > ul {
