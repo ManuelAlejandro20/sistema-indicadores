@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.2" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-  <persistence-unit name="InformacionInteractivaAdminPU" transaction-type="JTA">
-    <jta-data-source>java:jboss/datasources/DvcmeInformacionExternaAdminDS</jta-data-source>
+  <persistence-unit name="IndicadoresAdminPU" transaction-type="JTA">
+    <jta-data-source>java:/jboss/datasources/DvcmeIndicadoresAdminDS</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!-- <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>-->
     <properties>
@@ -21,8 +21,8 @@
       <property name="hibernate.order_updates" value="true"/>
     </properties>
   </persistence-unit>
-  <persistence-unit name="InformacionInteractivaPU" transaction-type="JTA">
-    <jta-data-source>java:jboss/datasources/DvcmeInformacionExternaDS</jta-data-source>
+  <persistence-unit name="IndicadoresPU" transaction-type="JTA">
+    <jta-data-source>java:/jboss/datasources/DvcmeIndicadoresDS</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!-- <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>-->
     <properties>

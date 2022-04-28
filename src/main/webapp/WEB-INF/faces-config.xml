@@ -35,6 +35,7 @@
         <url-pattern>index.html</url-pattern>
         <url-pattern>login.xhtml</url-pattern>
         <url-pattern>faces/inicio/inicio.xhtml</url-pattern>
+        <url-pattern>faces/administracion/admin-indicadores.xhtml</url-pattern>
         <url-pattern>faces/access.xhtml</url-pattern>
         <url-pattern>faces/expired.xhtml</url-pattern>
         <url-pattern>faces/login.xhtml</url-pattern>

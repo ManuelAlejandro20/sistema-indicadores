@@ -844,7 +844,10 @@
   text-indent: 0px !important;
   text-align: center; }
   .ui-icon-search:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f002";
+    font-weight: 600;      
+    }
 
 .ui-icon-wrench {
   background-image: none !important;
