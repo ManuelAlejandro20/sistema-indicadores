@@ -10,9 +10,15 @@
         </div>
         <br></br>        
         <h:form>
+<!--            <p:commandButton value="Crear tipo de indicador" 
+                             class="btn btn-blue btn-group-align"                                     
+                             action="#{usuarioBean.cerrarSesion}"/>-->
             <p:toolbar class="ui-g-toolbar-adm">
+
                 <p:toolbarGroup>
-                    <p:commandButton type="button" value="Crear tipo de indicador" class="btn btn-blue btn-group-align"/>
+                    <p:commandButton value="Crear tipo de indicador" 
+                                     class="btn btn-blue btn-group-align"                                     
+                                     action="/faces/creacion/crear-tipo-indicador.xhtml?faces-redirect=true"/>
                 </p:toolbarGroup>
 
                 <p:toolbarGroup align="right">

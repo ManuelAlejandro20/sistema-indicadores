@@ -1,3 +1,8 @@
+.label-creacion-tipo-indicador{
+    width: 50% !important;
+    text-align: left !important;
+}
+
 .label {
         width: 20%;
         padding: 4px;

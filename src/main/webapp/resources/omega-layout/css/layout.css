@@ -13,6 +13,15 @@
 /* UI ICONS */
 /* positioning */
 
+.formulario{
+    border: orange !important;
+}
+
+.card-creacion-tipo-indicador {
+  background-color: #ffffff;
+  padding: 0em !important;
+  margin-top: 0px !important; }
+
 .ui-g-toolbar-adm{
     padding: 1em;
     margin-top: 50px;
@@ -1621,6 +1630,16 @@ html {
 
 .wrapper {
   padding: 0; }
+  .wrapper .crear-tipo-indicadores-table{
+      transition: width 0.3s;
+  }
+  .wrapper .select-crear-tipo-indicadores{
+      transition: width 0.3s;
+  }  
+  .wrapper .text-area-tipo-indicadores{
+      transition: width 0.3s;
+      width: 126px !important;
+  }     
   .wrapper .topbar {
     -moz-transition: left 0.3s;
     -o-transition: left 0.3s;
@@ -1944,7 +1963,20 @@ html {
   .wrapper.sidebar-inactive-l .sidebar {
     margin-left: -250px; }
   .wrapper.sidebar-inactive-l .footer {
-    margin-left: 0; } }
+    margin-left: 0; } 
+  .wrapper.sidebar-inactive-l .crear-tipo-indicadores-table{
+    transition: width 0.3s;
+    width: 430px; } 
+  .wrapper.sidebar-inactive-l .select-crear-tipo-indicadores{
+      transition: width 0.3s;
+      width: 74% !important;
+  }    
+  .wrapper.sidebar-inactive-l .text-area-tipo-indicadores{
+      transition: width 0.3s;
+      width: 163px !important;
+  }      
+}
+
 @media (max-width: 1024px) {
   .wrapper .topbar {
     left: 0; }
@@ -3147,7 +3179,10 @@ h2 {
   color: #fff;
   margin-top: -2px; }
   .ui-messages .ui-messages-error-icon:before, .ui-message .ui-message-error-icon:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f06a";
+    font-weight: 600;  
+  }
 
 .ui-message .ui-message-error-icon {
   margin-top: -1px;
