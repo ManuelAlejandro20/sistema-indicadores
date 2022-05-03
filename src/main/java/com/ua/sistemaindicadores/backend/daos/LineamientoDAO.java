@@ -28,6 +28,7 @@ public class LineamientoDAO extends AbstractDAO<SelectLineamiento>{
     public LineamientoDAO() {
         super(SelectLineamiento.class);
     }
+    
     public List<SelectLineamiento> obtenerLineamientos()
     {
         return getEntityManager()

@@ -5,13 +5,13 @@
  */
 package com.ua.sistemaindicadores.backend.services;
 
+import com.ua.sistemaindicadores.backend.daos.IndicadorTipoDAO;
 import com.ua.sistemaindicadores.backend.daos.LineamientoDAO;
-import com.ua.sistemaindicadores.backend.entities.SelectLineamiento;
+import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.jboss.ejb3.annotation.SecurityDomain;
-import java.util.List;
 
 /**
  *
@@ -20,14 +20,15 @@ import java.util.List;
 @Stateless
 @SecurityDomain("DvcmeCredencialesDomain")
 @RolesAllowed({"ADMINISTRADOR"})
-public class IndicadorService {
+public class TipoIndicadorService {
 
     @Inject
-    private LineamientoDAO lineamientoDAO;
+    private IndicadorTipoDAO indicadorTipoDAO;
 
-    public List<SelectLineamiento> obtenerLineamientos()
-    {
-        return lineamientoDAO.obtenerLineamientos();
+    @RolesAllowed({"ADMINISTRADOR"})
+    public void crearTipoIndicador(IndicadorTipo indicadorTipo) {
+        indicadorTipoDAO.create(indicadorTipo);
     }
    
 }
+
