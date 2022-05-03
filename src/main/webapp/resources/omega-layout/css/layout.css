@@ -1649,7 +1649,7 @@ html {
   }  
   .wrapper .text-area-tipo-indicadores{
       transition: width 0.3s;
-      width: 126px !important;
+      width: 80% !important;
   }     
   .wrapper .topbar {
     -moz-transition: left 0.3s;
@@ -1977,14 +1977,14 @@ html {
     margin-left: 0; } 
   .wrapper.sidebar-inactive-l .crear-tipo-indicadores-table{
     transition: width 0.3s;
-    width: 430px; } 
+    width: 100%; } 
   .wrapper.sidebar-inactive-l .select-crear-tipo-indicadores{
       transition: width 0.3s;
       width: 74% !important;
   }    
   .wrapper.sidebar-inactive-l .text-area-tipo-indicadores{
       transition: width 0.3s;
-      width: 163px !important;
+      width: 80% !important;
   }      
 }
 
