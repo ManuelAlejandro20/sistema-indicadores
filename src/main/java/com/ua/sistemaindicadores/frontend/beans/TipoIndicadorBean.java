@@ -41,7 +41,7 @@ public class TipoIndicadorBean implements Serializable {
     @PostConstruct
     public void initalize(){
         nuevoIndicadorTipo = new IndicadorTipo();
-        System.out.println("Inicio Bean Tipo Indicador");
+        System.out.println("Inicio Bean Tipo Indicador");     
     }
     
     /**

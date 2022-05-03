@@ -13,6 +13,14 @@
 /* UI ICONS */
 /* positioning */
 
+
+.ui-panel-titlebar{
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#004AAE),color-stop(100%,#003274));
+    color: white;
+    border-bottom: 1px solid #004AAE !important;  
+}
+
+
 .formulario{
     border: 1px solid #004AAE !important;    
 }
@@ -30,11 +38,11 @@
     background: white !important;
 }
 
-.ui-widget-header{
+/*.ui-widget-header{
     background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#004AAE),color-stop(100%,#003274));
     color: white;
     border-bottom: 1px solid #004AAE !important;    
-}
+}*/
 
 .card-creacion-tipo-indicador {
   background-color: #ffffff;
@@ -46,6 +54,12 @@
     background: -webkit-linear-gradient(top,#f6f7f9 0,#ebedf0 100%);
     border-bottom: 1px solid #d9d9d9 !important;
     margin-top: 50px;
+}
+
+.ui-g-tabla-adm{
+    background: -webkit-linear-gradient(top,#f6f7f9 0,#ebedf0 100%) !important;
+    color: black;
+    border-bottom: 1px solid #d9d9d9 !important;
 }
 
 .ui-g-title{
@@ -2996,7 +3010,7 @@ h2 {
     display: none; }
   .ui-paginator > a:before {
     position: relative;
-    top: 1px; }
+    top: 3px; }
 .ui-paginator .ui-paginator-next {
   background-image: none !important;
   display: inline-block;
@@ -3008,7 +3022,10 @@ h2 {
   text-indent: 0px !important;
   text-align: center; }
   .ui-paginator .ui-paginator-next:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f04b";
+    font-weight: 600;   
+  }
 .ui-paginator .ui-paginator-last {
   background-image: none !important;
   display: inline-block;
@@ -3020,7 +3037,10 @@ h2 {
   text-indent: 0px !important;
   text-align: center; }
   .ui-paginator .ui-paginator-last:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f051";
+    font-weight: 600;  
+  }
 .ui-paginator .ui-paginator-prev {
   background-image: none !important;
   display: inline-block;
@@ -3037,7 +3057,10 @@ h2 {
   -o-transform: rotate(180deg);
   transform: rotate(180deg); }
   .ui-paginator .ui-paginator-prev:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f04b";
+    font-weight: 600; 
+  }
 .ui-paginator .ui-paginator-first {
   background-image: none !important;
   display: inline-block;
@@ -3049,7 +3072,10 @@ h2 {
   text-indent: 0px !important;
   text-align: center; }
   .ui-paginator .ui-paginator-first:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f048";
+    font-weight: 600;  
+  }
 .ui-paginator .ui-paginator-pages {
   padding: 0;
   vertical-align: top; }
