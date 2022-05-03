@@ -14,13 +14,26 @@
 /* positioning */
 
 .formulario{
-    border: 1px solid #FF6600 !important;    
+    border: 1px solid #004AAE !important;    
+}
+
+.ui-button-formulario {
+    border: 1px solid #ff6600 !important;
+    color: #fff;
+    background: #ff6600 !important;
+    transition: all .4s ease !important;
+}
+
+.ui-button-formulario:hover {
+    border: 1px solid #ff6600 !important;
+    color: black !important;
+    background: white !important;
 }
 
 .ui-widget-header{
-    background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#ff6600),color-stop(100%,#dd5800));
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#004AAE),color-stop(100%,#003274));
     color: white;
-    border-bottom: 1px solid #FF6600 !important;    
+    border-bottom: 1px solid #004AAE !important;    
 }
 
 .card-creacion-tipo-indicador {
