@@ -23,9 +23,9 @@ import javax.inject.Inject;
  *
  * @author aleja
  */
-@Named(value = "tipoIndicadorBean")
+@Named(value = "crearTipoIndicadorBean")
 @ViewScoped
-public class TipoIndicadorBean implements Serializable {
+public class CrearTipoIndicadorBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -41,13 +41,13 @@ public class TipoIndicadorBean implements Serializable {
     @PostConstruct
     public void initalize(){
         nuevoIndicadorTipo = new IndicadorTipo();
-        System.out.println("Inicio Bean Tipo Indicador");     
+        System.out.println("Inicio Bean Crear Tipo Indicador");     
     }
     
     /**
      * Creates a new instance of convenioBean
      */
-    public TipoIndicadorBean() {
+    public CrearTipoIndicadorBean() {
     }
 
     public void crearTipoIndicador() throws IOException

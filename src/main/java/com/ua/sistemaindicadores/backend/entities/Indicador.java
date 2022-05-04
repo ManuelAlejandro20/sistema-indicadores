@@ -26,7 +26,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -88,7 +87,7 @@ public class Indicador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "num_indicador")
-    private int numIndicador;
+    private Integer numIndicador;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -97,11 +96,11 @@ public class Indicador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "indicador")
-    private int indicador;
+    private Integer indicador;
     @Basic(optional = false)
     @NotNull
     @Column(name = "ajuste_pdei")
-    private double ajustePdei;
+    private Double ajustePdei;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -115,11 +114,11 @@ public class Indicador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "plazo")
-    private int plazo;
+    private Integer plazo;
     @Basic(optional = false)
     @NotNull
     @Column(name = "version")
-    private int version;
+    private Integer version;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -133,19 +132,19 @@ public class Indicador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "anio_cumplimiento")
-    private int anioCumplimiento;
+    private Integer anioCumplimiento;
     @Basic(optional = false)
     @NotNull
     @Column(name = "logro")
-    private int logro;
+    private Integer logro;
     @Basic(optional = false)
     @NotNull
     @Column(name = "frecuencia_medicion")
-    private int frecuenciaMedicion;
+    private Integer frecuenciaMedicion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "medio_verificaciom")
-    private int medioVerificaciom;
+    private Integer medioVerificaciom;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -159,7 +158,7 @@ public class Indicador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "unidad_proveedora_id")
-    private int unidadProveedoraId;
+    private Integer unidadProveedoraId;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_creacion")
@@ -184,12 +183,10 @@ public class Indicador implements Serializable {
     @NotNull
     @Lob
     @Column(name = "estado")
-    private byte[] estado;
-    @ManyToMany(mappedBy = "indicadorCollection")
-    private Collection<Anio> anioCollection;
+    private Short estado;
     @JoinColumn(name = "clasificacion_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Clasificacion clasificacionId;
+    private Clasificacion clasificacionId;    
 
     public Indicador() {
     }
@@ -198,7 +195,7 @@ public class Indicador implements Serializable {
         this.id = id;
     }
 
-    public Indicador(Integer id, String fuente, String aplicaLineamiento, String aplicaObjetivo, int numIndicador, String descripcionIndicador, int indicador, double ajustePdei, String unidadRepresentacion, String responsable, int plazo, int version, String lineaBase, String metas, int anioCumplimiento, int logro, int frecuenciaMedicion, int medioVerificaciom, String formaCalculo, String fuenteInformacion, int unidadProveedoraId, Date fechaCreacion, Date fechaActualizacion, Date anioIngresoSistema, String estadoActividad, byte[] estado) {
+    public Indicador(Integer id, String fuente, String aplicaLineamiento, String aplicaObjetivo, Integer numIndicador, String descripcionIndicador, Integer indicador, Double ajustePdei, String unidadRepresentacion, String responsable, Integer plazo, Integer version, String lineaBase, String metas, Integer anioCumplimiento, Integer logro, Integer frecuenciaMedicion, Integer medioVerificaciom, String formaCalculo, String fuenteInformacion, Integer unidadProveedoraId, Date fechaCreacion, Date fechaActualizacion, Date anioIngresoSistema, String estadoActividad, Short estado) {
         this.id = id;
         this.fuente = fuente;
         this.aplicaLineamiento = aplicaLineamiento;
@@ -259,11 +256,11 @@ public class Indicador implements Serializable {
         this.aplicaObjetivo = aplicaObjetivo;
     }
 
-    public int getNumIndicador() {
+    public Integer getNumIndicador() {
         return numIndicador;
     }
 
-    public void setNumIndicador(int numIndicador) {
+    public void setNumIndicador(Integer numIndicador) {
         this.numIndicador = numIndicador;
     }
 
@@ -275,19 +272,19 @@ public class Indicador implements Serializable {
         this.descripcionIndicador = descripcionIndicador;
     }
 
-    public int getIndicador() {
+    public Integer getIndicador() {
         return indicador;
     }
 
-    public void setIndicador(int indicador) {
+    public void setIndicador(Integer indicador) {
         this.indicador = indicador;
     }
 
-    public double getAjustePdei() {
+    public Double getAjustePdei() {
         return ajustePdei;
     }
 
-    public void setAjustePdei(double ajustePdei) {
+    public void setAjustePdei(Double ajustePdei) {
         this.ajustePdei = ajustePdei;
     }
 
@@ -307,19 +304,19 @@ public class Indicador implements Serializable {
         this.responsable = responsable;
     }
 
-    public int getPlazo() {
+    public Integer getPlazo() {
         return plazo;
     }
 
-    public void setPlazo(int plazo) {
+    public void setPlazo(Integer plazo) {
         this.plazo = plazo;
     }
 
-    public int getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
@@ -339,35 +336,35 @@ public class Indicador implements Serializable {
         this.metas = metas;
     }
 
-    public int getAnioCumplimiento() {
+    public Integer getAnioCumplimiento() {
         return anioCumplimiento;
     }
 
-    public void setAnioCumplimiento(int anioCumplimiento) {
+    public void setAnioCumplimiento(Integer anioCumplimiento) {
         this.anioCumplimiento = anioCumplimiento;
     }
 
-    public int getLogro() {
+    public Integer getLogro() {
         return logro;
     }
 
-    public void setLogro(int logro) {
+    public void setLogro(Integer logro) {
         this.logro = logro;
     }
 
-    public int getFrecuenciaMedicion() {
+    public Integer getFrecuenciaMedicion() {
         return frecuenciaMedicion;
     }
 
-    public void setFrecuenciaMedicion(int frecuenciaMedicion) {
+    public void setFrecuenciaMedicion(Integer frecuenciaMedicion) {
         this.frecuenciaMedicion = frecuenciaMedicion;
     }
 
-    public int getMedioVerificaciom() {
+    public Integer getMedioVerificaciom() {
         return medioVerificaciom;
     }
 
-    public void setMedioVerificaciom(int medioVerificaciom) {
+    public void setMedioVerificaciom(Integer medioVerificaciom) {
         this.medioVerificaciom = medioVerificaciom;
     }
 
@@ -387,11 +384,11 @@ public class Indicador implements Serializable {
         this.fuenteInformacion = fuenteInformacion;
     }
 
-    public int getUnidadProveedoraId() {
+    public Integer getUnidadProveedoraId() {
         return unidadProveedoraId;
     }
 
-    public void setUnidadProveedoraId(int unidadProveedoraId) {
+    public void setUnidadProveedoraId(Integer unidadProveedoraId) {
         this.unidadProveedoraId = unidadProveedoraId;
     }
 
@@ -427,21 +424,12 @@ public class Indicador implements Serializable {
         this.estadoActividad = estadoActividad;
     }
 
-    public byte[] getEstado() {
+    public Short getEstado() {
         return estado;
     }
 
-    public void setEstado(byte[] estado) {
+    public void setEstado(Short estado) {
         this.estado = estado;
-    }
-
-    @XmlTransient
-    public Collection<Anio> getAnioCollection() {
-        return anioCollection;
-    }
-
-    public void setAnioCollection(Collection<Anio> anioCollection) {
-        this.anioCollection = anioCollection;
     }
 
     public Clasificacion getClasificacionId() {
@@ -451,6 +439,8 @@ public class Indicador implements Serializable {
     public void setClasificacionId(Clasificacion clasificacionId) {
         this.clasificacionId = clasificacionId;
     }
+    
+    
 
     @Override
     public int hashCode() {

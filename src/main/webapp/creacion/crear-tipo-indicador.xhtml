@@ -6,7 +6,7 @@
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">
         <f:metadata>
-            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.TipoIndicadorBean"/>
+            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.CrearTipoIndicadorBean"/>
         </f:metadata>        
         <div class="ui-g-12 ui-g-title align-center">
             <h2 class="border-bottom-orange align-center">Administración de tipos de indicadores</h2>   
@@ -24,7 +24,7 @@
                                 <p:outputLabel id="nombreLabel" value="Nombre tipo de indicador: *"/>
                                 <p:inputText 
                                     id="nombre"
-                                    value="#{tipoIndicadorBean.nombreTipoIndicador}" 
+                                    value="#{crearTipoIndicadorBean.nombreTipoIndicador}" 
                                     required="true" 
                                     maxlength="10"
                                     requiredMessage="Campo nombre tipo de indicador es requerido."
@@ -34,7 +34,7 @@
                                 <p:message for="nombre"/>       
                                 <p:outputLabel id="vigenciaLabel" value="Vigencia: *"/>
                                 <p:selectOneMenu 
-                                    value="#{tipoIndicadorBean.vigencia}" 
+                                    value="#{crearTipoIndicadorBean.vigencia}" 
                                     class="select-crear-tipo-indicadores" id="vigencia" required="true" style="width: 72%;">
                                     <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
                                     <f:selectItem itemLabel="No Vigente" itemValue="NOVIGENTE"/>
@@ -43,13 +43,13 @@
                                 <p:message for="vigencia"/>                                           
                                 <p:outputLabel id="descripcionLabel" value="Descripción: *"/>
                                 <p:inputTextarea 
-                                    value="#{tipoIndicadorBean.descripcion}"
+                                    value="#{crearTipoIndicadorBean.descripcion}"
                                     required="true" requiredMessage="Campo descripción es requerido." class="text-area-tipo-indicadores" id="descripcion" rows="8" cols="18"/>
                                 <p:message for="descripcionLabel"/>                                     
                                 <p:message for="descripcion"/>      
                                 <p:commandButton value="Crear tipo de indicador"  
                                                  class="ui-button-formulario"
-                                                 action="#{tipoIndicadorBean.crearTipoIndicador}"   
+                                                 action="#{crearTipoIndicadorBean.crearTipoIndicador}"   
                                                  update="@form" 
                                                  process="@this, @form"/>                                
                             </h:panelGrid>

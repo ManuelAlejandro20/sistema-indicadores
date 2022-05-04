@@ -6,23 +6,17 @@
 package com.ua.sistemaindicadores.backend.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,43 +27,54 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Anio.findAll", query = "SELECT a FROM Anio a"),
-    @NamedQuery(name = "Anio.findByFecha", query = "SELECT a FROM Anio a WHERE a.fecha = :fecha"),
-    @NamedQuery(name = "Anio.findByDescripcion", query = "SELECT a FROM Anio a WHERE a.descripcion = :descripcion"),
-    @NamedQuery(name = "Anio.findByFlag", query = "SELECT a FROM Anio a WHERE a.flag = :flag")})
+    @NamedQuery(name = "Anio.findByFlag", query = "SELECT a FROM Anio a WHERE a.flag = :flag"),
+    @NamedQuery(name = "Anio.findById", query = "SELECT a FROM Anio a WHERE a.id = :id"),
+    @NamedQuery(name = "Anio.findByFecha", query = "SELECT a FROM Anio a WHERE a.fecha = :fecha")})
 public class Anio implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "fecha")
-    private Integer fecha;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "descripcion")
-    private String descripcion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "flag")
-    private short flag;
-    @JoinTable(name = "indicador_anio", joinColumns = {
-        @JoinColumn(name = "anio_fecha", referencedColumnName = "fecha")}, inverseJoinColumns = {
-        @JoinColumn(name = "indicador_id", referencedColumnName = "id")})
-    @ManyToMany
-    private Collection<Indicador> indicadorCollection;
+    private Short flag;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "id")
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fecha")
+    private Integer fecha;
 
     public Anio() {
     }
 
-    public Anio(Integer fecha) {
+    public Anio(Integer id) {
+        this.id = id;
+    }
+
+    public Anio(Integer id, Short flag, Integer fecha) {
+        this.id = id;
+        this.flag = flag;
         this.fecha = fecha;
     }
 
-    public Anio(Integer fecha, String descripcion, short flag) {
-        this.fecha = fecha;
-        this.descripcion = descripcion;
+    public Short getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Short flag) {
         this.flag = flag;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getFecha() {
@@ -80,35 +85,10 @@ public class Anio implements Serializable {
         this.fecha = fecha;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public short getFlag() {
-        return flag;
-    }
-
-    public void setFlag(short flag) {
-        this.flag = flag;
-    }
-
-    @XmlTransient
-    public Collection<Indicador> getIndicadorCollection() {
-        return indicadorCollection;
-    }
-
-    public void setIndicadorCollection(Collection<Indicador> indicadorCollection) {
-        this.indicadorCollection = indicadorCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (fecha != null ? fecha.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -119,7 +99,7 @@ public class Anio implements Serializable {
             return false;
         }
         Anio other = (Anio) object;
-        if ((this.fecha == null && other.fecha != null) || (this.fecha != null && !this.fecha.equals(other.fecha))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -127,7 +107,7 @@ public class Anio implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ua.sistemaindicadores.backend.entities.Anio[ fecha=" + fecha + " ]";
+        return "com.ua.sistemaindicadores.backend.entities.Anio[ id=" + id + " ]";
     }
     
 }
