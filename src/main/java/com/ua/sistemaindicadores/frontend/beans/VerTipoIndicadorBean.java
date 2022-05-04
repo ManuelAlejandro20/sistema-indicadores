@@ -17,6 +17,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;  
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -34,10 +36,11 @@ public class VerTipoIndicadorBean implements Serializable {
     
     @Inject
     private TipoIndicadorLazyDataModel model;    
-    
     @Inject
     transient private TipoIndicadorService tipoIndicadorService;
         
+    private String nombreSeleccionado;
+    
     private TipoIndicadorDTO tipoIndicadorSeleccionadoDTO;
     
     @PostConstruct
@@ -67,6 +70,32 @@ public class VerTipoIndicadorBean implements Serializable {
         this.tipoIndicadorSeleccionadoDTO = tipoIndicadorSeleccionadoDTO;
     }
 
+    public String getNombreSeleccionado() {
+        return nombreSeleccionado;
+    }
+
+    public void setNombreSeleccionado(String nombreSeleccionado) {
+        this.nombreSeleccionado = nombreSeleccionado;
+    }
+    
+    //Filtros
+    
+    public void onSeleccionNombreListener() {
+        try {
+            if (nombreSeleccionado != null) {
+                model.setNombre(nombreSeleccionado);
+            } else {
+                model.setNombre(null);
+            }
+        } catch (EJBException ex) {
+            Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro nombre. Contacte al administrador.")
+                    );
+        }
+    }    
     
 
        

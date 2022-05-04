@@ -12,18 +12,16 @@
             <h2 class="border-bottom-orange align-center">Administración de Indicadores</h2>   
         </div>
         <br></br>        
-        <h:form>
-            <p:toolbar class="ui-g-toolbar-adm">
-                <p:toolbarGroup>
-                    <p:commandButton type="button" value="Crear indicador" class="btn btn-blue btn-group-align"/>
-                </p:toolbarGroup>
+        <p:toolbar class="ui-g-toolbar-adm">
+            <p:toolbarGroup>
+                <p:commandButton type="button" value="Crear indicador" class="btn btn-blue btn-group-align"/>
+            </p:toolbarGroup>
 
-                <p:toolbarGroup align="right">
-                    <p:commandButton type="button" value="Ver filtros" class="btn btn-orange btn-group-align"/>
-                    <p:commandButton type="button" value="Limpiar filtros" class="btn btn-orange"/>
-                </p:toolbarGroup>
-            </p:toolbar>
-        </h:form>
+            <p:toolbarGroup align="right">
+                <p:commandButton type="button" value="Ver filtros" class="btn btn-orange btn-group-align"/>
+                <p:commandButton type="button" value="Limpiar filtros" class="btn btn-orange"/>
+            </p:toolbarGroup>
+        </p:toolbar>
         <div class="ui-g-12 ui-md-10 align-left">
             <p:selectOneMenu id="lineamiento"
                              value="#{indicadorBean.lineamientoSeleccionado}"

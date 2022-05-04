@@ -12,25 +12,34 @@
             <h2 class="border-bottom-orange align-center">Administración de tipos de indicadores</h2>   
         </div>
         <br></br>        
-        <h:form>
-            <p:growl id="growl" sticky="true" showDetail="true"/>
-            <p:toolbar class="ui-g-toolbar-adm">
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <p:toolbar class="ui-g-toolbar-adm">
 
-                <p:toolbarGroup>
-                    <p:commandButton value="Crear tipo de indicador" 
-                                     class="btn btn-blue btn-group-align"                                     
-                                     action="/faces/creacion/crear-tipo-indicador.xhtml?faces-redirect=true"/>
-                </p:toolbarGroup>
+            <p:toolbarGroup>
+                <p:commandButton value="Crear tipo de indicador" 
+                                 class="btn btn-blue btn-group-align"                                     
+                                 action="/faces/creacion/crear-tipo-indicador.xhtml?faces-redirect=true"/>
+            </p:toolbarGroup>
 
-                <p:toolbarGroup align="right">
-                    <p:commandButton type="button" value="Ver filtros" class="btn btn-orange btn-group-align"/>
-                    <p:commandButton type="button" value="Limpiar filtros" class="btn btn-orange"/>
-                </p:toolbarGroup>
-            </p:toolbar>
-        </h:form>
+            <p:toolbarGroup align="right">
+                <p:commandButton type="button" value="Ver filtros" class="btn btn-orange btn-group-align"/>
+                <p:commandButton type="button" value="Limpiar filtros" class="btn btn-orange"/>
+            </p:toolbarGroup>
+        </p:toolbar>
+        <div class="ui-g-12  align-left">
+            <p:inputText id="nombre"
+                         value="#{verTipoIndicadorBean.nombreSeleccionado}">
+                <p:ajax event="keyup" 
+                        delay="50"
+                        listener="#{verTipoIndicadorBean.onSeleccionNombreListener}"
+                        process="@this" 
+                        update="@form:tipo_indicadores" />
+            </p:inputText>
+
+        </div>        
         <div class="ui-g-12">
             <p:dataTable class="ui-g-tabla-adm"                          
-                         id="tipoIndicadores"
+                         id="tipo_indicadores"
                          var="tipoIndicadorDTO" 
                          value="#{verTipoIndicadorBean.model}"
                          widgetVar="tablaTiposIndicador"                         
@@ -58,6 +67,7 @@
                           width="5"
                           styleClass="align-center">
                     <h:outputText value="#{tipoIndicadorDTO.nombre eq null?'Sin dato':tipoIndicadorDTO.nombre }">
+                        <f:convertNumber integerOnly="true"/>
                     </h:outputText>                    
                 </p:column>
                 <p:column headerText="Estado"

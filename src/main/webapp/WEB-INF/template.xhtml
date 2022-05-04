@@ -24,7 +24,9 @@
             <ui:include src="sidebar.xhtml" />
 
             <div class="main" >
-                <ui:insert name="content" />
+                <h:form id="form" enctype="multipart/form-data">
+                    <ui:insert name="content" />
+                </h:form>                                
             </div>
 
             <!--            <ui:include src="footer.xhtml" />-->

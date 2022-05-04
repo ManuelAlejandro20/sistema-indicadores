@@ -8,50 +8,48 @@
         <div class="ui-g-12 ui-g-title align-center">
             <h2 class="border-bottom-orange align-center">Administración de tipos de indicadores</h2>   
         </div>
-        <h:form>
-            <p:growl id="growl" showDetail="true"/>
-            <div class="ui-g-12 align-center">
-                <div class="ui-g-12 ui-md-4"></div>
-                <div class="ui-g-12 ui-md-4 ui-g-nopad">
-                    <div class="card card-creacion-tipo-indicador">                                              
-                        <p:panel class="formulario" header="EDITAR TIPO DE INDICADOR">
-                            <h:panelGrid class="crear-tipo-indicadores-table" 
-                                         width="100%"
-                                         columns="2" columnClasses="label label-creacion-tipo-indicador, value">
-                                <p:outputLabel id="nombreLabel" value="Nombre tipo de indicador: *"/>
-                                <p:inputText 
-                                    id="nombre"
-                                    required="true" 
-                                    maxlength="10"
-                                    requiredMessage="Campo nombre tipo de indicador es requerido."
-                                    style="width: 80%;"
-                                    tabindex="1"/>
-                                <p:message for="nombreLabel"/>       
-                                <p:message for="nombre"/>       
-                                <p:outputLabel id="vigenciaLabel" value="Vigencia: *"/>
-                                <p:selectOneMenu 
-                                    class="select-crear-tipo-indicadores" id="vigencia" required="true" style="width: 72%;">
-                                    <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
-                                    <f:selectItem itemLabel="No Vigente" itemValue="NOVIGENTE"/>
-                                </p:selectOneMenu>
-                                <p:message for="vigenciaLabel"/>                                     
-                                <p:message for="vigencia"/>                                           
-                                <p:outputLabel id="descripcionLabel" value="Descripción: *"/>
-                                <p:inputTextarea 
-                                    value="#{tipoIndicadorBean.descripcion}"
-                                    required="true" requiredMessage="Campo descripción es requerido." class="text-area-tipo-indicadores" id="descripcion" rows="8" cols="18"/>
-                                <p:message for="descripcionLabel"/>                                     
-                                <p:message for="descripcion"/>      
-                                <p:commandButton value="Editar tipo de indicador"  
-                                                 class="ui-button-formulario"
-                                                 update="@form" 
-                                                 process="@this, @form"/>                                
-                            </h:panelGrid>
-                        </p:panel>
-                    </div>       
-                </div>
-                <div class="ui-g-12 ui-md-4"></div>
-            </div>         
-        </h:form>        
+        <p:growl id="growl" showDetail="true"/>
+        <div class="ui-g-12 align-center">
+            <div class="ui-g-12 ui-md-4"></div>
+            <div class="ui-g-12 ui-md-4 ui-g-nopad">
+                <div class="card card-creacion-tipo-indicador">                                              
+                    <p:panel class="formulario" header="EDITAR TIPO DE INDICADOR">
+                        <h:panelGrid class="crear-tipo-indicadores-table" 
+                                     width="100%"
+                                     columns="2" columnClasses="label label-creacion-tipo-indicador, value">
+                            <p:outputLabel id="nombreLabel" value="Nombre tipo de indicador: *"/>
+                            <p:inputText 
+                                id="nombre"
+                                required="true" 
+                                maxlength="10"
+                                requiredMessage="Campo nombre tipo de indicador es requerido."
+                                style="width: 80%;"
+                                tabindex="1"/>
+                            <p:message for="nombreLabel"/>       
+                            <p:message for="nombre"/>       
+                            <p:outputLabel id="vigenciaLabel" value="Vigencia: *"/>
+                            <p:selectOneMenu 
+                                class="select-crear-tipo-indicadores" id="vigencia" required="true" style="width: 72%;">
+                                <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
+                                <f:selectItem itemLabel="No Vigente" itemValue="NOVIGENTE"/>
+                            </p:selectOneMenu>
+                            <p:message for="vigenciaLabel"/>                                     
+                            <p:message for="vigencia"/>                                           
+                            <p:outputLabel id="descripcionLabel" value="Descripción: *"/>
+                            <p:inputTextarea 
+                                value="#{tipoIndicadorBean.descripcion}"
+                                required="true" requiredMessage="Campo descripción es requerido." class="text-area-tipo-indicadores" id="descripcion" rows="8" cols="18"/>
+                            <p:message for="descripcionLabel"/>                                     
+                            <p:message for="descripcion"/>      
+                            <p:commandButton value="Editar tipo de indicador"  
+                                             class="ui-button-formulario"
+                                             update="@form" 
+                                             process="@this, @form"/>                                
+                        </h:panelGrid>
+                    </p:panel>
+                </div>       
+            </div>
+            <div class="ui-g-12 ui-md-4"></div>
+        </div>              
     </ui:define>
 </ui:composition>

@@ -9,19 +9,17 @@
             <h2 class="border-bottom-orange align-center">Administración de clasificaciones</h2>   
         </div>
         <br></br>        
-        <h:form>
-            <p:toolbar class="ui-g-toolbar-adm">
-                <p:toolbarGroup>
-                    <p:commandButton value="Crear clasificación" 
-                                     class="btn btn-blue btn-group-align"                                     
-                                     action="/faces/creacion/crear-clasificacion.xhtml?faces-redirect=true"/>                    
-                </p:toolbarGroup>
+        <p:toolbar class="ui-g-toolbar-adm">
+            <p:toolbarGroup>
+                <p:commandButton value="Crear clasificación" 
+                                 class="btn btn-blue btn-group-align"                                     
+                                 action="/faces/creacion/crear-clasificacion.xhtml?faces-redirect=true"/>                    
+            </p:toolbarGroup>
 
-                <p:toolbarGroup align="right">
-                    <p:commandButton type="button" value="Ver filtros" class="btn btn-orange btn-group-align"/>
-                    <p:commandButton type="button" value="Limpiar filtros" class="btn btn-orange"/>
-                </p:toolbarGroup>
-            </p:toolbar>
-        </h:form>   
+            <p:toolbarGroup align="right">
+                <p:commandButton type="button" value="Ver filtros" class="btn btn-orange btn-group-align"/>
+                <p:commandButton type="button" value="Limpiar filtros" class="btn btn-orange"/>
+            </p:toolbarGroup>
+        </p:toolbar>
     </ui:define>
 </ui:composition>
