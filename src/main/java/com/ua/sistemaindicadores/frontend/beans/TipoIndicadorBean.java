@@ -37,7 +37,7 @@ public class TipoIndicadorBean implements Serializable {
     private String descripcion;
     
     private IndicadorTipo nuevoIndicadorTipo;
-    
+        
     @PostConstruct
     public void initalize(){
         nuevoIndicadorTipo = new IndicadorTipo();

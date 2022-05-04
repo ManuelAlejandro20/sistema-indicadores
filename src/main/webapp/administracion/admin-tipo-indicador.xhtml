@@ -5,6 +5,9 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">
+        <f:metadata>
+            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.VerTipoIndicadorBean"/>
+        </f:metadata>        
         <div class="ui-g-12 ui-g-title align-center">
             <h2 class="border-bottom-orange align-center">Administración de tipos de indicadores</h2>   
         </div>
@@ -27,17 +30,23 @@
         </h:form>
         <div class="ui-g-12">
             <p:dataTable class="ui-g-tabla-adm"                          
-                         id="tipoIndicadores" 
+                         id="tipoIndicadores"
+                         var="tipoIndicadorDTO" 
+                         value="#{verTipoIndicadorBean.model}"
+                         widgetVar="tablaTiposIndicador"                         
                          lazy="true"
                          paginator="true"
-                         rows="10"
+                         rows="5"
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                          rowsPerPageTemplate="5,10,25,50,100"
                          currentPageReportTemplate="Mostrando {startRecord} - {endRecord} de {totalRecords}" 
                          selectionMode="single"
                          sortMode="single"
+                         sortBy="#{tipoIndicadorDTO.id}"
                          emptyMessage="No se recuperaron registros"
                          reflow="true"
+                         selection="#{verTipoIndicadorBean.tipoIndicadorSeleccionadoDTO}"
+                         rowKey="#{tipoIndicadorDTO.id}"                         
                          >
 
                 <f:facet name="header">
@@ -46,34 +55,44 @@
                     </div>
                 </f:facet>
                 <p:column headerText="Nombre"
-                          width="20"
+                          width="5"
                           styleClass="align-center">
+                    <h:outputText value="#{tipoIndicadorDTO.nombre eq null?'Sin dato':tipoIndicadorDTO.nombre }">
+                    </h:outputText>                    
                 </p:column>
-                <p:column headerText="Vigencia"
-                          width="20">
-                </p:column>
-
-                <p:column headerText="Fecha de creación"
-                          width="30"
-                          styleClass="alight-center"
-                          >
-                </p:column>
-                <p:column headerText="Última actualización"
-                          width="30"
-                          styleClass="alight-center"
-                          >
+                <p:column headerText="Estado"
+                          width="5"
+                          styleClass="align-center">
+                    <h:outputText value="#{tipoIndicadorDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
+                    </h:outputText>                            
                 </p:column>
                 <p:column headerText="Descripción"
                           width="50"
                           styleClass="align-center">
+                    <h:outputText value="#{tipoIndicadorDTO.descripcion eq null?'Sin dato':tipoIndicadorDTO.descripcion }">
+                    </h:outputText>                            
+                </p:column>
+                <p:column headerText="Fecha de creación"
+                          width="30"
+                          styleClass="align-center">                          
+                    <h:outputText value="#{tipoIndicadorDTO.fechaCreacion eq null?'Sin dato':tipoIndicadorDTO.fechaCreacion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
+                    </h:outputText>                    
+                </p:column>
+                <p:column headerText="Última actualización"
+                          width="30"
+                          styleClass="align-center">
+                    <h:outputText value="#{tipoIndicadorDTO.fechaActualizacion eq null?'Sin dato':tipoIndicadorDTO.fechaActualizacion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
+                    </h:outputText>                         
                 </p:column>
                 <p:column headerText="Editar"
                           width="4"
                           styleClass="align-center">
                     <p:button
-                        outcome="/administracion/admin-tipo-indicador.xhtml"
+                        outcome="/edicion/edicion-tipo-indicador.xhtml"
                         class="btn btn-info"
-                        icon="fa fa-eye">
+                        icon="fa fa-edit">
                     </p:button>
 
                 </p:column>

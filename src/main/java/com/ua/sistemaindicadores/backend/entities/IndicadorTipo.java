@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "IndicadorTipo.findByDescripcion", query = "SELECT i FROM IndicadorTipo i WHERE i.descripcion = :descripcion"),
     @NamedQuery(name = "IndicadorTipo.findByEstado", query = "SELECT i FROM IndicadorTipo i WHERE i.estado = :estado"),
     @NamedQuery(name = "IndicadorTipo.findByFechaCreacion", query = "SELECT i FROM IndicadorTipo i WHERE i.fechaCreacion = :fechaCreacion"),
+    @NamedQuery(name = "IndicadorTipo.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.TipoIndicadorDTO(i.id, i.nombre, i.descripcion, i.estado, i.fechaCreacion, i.fechaActualizacion) FROM IndicadorTipo i WHERE i.id = :Id"),   
     @NamedQuery(name = "IndicadorTipo.findByFechaActualizacion", query = "SELECT i FROM IndicadorTipo i WHERE i.fechaActualizacion = :fechaActualizacion")})
 public class IndicadorTipo implements Serializable {
 
@@ -62,7 +63,7 @@ public class IndicadorTipo implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "estado")
-    private short estado;
+    private Short estado;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_creacion")
@@ -83,7 +84,7 @@ public class IndicadorTipo implements Serializable {
         this.id = id;
     }
 
-    public IndicadorTipo(Integer id, String nombre, String descripcion, short estado, Date fechaCreacion, Date fechaActualizacion) {
+    public IndicadorTipo(Integer id, String nombre, String descripcion, Short estado, Date fechaCreacion, Date fechaActualizacion) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -116,11 +117,11 @@ public class IndicadorTipo implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public short getEstado() {
+    public Short getEstado() {
         return estado;
     }
 
-    public void setEstado(short estado) {
+    public void setEstado(Short estado) {
         this.estado = estado;
     }
 

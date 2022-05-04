@@ -19,7 +19,11 @@
     <context-param>
         <param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
         <param-value>true</param-value>
-    </context-param>         
+    </context-param>      
+    <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+        <param-value>true</param-value>
+    </context-param>       
     <env-entry>
         <env-entry-name>largoMinimoClave</env-entry-name>
         <env-entry-type>java.lang.Integer</env-entry-type>
@@ -144,7 +148,28 @@
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
         </user-data-constraint>
-    </security-constraint>             
+    </security-constraint>     
+    
+    <security-constraint>
+        <display-name>ConstraintEdicion</display-name>
+        <web-resource-collection>
+            <web-resource-name>edicion</web-resource-name>
+            <description></description>
+            <url-pattern>/edicion/*</url-pattern>
+            <url-pattern>/faces/edicion/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description></description>
+            <role-name>ADMINISTRADOR</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
+            <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
+            <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>                         
     
     <login-config>
         <auth-method>FORM</auth-method>
