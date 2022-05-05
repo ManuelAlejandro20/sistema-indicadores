@@ -31,8 +31,8 @@ public class IndicadorTipoDAO extends AbstractDAO<IndicadorTipo> {
     public static final String KEY_NOMBRE = "nombre";
     public static final String KEY_DESCRIPCION = "descripcion";
     public static final String KEY_ESTADO = "estado";
-    public static final String KEY_FCREACION = "fecha_creacion";
-    public static final String KEY_FACT = "fecha_actualizacion";    
+    public static final String KEY_FCREACION = "fechaCreacion";
+    public static final String KEY_FACT = "fechaActualizacion";    
     
     @Inject
     private EntityManagerProvider entityManagerProvider;
@@ -98,16 +98,16 @@ public class IndicadorTipoDAO extends AbstractDAO<IndicadorTipo> {
                                         (Short) filters.get(key)
                                 )
                         );
-                        break;
+                        break;   
                     case KEY_FCREACION:
-                    case KEY_FACT:
-                        p = cb.and(p,
-                                cb.equal(
-                                        root.get(key),
+                    case KEY_FACT:         
+                        p = cb.and(p,                                     
+                                cb.lessThanOrEqualTo(
+                                        root.<Date>get(key), 
                                         (Date) filters.get(key)
                                 )
                         );
-                        break;                        
+                        break;                            
                     default:
                         break;
                 }
@@ -115,6 +115,7 @@ public class IndicadorTipoDAO extends AbstractDAO<IndicadorTipo> {
         }
         return p;
     }    
+     
     public List<TipoIndicadorDTO> cargar(int first, int pageSize, String sortField, String sortOrder, Map<String, Object> filters) {
         mapJoins.clear(); //limpiar map antes de crear la query
 

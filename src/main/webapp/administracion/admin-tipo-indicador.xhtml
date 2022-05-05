@@ -22,21 +22,75 @@
             </p:toolbarGroup>
 
             <p:toolbarGroup align="right">
-                <p:commandButton type="button" value="Ver filtros" class="btn btn-orange btn-group-align"/>
-                <p:commandButton type="button" value="Limpiar filtros" class="btn btn-orange"/>
+                <p:commandButton value="#{verTipoIndicadorBean.mensajeFiltros}" 
+                                 class="btn btn-orange btn-group-align"
+                                 process="@this" 
+                                 update="@form"
+                                 actionListener="#{verTipoIndicadorBean.eventofiltros}"
+                                 />
+                <p:commandButton value="Limpiar filtros" 
+                                 class="btn btn-orange"
+                                 process="@this" 
+                                 update="@form"
+                                 actionListener="#{verTipoIndicadorBean.limpiarFiltros}"/>                                                                                                 
             </p:toolbarGroup>
         </p:toolbar>
-        <div class="ui-g-12  align-left">
-            <p:inputText id="nombre"
-                         value="#{verTipoIndicadorBean.nombreSeleccionado}">
-                <p:ajax event="keyup" 
-                        delay="50"
-                        listener="#{verTipoIndicadorBean.onSeleccionNombreListener}"
-                        process="@this" 
-                        update="@form:tipo_indicadores" />
-            </p:inputText>
-
-        </div>        
+        <div class="ui-g-12" style="display:#{verTipoIndicadorBean.filtros?'none':'block'}">
+            <p:panel class="formulario" header="FILTROS">
+                        <h:panelGrid width="100%"
+                            columns="5" >
+                            <p:outputLabel style="font-weight:bold;" id="nombreLabel" value="NOMBRE"/>
+                            <p:outputLabel style="font-weight:bold;" id="estadoLabel" value="ESTADO"/>
+                            <p:outputLabel style="font-weight:bold;" id="descripcionLabel" value="DESCRIPCIÓN"/>
+                            <p:outputLabel style="font-weight:bold;" id="fechaCLabel" value="FECHA CREACIÓN"/>
+                            <p:outputLabel style="font-weight:bold;" id="fechaALabel" value="ÚLTIMA ACTUALIZACIÓN"/>
+                            <p:inputText id="nombre"
+                                         value="#{verTipoIndicadorBean.nombreSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verTipoIndicadorBean.onSeleccionNombreListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText>            
+                            <p:selectOneMenu id="estado"
+                                             value="#{verTipoIndicadorBean.estadoSeleccionado}"
+                                             >
+                                <f:selectItem itemLabel="Seleccione una opción" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItem itemLabel="Vigente" itemValue="1"/>
+                                <f:selectItem itemLabel="No Vigente" itemValue="0"/>
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verTipoIndicadorBean.onSeleccionEstadoListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:selectOneMenu>  
+                            <p:inputText id="descripcion"
+                                         value="#{verTipoIndicadorBean.descripcionSeleccionada}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verTipoIndicadorBean.onSeleccionDescripcionListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText>   
+                            <p:datePicker id="basic" 
+                                          value="#{verTipoIndicadorBean.fechaCreacionSeleccionada}">
+                                <p:ajax event="dateSelect" 
+                                        delay="50"
+                                        listener="#{verTipoIndicadorBean.onSeleccionFechaCListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />                                
+                            </p:datePicker>  
+                            <p:inputText id="nombre5"
+                                         value="#{verTipoIndicadorBean.nombreSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verTipoIndicadorBean.onSeleccionNombreListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText>                                
+                        </h:panelGrid>
+            </p:panel>
+        </div>              
         <div class="ui-g-12">
             <p:dataTable class="ui-g-tabla-adm"                          
                          id="tipo_indicadores"
@@ -62,10 +116,10 @@
                     <div style="height: 30px;">
                         <span>Lista de tipos de indicadores</span>
                     </div>
-                </f:facet>
+                </f:facet>              
                 <p:column headerText="Nombre"
                           width="5"
-                          styleClass="align-center">
+                          styleClass="align-center">                 
                     <h:outputText value="#{tipoIndicadorDTO.nombre eq null?'Sin dato':tipoIndicadorDTO.nombre }">
                         <f:convertNumber integerOnly="true"/>
                     </h:outputText>                    

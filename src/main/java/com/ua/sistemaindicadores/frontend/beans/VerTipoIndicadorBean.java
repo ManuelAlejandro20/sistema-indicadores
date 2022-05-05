@@ -40,12 +40,20 @@ public class VerTipoIndicadorBean implements Serializable {
     transient private TipoIndicadorService tipoIndicadorService;
         
     private String nombreSeleccionado;
+    private String estadoSeleccionado;
+    private String descripcionSeleccionada;
+    private Date fechaCreacionSeleccionada;
+    
+    private Boolean filtros;
+    private String mensajeFiltros;
     
     private TipoIndicadorDTO tipoIndicadorSeleccionadoDTO;
     
     @PostConstruct
     public void initalize(){
         System.out.println("Inicio Bean Ver Tipo Indicador");     
+        filtros = true;
+        mensajeFiltros = "Mostrar filtros";        
     }
     
     /**
@@ -77,6 +85,79 @@ public class VerTipoIndicadorBean implements Serializable {
     public void setNombreSeleccionado(String nombreSeleccionado) {
         this.nombreSeleccionado = nombreSeleccionado;
     }
+
+    public String getEstadoSeleccionado() {
+        return estadoSeleccionado;
+    }
+
+    public void setEstadoSeleccionado(String estadoSeleccionado) {
+        this.estadoSeleccionado = estadoSeleccionado;
+    }
+
+    public String getDescripcionSeleccionada() {
+        return descripcionSeleccionada;
+    }
+
+    public void setDescripcionSeleccionada(String descripcionSeleccionada) {
+        this.descripcionSeleccionada = descripcionSeleccionada;
+    }
+
+    public Date getFechaCreacionSeleccionada() {
+        return fechaCreacionSeleccionada;
+    }
+
+    public void setFechaCreacionSeleccionada(Date fechaCreacionSeleccionada) {
+        this.fechaCreacionSeleccionada = fechaCreacionSeleccionada;
+    }
+
+    public Boolean getFiltros() {
+        return filtros;
+    }
+
+    public void setFiltros(Boolean filtros) {
+        this.filtros = filtros;
+    }
+
+    public String getMensajeFiltros() {
+        return mensajeFiltros;
+    }
+
+    public void setMensajeFiltros(String mensajeFiltros) {
+        this.mensajeFiltros = mensajeFiltros;
+    }
+    
+    public void eventofiltros() {
+        if (filtros) {            
+            mensajeFiltros = "Ocultar filtros";
+            filtros = false;
+        } else {
+            limpiarFiltros();
+            mensajeFiltros = "Mostrar filtros";
+            filtros = true;
+        }
+    }
+    
+    public void limpiarFiltros() {
+        try {
+           nombreSeleccionado = null;
+           estadoSeleccionado = null;
+           descripcionSeleccionada = null;
+           fechaCreacionSeleccionada = null;
+           onSeleccionNombreListener();
+           onSeleccionEstadoListener();
+           onSeleccionDescripcionListener();
+           onSeleccionFechaCListener();
+            
+        } catch (EJBException ex) {
+            Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema al borrar los filtros. Contacte al administrador.")
+                    );
+        }
+    }    
+    
     
     //Filtros
     
@@ -96,6 +177,57 @@ public class VerTipoIndicadorBean implements Serializable {
                     );
         }
     }    
+    
+    public void onSeleccionEstadoListener() {        
+        try {
+            if (estadoSeleccionado != null) {
+                model.setEstado(Short.valueOf(estadoSeleccionado));
+            } else {
+                model.setEstado(null);
+            }
+        } catch (EJBException ex) {
+            Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro estado. Contacte al administrador.")
+                    );
+        }
+    }    
+    
+    public void onSeleccionDescripcionListener() {
+        try {
+            if (descripcionSeleccionada != null) {
+                model.setDescripcion(descripcionSeleccionada);
+            } else {
+                model.setDescripcion(null);
+            }
+        } catch (EJBException ex) {
+            Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro descripcion. Contacte al administrador.")
+                    );
+        }
+    }    
+
+    public void onSeleccionFechaCListener() {
+        try {
+            if (fechaCreacionSeleccionada != null) {
+                model.setFechaCreacion(fechaCreacionSeleccionada);
+            } else {
+                model.setFechaCreacion(null);
+            }
+        } catch (EJBException ex) {
+            Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha creacion. Contacte al administrador.")
+                    );
+        }
+    }            
     
 
        

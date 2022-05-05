@@ -3104,7 +3104,10 @@ h2 {
   height: 15px;
   padding-left: 5px; }
   .ui-datepicker .ui-datepicker-next .ui-icon:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f0da";
+    font-weight: 600;
+  }
 .ui-datepicker .ui-datepicker-prev .ui-icon {
   background-image: none !important;
   display: inline-block;
@@ -3119,7 +3122,10 @@ h2 {
   width: 10px;
   height: 15px; }
   .ui-datepicker .ui-datepicker-prev .ui-icon:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f0d9";
+    font-weight: 600;   
+  }
 
 .ui-chkbox .ui-icon-blank {
   background-image: none !important;
