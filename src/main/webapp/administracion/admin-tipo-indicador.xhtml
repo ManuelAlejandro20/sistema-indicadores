@@ -72,22 +72,22 @@
                                         process="@this" 
                                         update="@form:tipo_indicadores" />
                             </p:inputText>   
-                            <p:datePicker id="basic" 
-                                          value="#{verTipoIndicadorBean.fechaCreacionSeleccionada}">
-                                <p:ajax event="dateSelect" 
-                                        delay="50"
-                                        listener="#{verTipoIndicadorBean.onSeleccionFechaCListener}"
-                                        process="@this" 
-                                        update="@form:tipo_indicadores" />                                
-                            </p:datePicker>  
-                            <p:inputText id="nombre5"
-                                         value="#{verTipoIndicadorBean.nombreSeleccionado}">
+                            <p:inputText id="anioCreacion"
+                                         value="#{verTipoIndicadorBean.anioCreacionSeleccionado}">
                                 <p:ajax event="keyup" 
-                                        delay="50"
-                                        listener="#{verTipoIndicadorBean.onSeleccionNombreListener}"
+                                        delay="500"
+                                        listener="#{verTipoIndicadorBean.onSeleccionAnioCreacionListener}"
                                         process="@this" 
                                         update="@form:tipo_indicadores" />
-                            </p:inputText>                                
+                            </p:inputText>  
+                            <p:inputText id="anioActualizacion"
+                                         value="#{verTipoIndicadorBean.anioActualizacionSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="500"
+                                        listener="#{verTipoIndicadorBean.onSeleccionAnioActualizacionListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText>                               
                         </h:panelGrid>
             </p:panel>
         </div>              

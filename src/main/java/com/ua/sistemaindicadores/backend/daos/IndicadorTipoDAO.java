@@ -8,6 +8,7 @@ package com.ua.sistemaindicadores.backend.daos;
 import com.ua.sistemaindicadores.backend.dtos.TipoIndicadorDTO;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo_;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -101,10 +102,12 @@ public class IndicadorTipoDAO extends AbstractDAO<IndicadorTipo> {
                         break;   
                     case KEY_FCREACION:
                     case KEY_FACT:         
-                        p = cb.and(p,                                     
-                                cb.lessThanOrEqualTo(
-                                        root.<Date>get(key), 
-                                        (Date) filters.get(key)
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy");
+                        Integer year = Integer.parseInt(df.format((Date) filters.get(key)));                        
+                        p = cb.and(p,          
+                                cb.equal(
+                                        cb.function("YEAR", Integer.class, root.get(key)), 
+                                        year
                                 )
                         );
                         break;                            

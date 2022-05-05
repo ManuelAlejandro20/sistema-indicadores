@@ -9,20 +9,18 @@ import com.ua.sistemaindicadores.backend.dtos.TipoIndicadorDTO;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.models.TipoIndicadorLazyDataModel;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
-import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;  
-import java.util.List;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.text.ParseException;
 
 /**
  *
@@ -42,12 +40,14 @@ public class VerTipoIndicadorBean implements Serializable {
     private String nombreSeleccionado;
     private String estadoSeleccionado;
     private String descripcionSeleccionada;
-    private Date fechaCreacionSeleccionada;
+    private String anioCreacionSeleccionado;
+    private String anioActualizacionSeleccionado;
     
     private Boolean filtros;
     private String mensajeFiltros;
     
     private TipoIndicadorDTO tipoIndicadorSeleccionadoDTO;
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     
     @PostConstruct
     public void initalize(){
@@ -102,12 +102,12 @@ public class VerTipoIndicadorBean implements Serializable {
         this.descripcionSeleccionada = descripcionSeleccionada;
     }
 
-    public Date getFechaCreacionSeleccionada() {
-        return fechaCreacionSeleccionada;
+    public String getAnioCreacionSeleccionado() {
+        return anioCreacionSeleccionado;
     }
 
-    public void setFechaCreacionSeleccionada(Date fechaCreacionSeleccionada) {
-        this.fechaCreacionSeleccionada = fechaCreacionSeleccionada;
+    public void setAnioCreacionSeleccionado(String anioCreacionSeleccionado) {
+        this.anioCreacionSeleccionado = anioCreacionSeleccionado;
     }
 
     public Boolean getFiltros() {
@@ -124,6 +124,14 @@ public class VerTipoIndicadorBean implements Serializable {
 
     public void setMensajeFiltros(String mensajeFiltros) {
         this.mensajeFiltros = mensajeFiltros;
+    }
+
+    public String getAnioActualizacionSeleccionado() {
+        return anioActualizacionSeleccionado;
+    }
+
+    public void setAnioActualizacionSeleccionado(String anioActualizacionSeleccionado) {
+        this.anioActualizacionSeleccionado = anioActualizacionSeleccionado;
     }
     
     public void eventofiltros() {
@@ -142,11 +150,13 @@ public class VerTipoIndicadorBean implements Serializable {
            nombreSeleccionado = null;
            estadoSeleccionado = null;
            descripcionSeleccionada = null;
-           fechaCreacionSeleccionada = null;
+           anioCreacionSeleccionado = null;
+           anioActualizacionSeleccionado = null;
            onSeleccionNombreListener();
            onSeleccionEstadoListener();
            onSeleccionDescripcionListener();
-           onSeleccionFechaCListener();
+           onSeleccionAnioCreacionListener();
+           onSeleccionAnioActualizacionListener();
             
         } catch (EJBException ex) {
             Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
@@ -212,10 +222,10 @@ public class VerTipoIndicadorBean implements Serializable {
         }
     }    
 
-    public void onSeleccionFechaCListener() {
+    public void onSeleccionAnioCreacionListener(){        
         try {
-            if (fechaCreacionSeleccionada != null) {
-                model.setFechaCreacion(fechaCreacionSeleccionada);
+            if (anioCreacionSeleccionado != null) {
+                model.setFechaCreacion(formatter.parse("01-01-" + anioCreacionSeleccionado));
             } else {
                 model.setFechaCreacion(null);
             }
@@ -226,8 +236,29 @@ public class VerTipoIndicadorBean implements Serializable {
                             "mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha creacion. Contacte al administrador.")
                     );
+        } catch (ParseException ex){
+            model.setFechaCreacion(null);
         }
     }            
+    
+    public void onSeleccionAnioActualizacionListener(){        
+        try {
+            if (anioActualizacionSeleccionado != null) {
+                model.setFechaActualizacion(formatter.parse("01-01-" + anioActualizacionSeleccionado));
+            } else {
+                model.setFechaActualizacion(null);
+            }
+        } catch (EJBException ex) {
+            Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha actualizacion. Contacte al administrador.")
+                    );
+        } catch (ParseException ex){
+            model.setFechaCreacion(null);
+        }
+    }          
     
 
        
