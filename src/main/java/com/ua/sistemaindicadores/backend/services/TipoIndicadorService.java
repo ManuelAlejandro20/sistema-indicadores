@@ -57,6 +57,11 @@ public class TipoIndicadorService {
             Map<String, Object> filters) {
         return indicadorTipoDAO.cargar(first, pageSize, sortField, sortOrder, filters);
     }    
+ 
+    @RolesAllowed({"ADMINISTRADOR"})
+    public IndicadorTipo buscarTipoIndicadorID(Integer id){
+        return indicadorTipoDAO.buscarTipoIndicadorID(id);
+    }
     
 }
 

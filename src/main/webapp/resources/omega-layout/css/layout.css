@@ -1667,7 +1667,13 @@ html {
   background-color: #edf0f5; }
 
 .wrapper {
+  display:flex; 
+  flex-direction:column; 
+  min-height:100vh; margin:0;
   padding: 0; }
+  .wrapper .footer{
+      transition: padding-left 0.3s;      
+  }
   .wrapper .crear-tipo-indicadores-table{
       transition: width 0.3s;
   }
@@ -1970,8 +1976,9 @@ html {
     margin-left: 250px;
     padding: 50px 16px 16px 16px; }
   .wrapper .footer {
-    margin-left: 250px;
-    height: 40px;
+    margin-top:auto; 
+    padding-left: 20% !important;
+    height:40px; 
     background-color: #ffffff;
     padding: .7em 1.5em 0em 1.5em; }
     .wrapper .footer img {
@@ -2012,7 +2019,10 @@ html {
   .wrapper.sidebar-inactive-l .text-area-tipo-indicadores{
       transition: width 0.3s;
       width: 80% !important;
-  }      
+  }   
+  .wrapper.sidebar-inactive-l .footer{
+      padding-left: 4% !important;
+  }     
 }
 
 @media (max-width: 1024px) {
