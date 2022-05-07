@@ -32,6 +32,7 @@ public class EditarTipoIndicadorBean implements Serializable {
     @Inject
     transient private TipoIndicadorService tipoIndicadorService;
   
+    private IndicadorTipo it;
     private String id; 
     private String nombreTipoIndicador; 
     private String vigencia;
@@ -48,9 +49,8 @@ public class EditarTipoIndicadorBean implements Serializable {
     public EditarTipoIndicadorBean() {
     }
 
-    public void cargarDatos(){
-        System.out.println(id);
-        IndicadorTipo it = tipoIndicadorService.buscarTipoIndicadorID(Integer.valueOf(id));
+    public void cargarDatos(){        
+        it = tipoIndicadorService.buscarTipoIndicadorID(Integer.valueOf(id));
         nombreTipoIndicador = it.getNombre();
         descripcion = it.getDescripcion();
         
@@ -61,6 +61,40 @@ public class EditarTipoIndicadorBean implements Serializable {
         }
         
     }
+    
+    public void actualizarDatos() throws IOException{        
+        
+        short numVigencia = 0; 
+        if(vigencia.equals("VIGENTE")){
+            numVigencia = 1;
+        }
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        it.setNombre(nombreTipoIndicador);
+        it.setEstado(numVigencia);
+        it.setDescripcion(descripcion);
+        it.setFechaActualizacion(new Date());
+        
+        try{
+            tipoIndicadorService.actualizarTipoIndicador(it);          
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN", 
+                    "El tipo de indicador " + nombreTipoIndicador + " ha sido actualizado correctamente")
+            );
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            context.getExternalContext()
+                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-tipo-indicador.xhtml");
+        }
+        catch(EJBException e){
+            
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN", 
+                    "El tipo de indicador " + nombreTipoIndicador + " ya existe en los registros")
+            );            
+            
+            
+        }          
+        
+    }    
     
     public String getId() {
         return id;

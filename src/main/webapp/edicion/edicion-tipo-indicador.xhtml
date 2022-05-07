@@ -51,6 +51,7 @@
                             <p:message for="descripcion"/>      
                             <p:commandButton value="Editar tipo de indicador"  
                                              class="ui-button-formulario"
+                                             action="#{editarTipoIndicadorBean.actualizarDatos}"   
                                              update="@form" 
                                              process="@this, @form"/>                                
                         </h:panelGrid>
