@@ -10,19 +10,23 @@
         </div>
         <br></br>        
         <div class="ui-g ui-g-select-indicadores">
-            <div class="ui-g-6">
-                <div class="card card-select-indicador">
-                    <h1>Indicadores vigentes</h1>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
-                    <!--                    <p:button value="Home" style="display:inline-block;margin-top:5px"/>-->
-                </div>
+            <div class="ui-g-6">                
+                <h:link outcome="/indicadores/ver-tipo-indicador-vigente.xhtml">
+                    <div class="card card-select-indicador">                   
+                        <h1>Indicadores vigentes</h1>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>                                        
+                        <!--                    <p:button value="Home" style="display:inline-block;margin-top:5px"/>-->
+                    </div>
+                </h:link>
             </div> 
             <div class="ui-g-6 animated">
-                <div class="card card-select-indicador">
-                    <h1>Indicadores no vigentes</h1>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
-                    <!--                    <p:button value="Home" style="display:inline-block;margin-top:5px"/>-->
-                </div>
+                <h:link outcome="/indicadores/ver-tipo-indicador-no-vigente.xhtml">
+                    <div class="card card-select-indicador">
+                        <h1>Indicadores no vigentes</h1>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+                        <!--                    <p:button value="Home" style="display:inline-block;margin-top:5px"/>-->
+                    </div>
+                </h:link>
             </div>             
         </div>       
     </ui:define>
