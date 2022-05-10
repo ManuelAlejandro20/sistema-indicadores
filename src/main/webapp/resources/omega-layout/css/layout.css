@@ -2267,9 +2267,12 @@ h2 {
     background-color: #FF6600 !important; 
     border-radius: 0.25rem;
     color: white;
-    cursor: pointer;
-    text-decoration: none !important;
+    cursor: pointer;    
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.link-no-underline{
+    text-decoration: none !important;
 }
 
 .card-select-indicador:hover {
