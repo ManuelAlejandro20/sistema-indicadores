@@ -493,6 +493,24 @@ input[type=button].btn-block {
     border-color: #3f9ae5;
     box-shadow: 0 0 0 0.2rem rgba(97, 157, 206, 0.5);
 }
+.btn-view {
+    color: #212529;
+    background-color: #FF6600 !important;
+    border-color: #FF6600 !important;
+}
+
+.btn-view:hover {
+    color: #fff;
+    background-color: #4aa0e6;
+    border-color: #3f9ae5;
+}
+.btn-view:focus,
+.btn-view.focus {
+    color: #fff;
+    background-color: #4aa0e6;
+    border-color: #3f9ae5;
+    box-shadow: 0 0 0 0.2rem rgba(97, 157, 206, 0.5);
+}
 .btn-primary {
     color: #fff;
     background-color: #3490dc;

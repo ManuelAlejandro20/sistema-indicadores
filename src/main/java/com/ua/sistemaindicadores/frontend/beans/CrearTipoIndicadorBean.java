@@ -6,14 +6,19 @@
 package com.ua.sistemaindicadores.frontend.beans;
 
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
+import com.ua.sistemaindicadores.backend.services.CorreoService;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
 import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;  
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -31,16 +36,21 @@ public class CrearTipoIndicadorBean implements Serializable {
     
     @Inject
     transient private TipoIndicadorService tipoIndicadorService;
+    @Inject
+    transient private CorreoService correoService;    
   
     private String nombreTipoIndicador; 
     private String vigencia;
     private String descripcion;
+    
+    private boolean disabled;
     
     private IndicadorTipo nuevoIndicadorTipo;
         
     @PostConstruct
     public void initalize(){
         nuevoIndicadorTipo = new IndicadorTipo();
+        disabled = false;
         System.out.println("Inicio Bean Crear Tipo Indicador");     
     }
     
@@ -49,9 +59,10 @@ public class CrearTipoIndicadorBean implements Serializable {
      */
     public CrearTipoIndicadorBean() {
     }
-
+    
     public void crearTipoIndicador() throws IOException
     {
+               
         short numVigencia = 0; 
         if(vigencia.equals("VIGENTE")){
             numVigencia = 1;
@@ -74,6 +85,31 @@ public class CrearTipoIndicadorBean implements Serializable {
             context.getExternalContext().getFlash().setKeepMessages(true);
             context.getExternalContext()
                     .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-tipo-indicador.xhtml");
+        
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
+                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha creado un registro de un nuevo tipo de indicador.<br/> "
+                        + "<ul>"
+                        + "<li>Nombre tipo de indicador: " + nuevoIndicadorTipo.getNombre() + ".</li>"
+                        + "<li>Estado: " + vigencia + ".</li>"
+                        + "<li>Descripción: " + nuevoIndicadorTipo.getDescripcion() + ".</li>"
+                        + "<li>Fecha creación: " + formatter.format(nuevoIndicadorTipo.getFechaCreacion()) + ".</li>"
+                        + "</ul>"
+                        + "<br/><br/>"
+                        + "Saludos cordiales. <br/><br/>"
+                        + "Sistema de Indicadores."
+                );   
+            } catch (Exception ex) {
+                
+                //En caso de capturar algun error se retorna un mensaje y se guarda en el log el error
+                Logger.getLogger(CrearTipoIndicadorBean.class
+                        .getName()).log(Level.SEVERE, "Ocurrio un error al enviar el correo.", ex);
+                FacesContext
+                        .getCurrentInstance()
+                        .addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
+                        );
+            }                        
         }
         catch(EJBException e){
             
@@ -116,5 +152,31 @@ public class CrearTipoIndicadorBean implements Serializable {
     public void setNuevoIndicadorTipo(IndicadorTipo nuevoIndicadorTipo) {
         this.nuevoIndicadorTipo = nuevoIndicadorTipo;
     }
-       
+
+    public TipoIndicadorService getTipoIndicadorService() {
+        return tipoIndicadorService;
+    }
+
+    public void setTipoIndicadorService(TipoIndicadorService tipoIndicadorService) {
+        this.tipoIndicadorService = tipoIndicadorService;
+    }
+
+    public CorreoService getCorreoService() {
+        return correoService;
+    }
+
+    public void setCorreoService(CorreoService correoService) {
+        this.correoService = correoService;
+    }
+
+    public boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    
+          
 }
