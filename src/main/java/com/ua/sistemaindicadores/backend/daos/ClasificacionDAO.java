@@ -26,8 +26,7 @@ import javax.persistence.criteria.Predicate;
  */
 @Stateless
 public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
-
-    public static final String KEY_INDICADOR_TIPO_ID = "indicador_tipo_id";
+    
     public static final String KEY_NOMBRE = "nombre";
     public static final String KEY_TIPO = "tipo";
     public static final String KEY_ESTADO = "estado";
@@ -36,7 +35,7 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
     private EntityManagerProvider entityManagerProvider;
 
     private final Map<String, Join> mapJoins = new HashMap<>();
-    
+
     @Override
     protected EntityManager getEntityManager() {
         return entityManagerProvider.getEntityManager();
@@ -46,25 +45,24 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
         super(Clasificacion.class);
     }
 
-    public List<Clasificacion> obtenerClasificaciones()
-    {
+    public List<Clasificacion> obtenerClasificaciones() {
         return getEntityManager()
                 .createNamedQuery("Clasificacion.findAll", Clasificacion.class)
                 .getResultList();
-    }     
-    
-    public Clasificacion buscarClasificacionID(Integer id){
+    }
+
+    public Clasificacion buscarClasificacionID(Integer id) {
         return find(id);
     }
-    
+
     public ClasificacionDTO obtenerClasificacionDTO(Integer clasificacionId) {
         List<ClasificacionDTO> dtos = getEntityManager()
                 .createNamedQuery("Clasificacion.obtenerDTO", ClasificacionDTO.class)
                 .setParameter("Id", clasificacionId)
                 .getResultList();
         return dtos.isEmpty() ? null : dtos.get(0);
-    }    
-    
+    }
+
     public int contar(Map<String, Object> filters) {
         mapJoins.clear(); //limpiar map antes de crear la query
 
@@ -79,8 +77,8 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
 
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
-    }    
-    
+    }
+
     private Predicate construirPredicado(CriteriaBuilder cb, Root<Clasificacion> root, Map<String, Object> filters) {
         Predicate p = cb.conjunction();
         if (filters != null && !filters.isEmpty()) {
@@ -88,7 +86,12 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
                 switch (key) {
                     case KEY_TIPO:
                     case KEY_NOMBRE:
-                    case KEY_INDICADOR_TIPO_ID:
+                    case KEY_DESCRIPCION:
+                        p = cb.and(
+                                p, cb.like(cb.lower(root.get(key)),
+                                        cb.lower(cb.literal("%" + filters.get(key).toString() + "%")))
+                        );
+                        break;
                     case KEY_ESTADO:
                         p = cb.and(p,
                                 cb.equal(
@@ -97,20 +100,14 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
                                 )
                         );
                         break;
-                    case KEY_DESCRIPCION:
-                        p = cb.and(
-                                p, cb.like(cb.lower(root.get(key)),
-                                        cb.lower(cb.literal("%" + filters.get(key).toString() + "%")))
-                        );
-                        break;
                     default:
                         break;
                 }
             }
         }
         return p;
-    }    
-     
+    }
+
     public List<ClasificacionDTO> cargar(int first, int pageSize, String sortField, String sortOrder, Map<String, Object> filters) {
         mapJoins.clear(); //limpiar map antes de crear la query
 
@@ -140,14 +137,13 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
                         rootInformacion.get(Clasificacion_.NOMBRE),
                         rootInformacion.get(Clasificacion_.TIPO),
                         rootInformacion.get(Clasificacion_.ESTADO),
-                        rootInformacion.get(Clasificacion_.DESCRIPCION)  
+                        rootInformacion.get(Clasificacion_.DESCRIPCION)
                 )).distinct(true);
 
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         q.setMaxResults(pageSize);
         q.setFirstResult(first);
         return q.getResultList();
-    }    
-    
-    
+    }
+
 }

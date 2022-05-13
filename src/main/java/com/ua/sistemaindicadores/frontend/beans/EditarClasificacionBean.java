@@ -5,29 +5,45 @@
  */
 package com.ua.sistemaindicadores.frontend.beans;
 
+import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
 import com.ua.sistemaindicadores.backend.entities.SelectLineamiento;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
+import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author diego
  */
-@Named(value = "clasificacionesBean")
+@Named(value = "editarClasificacionBean")
 @ViewScoped
 public class EditarClasificacionBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Inject
     transient private ClasificacionService clasificacionService;
 
-    private List<SelectLineamiento> listaLineamientos;
-    private SelectLineamiento lineamientoSeleccionado;
+    private Clasificacion it;
+    private String id;
+    private String nombreClasificacion;
+    private String tipo;
+    private String descripcion;
+    private byte[] estado;
+
+    @PostConstruct
+    public void initalize() {
+        System.out.println("Inicio Bean Editar Tipo Indicador");
+    }
 
     /**
      * Creates a new instance of convenioBean
@@ -35,29 +51,78 @@ public class EditarClasificacionBean implements Serializable {
     public EditarClasificacionBean() {
     }
 
-    @PostConstruct
-    private void inicializar() {
-
-        listaLineamientos = clasificacionService.obtenerLineamientos();
-
-        System.out.println(listaLineamientos);
-        
+    public void cargarDatos() {
+        it = clasificacionService.buscarClasificacionID(Integer.valueOf(id));
+        nombreClasificacion = it.getNombre();
+        tipo = it.getTipo();
+        descripcion = it.getDescripcion();
+        estado = it.getEstado();
     }
 
-    public List<SelectLineamiento> getlistaLineamientos() {
-        return this.listaLineamientos;
+    public void actualizarDatos() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        it.setNombre(nombreClasificacion);
+        it.setTipo(tipo);
+        it.setEstado(estado);
+        it.setDescripcion(descripcion);
+
+        try {
+            clasificacionService.actualizarClasificacion(it);
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
+                    "La clasificacion " + nombreClasificacion + " ha sido actualizado correctamente")
+            );
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            context.getExternalContext()
+                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-clasificacion.xhtml");
+        } catch (EJBException e) {
+
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN",
+                    "La clasificacion " + nombreClasificacion + " ya existe en los registros")
+            );
+
+        }
+
     }
 
-    public void setlistaLineamientos(List<SelectLineamiento> lineamientos) {
-        this.listaLineamientos = lineamientos;
+    public String getId() {
+        return id;
     }
 
-    public SelectLineamiento getlineamientoSeleccionado() {
-        return this.lineamientoSeleccionado;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setlineamientoSeleccionado(SelectLineamiento lineamientoSeleccionado) {
-        this.lineamientoSeleccionado = lineamientoSeleccionado;
+    public String getNombreTipoIndicador() {
+        return nombreClasificacion;
+    }
+
+    public void setNombreTipoIndicador(String nombreClasificacion) {
+        this.nombreClasificacion = nombreClasificacion;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public byte[] getEstado() {
+        return estado;
+    }
+
+    public void setEstado(byte[] estado) {
+        this.estado = estado;
     }
 
 }

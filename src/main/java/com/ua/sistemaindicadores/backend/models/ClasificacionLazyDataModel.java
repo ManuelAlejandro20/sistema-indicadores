@@ -63,11 +63,6 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
     @Override
     public List<ClasificacionDTO> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         try {
-            if (indicador_tipo_id != null) {
-                filters.put(ClasificacionDAO.KEY_INDICADOR_TIPO_ID, indicador_tipo_id);
-            } else {
-                filters.remove(ClasificacionDAO.KEY_INDICADOR_TIPO_ID);
-            }
             if (nombre != null) {
                 filters.put(ClasificacionDAO.KEY_NOMBRE, nombre);
             } else {

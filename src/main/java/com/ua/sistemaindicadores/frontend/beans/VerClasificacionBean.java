@@ -26,36 +26,34 @@ import java.text.ParseException;
  *
  * @author diego
  */
-@Named(value = "verTipoIndicadorBean")
+@Named(value = "verClasificacionBean")
 @ViewScoped
 public class VerClasificacionBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Inject
-    private ClasificacionLazyDataModel model;    
+    private ClasificacionLazyDataModel model;
     @Inject
     transient private ClasificacionService clasificacionService;
-        
+
     private String nombreSeleccionado;
     private String estadoSeleccionado;
     private String descripcionSeleccionada;
-    private String anioCreacionSeleccionado;
-    private String anioActualizacionSeleccionado;
-    
+
     private Boolean filtros;
     private String mensajeFiltros;
-    
+
     private ClasificacionDTO clasificacionSeleccionadoDTO;
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-    
+
     @PostConstruct
-    public void initalize(){
-        System.out.println("Inicio Bean Ver Tipo Indicador");     
+    public void initalize() {
+        System.out.println("Inicio Bean Ver Tipo Indicador");
         filtros = true;
-        mensajeFiltros = "Mostrar filtros";        
+        mensajeFiltros = "Mostrar filtros";
     }
-    
+
     /**
      * Creates a new instance of convenioBean
      */
@@ -70,12 +68,12 @@ public class VerClasificacionBean implements Serializable {
         this.model = model;
     }
 
-    public ClasificacionDTO getTipoIndicadorSeleccionadoDTO() {
+    public ClasificacionDTO getClasificacionSeleccionadoDTO() {
         return clasificacionSeleccionadoDTO;
     }
 
-    public void setTipoIndicadorSeleccionadoDTO(ClasificacionDTO tipoIndicadorSeleccionadoDTO) {
-        this.clasificacionSeleccionadoDTO = tipoIndicadorSeleccionadoDTO;
+    public void setClasificacionSeleccionadoDTO(ClasificacionDTO clasificacionSeleccionadoDTO) {
+        this.clasificacionSeleccionadoDTO = clasificacionSeleccionadoDTO;
     }
 
     public String getNombreSeleccionado() {
@@ -102,14 +100,6 @@ public class VerClasificacionBean implements Serializable {
         this.descripcionSeleccionada = descripcionSeleccionada;
     }
 
-    public String getAnioCreacionSeleccionado() {
-        return anioCreacionSeleccionado;
-    }
-
-    public void setAnioCreacionSeleccionado(String anioCreacionSeleccionado) {
-        this.anioCreacionSeleccionado = anioCreacionSeleccionado;
-    }
-
     public Boolean getFiltros() {
         return filtros;
     }
@@ -126,16 +116,8 @@ public class VerClasificacionBean implements Serializable {
         this.mensajeFiltros = mensajeFiltros;
     }
 
-    public String getAnioActualizacionSeleccionado() {
-        return anioActualizacionSeleccionado;
-    }
-
-    public void setAnioActualizacionSeleccionado(String anioActualizacionSeleccionado) {
-        this.anioActualizacionSeleccionado = anioActualizacionSeleccionado;
-    }
-    
     public void eventofiltros() {
-        if (filtros) {            
+        if (filtros) {
             mensajeFiltros = "Ocultar filtros";
             filtros = false;
         } else {
@@ -144,33 +126,27 @@ public class VerClasificacionBean implements Serializable {
             filtros = true;
         }
     }
-    
+
     public void limpiarFiltros() {
         try {
-           nombreSeleccionado = null;
-           estadoSeleccionado = null;
-           descripcionSeleccionada = null;
-           anioCreacionSeleccionado = null;
-           anioActualizacionSeleccionado = null;
-           onSeleccionNombreListener();
-           onSeleccionEstadoListener();
-           onSeleccionDescripcionListener();
-           onSeleccionAnioCreacionListener();
-           onSeleccionAnioActualizacionListener();
-            
+            nombreSeleccionado = null;
+            estadoSeleccionado = null;
+            descripcionSeleccionada = null;
+            onSeleccionNombreListener();
+            onSeleccionEstadoListener();
+            onSeleccionDescripcionListener();
+
         } catch (EJBException ex) {
-            Logger.getLogger(ClasificacionTipo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Clasificacion.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance()
                     .addMessage(
                             "mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema al borrar los filtros. Contacte al administrador.")
                     );
         }
-    }    
-    
-    
+    }
+
     //Filtros
-    
     public void onSeleccionNombreListener() {
         try {
             if (nombreSeleccionado != null) {
@@ -179,16 +155,16 @@ public class VerClasificacionBean implements Serializable {
                 model.setNombre(null);
             }
         } catch (EJBException ex) {
-            Logger.getLogger(ClasificacionTipo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Clasificacion.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance()
                     .addMessage(
                             "mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro nombre. Contacte al administrador.")
                     );
         }
-    }    
-    
-    public void onSeleccionEstadoListener() {        
+    }
+
+    public void onSeleccionEstadoListener() {
         try {
             if (estadoSeleccionado != null) {
                 model.setEstado(Short.valueOf(estadoSeleccionado));
@@ -196,15 +172,15 @@ public class VerClasificacionBean implements Serializable {
                 model.setEstado(null);
             }
         } catch (EJBException ex) {
-            Logger.getLogger(ClasificacionTipo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Clasificacion.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance()
                     .addMessage(
                             "mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro estado. Contacte al administrador.")
                     );
         }
-    }    
-    
+    }
+
     public void onSeleccionDescripcionListener() {
         try {
             if (descripcionSeleccionada != null) {
@@ -213,53 +189,12 @@ public class VerClasificacionBean implements Serializable {
                 model.setDescripcion(null);
             }
         } catch (EJBException ex) {
-            Logger.getLogger(ClasificacionTipo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Clasificacion.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance()
                     .addMessage(
                             "mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro descripcion. Contacte al administrador.")
                     );
         }
-    }    
-
-    public void onSeleccionAnioCreacionListener(){        
-        try {
-            if (anioCreacionSeleccionado != null) {
-                model.setFechaCreacion(formatter.parse("01-01-" + anioCreacionSeleccionado));
-            } else {
-                model.setFechaCreacion(null);
-            }
-        } catch (EJBException ex) {
-            Logger.getLogger(ClasificacionTipo.class.getName()).log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance()
-                    .addMessage(
-                            "mensaje",
-                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha creacion. Contacte al administrador.")
-                    );
-        } catch (ParseException ex){
-            model.setFechaCreacion(null);
-        }
-    }            
-    
-    public void onSeleccionAnioActualizacionListener(){        
-        try {
-            if (anioActualizacionSeleccionado != null) {
-                model.setFechaActualizacion(formatter.parse("01-01-" + anioActualizacionSeleccionado));
-            } else {
-                model.setFechaActualizacion(null);
-            }
-        } catch (EJBException ex) {
-            Logger.getLogger(ClasificacionTipo.class.getName()).log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance()
-                    .addMessage(
-                            "mensaje",
-                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha actualizacion. Contacte al administrador.")
-                    );
-        } catch (ParseException ex){
-            model.setFechaCreacion(null);
-        }
-    }          
-    
-
-       
+    }
 }
