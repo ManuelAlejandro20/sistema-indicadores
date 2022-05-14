@@ -6,48 +6,39 @@
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">    
         <div class="ui-g-12 ui-g-title align-center">
-            <h2 class="border-bottom-orange align-center">Administración de tipos de indicadores</h2>   
+            <h2 class="border-bottom-orange align-center">Administración de clasificaciones</h2>   
         </div>
         <p:growl id="growl" showDetail="true"/>
         <div class="ui-g-12 align-center">
             <div class="ui-g-12 ui-md-4"></div>
             <div class="ui-g-12 ui-md-4 ui-g-nopad">
-                <div class="card card-creacion-tipo-indicador">                                              
-                    <p:panel class="formulario" header="CREAR CLASIFICACIÓN">
-                        <h:panelGrid class="crear-tipo-indicadores-table" 
+                <div class="card card-creacion-clasificacion">                                              
+                    <p:panel class="formulario" header="CREAR CLASIFICACION">
+                        <h:panelGrid class="crear-clasificacion-table" 
                                      width="100%"
-                                     columns="2" columnClasses="label label-creacion-tipo-indicador, value">
-                            <p:outputLabel id="nombreLabel" value="Nombre clasificación: *"/>
+                                     columns="2" columnClasses="label label-creacion-clasificacion, value">
+                            <p:outputLabel id="nombreLabel" value="Nombre de clasificacion: *"/>
                             <p:inputText 
-                                id="nombre" 
+                                id="nombre"
+                                value="#{crearClasificacionBean.nombreClasificacion}" 
                                 required="true" 
                                 maxlength="10"
-                                requiredMessage="Campo nombre tipo de indicador es requerido."
+                                requiredMessage="Campo nombre clasificacion es requerido."
                                 style="width: 80%;"
                                 tabindex="1"/>
                             <p:message for="nombreLabel"/>       
-                            <p:message for="nombre"/>   
-                            <p:outputLabel id="tipoLabel" value="Tipo de indicador: *"/>
-                            <p:selectOneMenu 
-                                class="select-crear-tipo-indicadores" id="tipo" required="true" style="width: 72%;">
-                            </p:selectOneMenu>
-                            <p:message for="tipoLabel"/>                                     
-                            <p:message for="tipo"/>                                                                                                  
-                            <p:outputLabel id="vigenciaLabel" value="Vigencia: *"/>
-                            <p:selectOneMenu 
-                                class="select-crear-tipo-indicadores" id="vigencia" required="true" style="width: 72%;">
-                                <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
-                                <f:selectItem itemLabel="No Vigente" itemValue="NOVIGENTE"/>
-                            </p:selectOneMenu>
-                            <p:message for="vigenciaLabel"/>                                     
-                            <p:message for="vigencia"/>                                           
+                            <p:message for="nombre"/>       
+                            <p:outputLabel id="tipoLabel" value="Tipo: *"/>                                         
                             <p:outputLabel id="descripcionLabel" value="Descripción: *"/>
                             <p:inputTextarea 
-                                required="true" requiredMessage="Campo descripción es requerido." class="text-area-tipo-indicadores" id="descripcion" rows="8" cols="18"/>
+                                value="#{crearClasificacionBean.descripcion}"
+                                maxlength="240"
+                                required="true" requiredMessage="Campo descripción es requerido." class="text-area-clasificacion" id="descripcion" rows="8" cols="18"/>
                             <p:message for="descripcionLabel"/>                                     
                             <p:message for="descripcion"/>      
-                            <p:commandButton value="Crear clasificación"   
-                                             class="ui-button-formulario"                                                 
+                            <p:commandButton value="Crear tipo de clasificacion"  
+                                             class="ui-button-formulario"
+                                             action="#{crearClasificacionBean.crearClasificacion}"   
                                              update="@form" 
                                              process="@this, @form"/>                                
                         </h:panelGrid>
@@ -55,6 +46,6 @@
                 </div>       
             </div>
             <div class="ui-g-12 ui-md-4"></div>
-        </div>         
+        </div>     
     </ui:define>
 </ui:composition>

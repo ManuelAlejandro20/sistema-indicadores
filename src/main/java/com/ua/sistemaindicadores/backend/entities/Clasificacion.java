@@ -71,7 +71,7 @@ public class Clasificacion implements Serializable {
     private Collection<Indicador> indicadorCollection;
     @JoinColumn(name = "indicador_tipo_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private IndicadorTipo indicadorTipoId;
+    private Integer indicadorTipoId;
 
     public Clasificacion() {
     }
@@ -137,11 +137,11 @@ public class Clasificacion implements Serializable {
         this.indicadorCollection = indicadorCollection;
     }
 
-    public IndicadorTipo getIndicadorTipoId() {
+    public Integer getIndicadorTipoId() {
         return indicadorTipoId;
     }
 
-    public void setIndicadorTipoId(IndicadorTipo indicadorTipoId) {
+    public void setIndicadorTipoId(Integer indicadorTipoId) {
         this.indicadorTipoId = indicadorTipoId;
     }
 
