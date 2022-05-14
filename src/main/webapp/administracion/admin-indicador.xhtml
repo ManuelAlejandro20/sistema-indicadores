@@ -4,45 +4,26 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/template.xhtml">
-    <ui:define name="content">
-        <f:metadata>
-            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.IndicadorBean"/>
-        </f:metadata>
+    <ui:define name="content">    
         <div class="ui-g-12 ui-g-title align-center">
             <h2 class="border-bottom-orange align-center">Administración de Indicadores</h2>   
         </div>
         <br></br>        
+        <p:growl id="growl" showDetail="true"/>
         <p:toolbar class="ui-g-toolbar-adm">
+
             <p:toolbarGroup>
-                <p:commandButton type="button" value="Crear indicador" class="btn btn-blue btn-group-align"/>
+                <p:commandButton value="Crear indicador" 
+                                 class="btn btn-blue btn-group-align"                                     
+                                 action="/faces/creacion/crear-indicador.xhtml?faces-redirect=true"/>
             </p:toolbarGroup>
 
             <p:toolbarGroup align="right">
-                <p:commandButton type="button" value="Ver filtros" class="btn btn-orange btn-group-align"/>
-                <p:commandButton type="button" value="Limpiar filtros" class="btn btn-orange"/>
+                <p:commandButton value="Mostrar filtros" 
+                                 class="btn btn-orange btn-group-align"/>
+                <p:commandButton value="Limpiar filtros" 
+                                 class="btn btn-orange"/>                                                                                                 
             </p:toolbarGroup>
-        </p:toolbar>
-        <div class="ui-g-12 ui-md-10 align-left">
-            <p:selectOneMenu id="lineamiento"
-                             value="#{indicadorBean.lineamientoSeleccionado}"
-                             required="true"
-                             var="pa"
-                             filter="true" 
-                             filterMatchMode="contains" 
-                             styleClass="manymenu-advanced"
-                             tabindex="1"
-                             >
-                <f:selectItem itemLabel="Seleccione una opción" itemValue="#{null}" noSelectionOption="true" />
-                <f:selectItems value="#{indicadorBean.listaLineamientos}"
-                               var="lin"
-                               itemLabel="#{lin.lineamiento}"
-                               itemValue="#{lin}"
-                               itemDescription="#{lin.lineamiento}"/>
-                <p:column>
-                    #{pa.lineamiento}
-                </p:column>
-                <p:message for="lin"/>                
-            </p:selectOneMenu>
-        </div>        
+        </p:toolbar>                
     </ui:define>
 </ui:composition>
