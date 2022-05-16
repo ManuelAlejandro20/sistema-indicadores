@@ -27,8 +27,39 @@
                                 style="width: 80%;"
                                 tabindex="1"/>
                             <p:message for="nombreLabel"/>       
-                            <p:message for="nombre"/>       
-                            <p:outputLabel id="tipoLabel" value="Tipo: *"/>                                         
+                            <p:message for="nombre"/>
+                            <p:outputLabel id="vigenciaLabel" value="Vigencia: *"/>
+                            <p:selectOneMenu 
+                                value="#{crearClasificacionBean.estado}" 
+                                class="select-crear-tipo-indicadores" id="vigencia" required="true" style="width: 72%;">
+                                <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
+                                <f:selectItem itemLabel="No Vigente" itemValue="NOVIGENTE"/>
+                            </p:selectOneMenu>
+                            <p:message for="vigenciaLabel"/>                                     
+                            <p:message for="vigencia"/>
+                            <p:outputLabel id="tipoLabel" value="Tipo: *"/>
+
+                            <p:selectOneMenu id="listaTipo"
+                                             value="#{crearClasificacionBean.indicadorTipoSeleccionado}"
+                                             required="true"
+                                             var="tipo"
+                                             converter="tipoIndicadorConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"
+                                             >
+                                <f:selectItems value="#{crearClasificacionBean.listaIndicadorTipo}"
+                                               var="indTipo"
+                                               itemLabel="#{indTipo.nombre}"
+                                               itemValue="#{indTipo}"
+                                               itemDescription="#{indTipo.descripcion}"/>
+                                <p:column>
+                                    #{tipo.nombre}
+                                </p:column>
+                                <p:message for="indTipo"/>                
+                            </p:selectOneMenu>
+                            <p:message for="tipoLabel"/>                                     
+                            <p:message for="listaTipo"/>
                             <p:outputLabel id="descripcionLabel" value="Descripción: *"/>
                             <p:inputTextarea 
                                 value="#{crearClasificacionBean.descripcion}"

@@ -14,8 +14,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -38,7 +36,7 @@ public class EditarClasificacionBean implements Serializable {
     private String nombreClasificacion;
     private String tipo;
     private String descripcion;
-    private byte[] estado;
+    private Short estado;
 
     @PostConstruct
     public void initalize() {
@@ -117,11 +115,11 @@ public class EditarClasificacionBean implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public byte[] getEstado() {
+    public Short getEstado() {
         return estado;
     }
 
-    public void setEstado(byte[] estado) {
+    public void setEstado(Short estado) {
         this.estado = estado;
     }
 

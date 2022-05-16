@@ -6,14 +6,17 @@
 package com.ua.sistemaindicadores.frontend.beans;
 
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
+import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
+import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
 import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;  
+import java.util.Date;
+import java.util.List;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -28,58 +31,88 @@ import javax.inject.Inject;
 public class CrearClasificacionBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Inject
     transient private ClasificacionService clasificacionService;
-  
+    @Inject
+    transient private TipoIndicadorService tipoIndicadorService;
+
     private Integer indicador_tipo_id;
     private String nombreClasificacion;
-    private Short estado;
-    private String tipo;
+    private String vigencia;
     private String descripcion;
-    
+    private List<IndicadorTipo> listaIndicadorTipo;
+    private IndicadorTipo indicadorTipoSeleccionado;
+
     private Clasificacion nuevaClasificacion;
-        
+
     @PostConstruct
-    public void initalize(){
+    public void initalize() {
         nuevaClasificacion = new Clasificacion();
-        System.out.println("Inicio Bean Crear Clasificacion");     
+        listaIndicadorTipo = tipoIndicadorService.obtenerIndicadorTipos();
+        System.out.println("Inicio Bean Crear Clasificacion");
     }
-    
+
     /**
      * Creates a new instance of convenioBean
      */
     public CrearClasificacionBean() {
     }
 
-    public void crearClasificacion() throws IOException
-    {       
+    public void crearClasificacion() throws IOException {
+        short numVigencia = 0;
+        if (vigencia.equals("VIGENTE")) {
+            numVigencia = 1;
+        }
+
         FacesContext context = FacesContext.getCurrentInstance();
+
+        System.out.println(indicadorTipoSeleccionado);
+        System.out.println(nombreClasificacion);
+        System.out.println(numVigencia);
+        System.out.println(indicadorTipoSeleccionado.getNombre());
+        System.out.println(descripcion);
+        System.out.println(indicadorTipoSeleccionado.getId());
         
-        nuevaClasificacion.setIndicadorTipoId(indicador_tipo_id);
+        nuevaClasificacion.setIndicadorTipoId(indicadorTipoSeleccionado);
         nuevaClasificacion.setNombre(nombreClasificacion);
-        nuevaClasificacion.setTipo(tipo);
+        nuevaClasificacion.setEstado(numVigencia);
+        nuevaClasificacion.setTipo(indicadorTipoSeleccionado.getNombre());
         nuevaClasificacion.setDescripcion(descripcion);
-                
-        try{
-            clasificacionService.crearClasificacion(nuevaClasificacion);          
-            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN", 
+
+        try {
+            clasificacionService.crearClasificacion(nuevaClasificacion);
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
                     "La clasificacion " + nombreClasificacion + " ha sido agregado correctamente")
             );
             context.getExternalContext().getFlash().setKeepMessages(true);
             context.getExternalContext()
-                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-tipo-indicador.xhtml");
-        }
-        catch(EJBException e){
-            
-            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN", 
-                    "La clasificacion " + nombreClasificacion + " ya existe en los registros")
-            );            
-            
-            
-        }                      
-    }        
+                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-clasificacion.xhtml");
+        } catch (EJBException e) {
 
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN",
+                    "La clasificacion " + nombreClasificacion + " ya existe en los registros")
+            );
+
+        }
+    }
+
+    public List<IndicadorTipo> getListaIndicadorTipo() {
+        return listaIndicadorTipo;
+    }
+
+    public void setListaIndicadorTipo(List<IndicadorTipo> listaIndicadorTipo) {
+        this.listaIndicadorTipo = listaIndicadorTipo;
+    }
+
+    public IndicadorTipo getIndicadorTipoSeleccionado() {
+        return indicadorTipoSeleccionado;
+    }
+
+    public void setIndicadorTipoSeleccionado(IndicadorTipo indicadorTipoSeleccionado) {
+        this.indicadorTipoSeleccionado = indicadorTipoSeleccionado;
+    }
+    
     public ClasificacionService getClasificacionService() {
         return clasificacionService;
     }
@@ -93,6 +126,7 @@ public class CrearClasificacionBean implements Serializable {
     }
 
     public void setIndicador_tipo_id(Integer indicador_tipo_id) {
+
         this.indicador_tipo_id = indicador_tipo_id;
     }
 
@@ -104,20 +138,20 @@ public class CrearClasificacionBean implements Serializable {
         this.nombreClasificacion = nombreClasificacion;
     }
 
-    public Short getEstado() {
-        return estado;
+    public String getEstado() {
+        return vigencia;
     }
 
-    public void setEstado(Short estado) {
-        this.estado = estado;
+    public void setEstado(String vigencia) {
+        this.vigencia = vigencia;
+    }
+    
+    public String getVigencia() {
+        return vigencia;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setVigencia(String vigencia) {
+        this.vigencia = vigencia;
     }
 
     public String getDescripcion() {
@@ -135,6 +169,5 @@ public class CrearClasificacionBean implements Serializable {
     public void setNuevaClasificacion(Clasificacion nuevaClasificacion) {
         this.nuevaClasificacion = nuevaClasificacion;
     }
-      
-    
+
 }
