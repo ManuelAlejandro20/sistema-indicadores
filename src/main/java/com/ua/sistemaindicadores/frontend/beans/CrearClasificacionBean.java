@@ -16,6 +16,7 @@ import javax.faces.view.ViewScoped;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -95,14 +96,15 @@ public class CrearClasificacionBean implements Serializable {
                     .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-clasificacion.xhtml");
         
             try {
-                //SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                //formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
                 correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha creado un registro de una nueva clasificación.<br/> "
                         + "<ul>"
                         + "<li>Nombre clasificación: " + nuevaClasificacion.getNombre() + ".</li>"
                         + "<li>Tipo de indicador asociado: " + nuevaClasificacion.getTipo() + ".</li>"                                    
                         + "<li>Estado: " + vigencia + ".</li>"
-                        + "<li>Descripción: " + nuevaClasificacion.getDescripcion() + ".</li>"                            
+                        + "<li>Descripción: " + nuevaClasificacion.getDescripcion() + ".</li>"       
+                        + "<li>Fecha creación: " + formatter.format(nuevaClasificacion.getFechaCreacion()) + ".</li>"                              
                         + "</ul>"
                         + "<br/><br/>"
                         + "Saludos cordiales. <br/><br/>"
