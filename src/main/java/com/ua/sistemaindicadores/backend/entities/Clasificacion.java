@@ -7,6 +7,7 @@ package com.ua.sistemaindicadores.backend.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +21,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -38,7 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Clasificacion.findByNombre", query = "SELECT c FROM Clasificacion c WHERE c.nombre = :nombre"),
     @NamedQuery(name = "Clasificacion.findByEstado", query = "SELECT c FROM Clasificacion c WHERE c.estado = :estado"),
     @NamedQuery(name = "Clasificacion.findByTipo", query = "SELECT c FROM Clasificacion c WHERE c.tipo = :tipo"),
-    @NamedQuery(name = "Clasificacion.findByDescripcion", query = "SELECT c FROM Clasificacion c WHERE c.descripcion = :descripcion")})
+    @NamedQuery(name = "Clasificacion.findByDescripcion", query = "SELECT c FROM Clasificacion c WHERE c.descripcion = :descripcion"),
+    @NamedQuery(name = "Clasificacion.findByFechaCreacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaCreacion = :fechaCreacion"), 
+    @NamedQuery(name = "Clasificacion.findByFechaActualizacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaActualizacion = :fechaActualizacion")})
 public class Clasificacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -66,6 +71,16 @@ public class Clasificacion implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "descripcion")
     private String descripcion;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fecha_creacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fecha_actualizacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaActualizacion;    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clasificacionId")
     private Collection<Indicador> indicadorCollection;
     @JoinColumn(name = "indicador_tipo_id", referencedColumnName = "id")
@@ -79,13 +94,15 @@ public class Clasificacion implements Serializable {
         this.id = id;
     }
 
-    public Clasificacion(Integer id, IndicadorTipo indicadorTipoId, String nombre, Short estado, String tipo, String descripcion) {
+    public Clasificacion(Integer id, IndicadorTipo indicadorTipoId, String nombre, Short estado, String tipo, String descripcion, Date fechaCreacion, Date fechaActualizacion) {
         this.id = id;
         this.indicadorTipoId = indicadorTipoId;
         this.nombre = nombre;
         this.estado = estado;
         this.tipo = tipo;
         this.descripcion = descripcion;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaActualizacion = fechaActualizacion;        
     }
 
     public Integer getId() {
@@ -128,6 +145,22 @@ public class Clasificacion implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Date getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(Date fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
+    }
+    
     @XmlTransient
     public Collection<Indicador> getIndicadorCollection() {
         return indicadorCollection;

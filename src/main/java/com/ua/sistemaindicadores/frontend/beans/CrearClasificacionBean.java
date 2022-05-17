@@ -81,6 +81,9 @@ public class CrearClasificacionBean implements Serializable {
         nuevaClasificacion.setEstado(numVigencia);
         nuevaClasificacion.setTipo(indicadorTipoSeleccionado.getNombre());
         nuevaClasificacion.setDescripcion(descripcion);
+        nuevaClasificacion.setFechaCreacion(new Date());
+        nuevaClasificacion.setFechaActualizacion(new Date());
+        nuevaClasificacion.setIndicadorCollection(new ArrayList<>());        
 
         try {
             clasificacionService.crearClasificacion(nuevaClasificacion);
