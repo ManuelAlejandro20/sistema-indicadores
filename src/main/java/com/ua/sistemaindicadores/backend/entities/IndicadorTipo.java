@@ -12,6 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -74,7 +75,7 @@ public class IndicadorTipo implements Serializable {
     @Column(name = "fecha_actualizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaActualizacion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "indicadorTipoId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "indicadorTipoId", fetch = FetchType.EAGER)
     private Collection<Clasificacion> clasificacionCollection;
 
     public IndicadorTipo() {

@@ -12,18 +12,18 @@
         <div class="ui-g-12 align-center">
             <div class="ui-g-12 ui-md-4"></div>
             <div class="ui-g-12 ui-md-4 ui-g-nopad">
-                <div class="card card-creacion-clasificacion">                                              
-                    <p:panel class="formulario" header="CREAR CLASIFICACION">
-                        <h:panelGrid class="crear-clasificacion-table" 
+                <div class="card card-creacion-tipo-indicador">                                              
+                    <p:panel class="formulario" header="CREAR CLASIFICACIÓN">
+                        <h:panelGrid class="crear-tipo-indicadores-table" 
                                      width="100%"
-                                     columns="2" columnClasses="label label-creacion-clasificacion, value">
-                            <p:outputLabel id="nombreLabel" value="Nombre de clasificacion: *"/>
+                                     columns="2" columnClasses="label label-creacion-tipo-indicador, value">
+                            <p:outputLabel id="nombreLabel" value="Nombre de clasificación: *"/>
                             <p:inputText 
                                 id="nombre"
                                 value="#{crearClasificacionBean.nombreClasificacion}" 
                                 required="true" 
                                 maxlength="10"
-                                requiredMessage="Campo nombre clasificacion es requerido."
+                                requiredMessage="Campo nombre clasificación es requerido."
                                 style="width: 80%;"
                                 tabindex="1"/>
                             <p:message for="nombreLabel"/>       
@@ -40,8 +40,10 @@
                             <p:outputLabel id="tipoLabel" value="Tipo: *"/>
 
                             <p:selectOneMenu id="listaTipo"
+                                             class="select-crear-tipo-indicadores"
                                              value="#{crearClasificacionBean.indicadorTipoSeleccionado}"
                                              required="true"
+                                             style="width: 72%;"
                                              var="tipo"
                                              converter="tipoIndicadorConverter"
                                              filter="true" 
@@ -64,12 +66,15 @@
                             <p:inputTextarea 
                                 value="#{crearClasificacionBean.descripcion}"
                                 maxlength="240"
-                                required="true" requiredMessage="Campo descripción es requerido." class="text-area-clasificacion" id="descripcion" rows="8" cols="18"/>
+                                required="true" requiredMessage="Campo descripción es requerido." class="text-area-tipo-indicadores" id="descripcion" rows="8" cols="18"/>
                             <p:message for="descripcionLabel"/>                                     
                             <p:message for="descripcion"/>      
-                            <p:commandButton value="Crear tipo de clasificacion"  
+                            <p:commandButton widgetVar="crearButton"
+                                             value="Crear clasificación"  
                                              class="ui-button-formulario"
                                              action="#{crearClasificacionBean.crearClasificacion}"   
+                                             onclick="PF('crearButton').disable()"
+                                             disabled="#{crearClasificacionBean.disabled}"                                             
                                              update="@form" 
                                              process="@this, @form"/>                                
                         </h:panelGrid>

@@ -15,6 +15,7 @@ import javax.faces.view.ViewScoped;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJBException;
@@ -46,10 +47,13 @@ public class CrearClasificacionBean implements Serializable {
 
     private Clasificacion nuevaClasificacion;
 
+    private boolean disabled;
+    
     @PostConstruct
     public void initalize() {
         nuevaClasificacion = new Clasificacion();
         listaIndicadorTipo = tipoIndicadorService.obtenerIndicadorTipos();
+        disabled = false;
         System.out.println("Inicio Bean Crear Clasificacion");
     }
 
@@ -66,13 +70,6 @@ public class CrearClasificacionBean implements Serializable {
         }
 
         FacesContext context = FacesContext.getCurrentInstance();
-
-        System.out.println(indicadorTipoSeleccionado);
-        System.out.println(nombreClasificacion);
-        System.out.println(numVigencia);
-        System.out.println(indicadorTipoSeleccionado.getNombre());
-        System.out.println(descripcion);
-        System.out.println(indicadorTipoSeleccionado.getId());
         
         nuevaClasificacion.setIndicadorTipoId(indicadorTipoSeleccionado);
         nuevaClasificacion.setNombre(nombreClasificacion);
@@ -162,6 +159,14 @@ public class CrearClasificacionBean implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+    
     public Clasificacion getNuevaClasificacion() {
         return nuevaClasificacion;
     }
