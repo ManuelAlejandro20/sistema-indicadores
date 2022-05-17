@@ -5,21 +5,130 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">
+        <f:metadata>
+            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.VerClasificacionBean"/>
+        </f:metadata>     
         <div class="ui-g-12 ui-g-title align-center">
             <h2 class="border-bottom-orange align-center">Administración de clasificaciones</h2>   
         </div>
         <br></br>        
+        <p:growl id="growl" showDetail="true"/>
         <p:toolbar class="ui-g-toolbar-adm">
+
             <p:toolbarGroup>
-                <p:commandButton value="Crear clasificación" 
+                <p:commandButton value="Crear clasificacion" 
                                  class="btn btn-blue btn-group-align"                                     
-                                 action="/faces/creacion/crear-clasificacion.xhtml?faces-redirect=true"/>                    
+                                 action="/faces/creacion/crear-clasificacion.xhtml?faces-redirect=true"/>
             </p:toolbarGroup>
 
             <p:toolbarGroup align="right">
-                <p:commandButton type="button" value="Ver filtros" class="btn btn-orange btn-group-align"/>
-                <p:commandButton type="button" value="Limpiar filtros" class="btn btn-orange"/>
+                <p:commandButton value="#{verClasificacionBean.mensajeFiltros}" 
+                                 class="btn btn-orange btn-group-align"
+                                 process="@this" 
+                                 update="@form"
+                                 actionListener="#{verClasificacionBean.eventofiltros}"
+                                 />
+                <p:commandButton value="Limpiar filtros" 
+                                 class="btn btn-orange"
+                                 process="@this" 
+                                 update="@form"
+                                 actionListener="#{verClasificacionBean.limpiarFiltros}"/>                                                                                                 
             </p:toolbarGroup>
         </p:toolbar>
+        <div class="ui-g-12" style="display:#{verClasificacionBean.filtros?'none':'block'}">
+            <p:panel class="formulario" header="FILTROS">
+                <h:panelGrid width="100%"
+                             columns="5" >
+                    <p:outputLabel style="font-weight:bold;" id="nombreLabel" value="NOMBRE"/>
+                    <p:outputLabel style="font-weight:bold;" id="estadoLabel" value="ESTADO"/>
+                    <p:outputLabel style="font-weight:bold;" id="descripcionLabel" value="DESCRIPCIÓN"/>
+                    <p:inputText id="nombre"
+                                 value="#{verClasificacionBean.nombreSeleccionado}">
+                        <p:ajax event="keyup" 
+                                delay="50"
+                                listener="#{verClasificacionBean.onSeleccionNombreListener}"
+                                process="@this" 
+                                update="@form:tipo_indicadores" />
+                    </p:inputText>            
+                    <p:selectOneMenu id="estado"
+                                     value="#{verClasificacionBean.estadoSeleccionado}"
+                                     >
+                        <f:selectItem itemLabel="Seleccione una opción" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItem itemLabel="Vigente" itemValue="1"/>
+                        <f:selectItem itemLabel="No Vigente" itemValue="0"/>
+                        <p:ajax event="itemSelect" 
+                                delay="50"
+                                listener="#{verClasificacionBean.onSeleccionEstadoListener}"
+                                process="@this" 
+                                update="@form:tipo_indicadores" />
+                    </p:selectOneMenu>  
+                    <p:inputText id="descripcion"
+                                 value="#{verClasificacionBean.descripcionSeleccionada}">
+                        <p:ajax event="keyup" 
+                                delay="50"
+                                listener="#{verClasificacionBean.onSeleccionDescripcionListener}"
+                                process="@this" 
+                                update="@form:tipo_indicadores" />
+                    </p:inputText>                                 
+                </h:panelGrid>
+            </p:panel>
+        </div>
+        <div class="ui-g-12">
+            <p:dataTable class="ui-g-tabla-adm"                          
+                         id="tipo_indicadores"
+                         var="clasificacionDTO" 
+                         value="#{verClasificacionBean.model}"
+                         widgetVar="tablaClasificacion"                         
+                         lazy="true"
+                         paginator="true"
+                         rows="5"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,25,50,100"
+                         currentPageReportTemplate="Mostrando {startRecord} - {endRecord} de {totalRecords}" 
+                         selectionMode="single"
+                         sortMode="single"
+                         sortBy="#{clasificacionDTO.id}"
+                         emptyMessage="No se recuperaron registros"
+                         reflow="true"
+                         selection="#{verClasificacionBean.clasificacionSeleccionadoDTO}"
+                         rowKey="#{clasificacionDTO.id}"                         
+                         >
+
+                <f:facet name="header">
+                    <div style="height: 30px;">
+                        <span>Lista de tipos de indicadores</span>
+                    </div>
+                </f:facet>              
+                <p:column headerText="Nombre"
+                          width="5"
+                          styleClass="align-center">                 
+                    <h:outputText value="#{clasificacionDTO.nombre eq null?'Sin dato':clasificacionDTO.nombre }">
+                        <f:convertNumber integerOnly="true"/>
+                    </h:outputText>                    
+                </p:column>
+                <p:column headerText="Estado"
+                          width="5"
+                          styleClass="align-center">
+                    <h:outputText value="#{clasificacionDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
+                    </h:outputText>                            
+                </p:column>
+                <p:column headerText="Descripción"
+                          width="50"
+                          styleClass="align-center">
+                    <h:outputText value="#{clasificacionDTO.descripcion eq null?'Sin dato':clasificacionDTO.descripcion }">
+                    </h:outputText>                            
+                </p:column>
+                <p:column headerText="Editar"
+                          width="4"
+                          styleClass="align-center">
+                    <p:button
+                        outcome="/edicion/edicion-tipo-indicador.xhtml?id=#{clasificacionDTO.id}"
+                        class="btn btn-info"
+                        icon="fa fa-edit">
+                    </p:button>
+
+                </p:column>
+            </p:dataTable>
+        </div> 
     </ui:define>
 </ui:composition>

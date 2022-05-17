@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -37,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Clasificacion.findAll", query = "SELECT c FROM Clasificacion c"),
     @NamedQuery(name = "Clasificacion.findById", query = "SELECT c FROM Clasificacion c WHERE c.id = :id"),
     @NamedQuery(name = "Clasificacion.findByNombre", query = "SELECT c FROM Clasificacion c WHERE c.nombre = :nombre"),
+    @NamedQuery(name = "Clasificacion.findByEstado", query = "SELECT c FROM Clasificacion c WHERE c.estado = :estado"),
     @NamedQuery(name = "Clasificacion.findByTipo", query = "SELECT c FROM Clasificacion c WHERE c.tipo = :tipo"),
     @NamedQuery(name = "Clasificacion.findByDescripcion", query = "SELECT c FROM Clasificacion c WHERE c.descripcion = :descripcion")})
 public class Clasificacion implements Serializable {
@@ -54,9 +54,8 @@ public class Clasificacion implements Serializable {
     private String nombre;
     @Basic(optional = false)
     @NotNull
-    @Lob
     @Column(name = "estado")
-    private byte[] estado;
+    private Short estado;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -80,8 +79,9 @@ public class Clasificacion implements Serializable {
         this.id = id;
     }
 
-    public Clasificacion(Integer id, String nombre, byte[] estado, String tipo, String descripcion) {
+    public Clasificacion(Integer id, IndicadorTipo indicadorTipoId, String nombre, Short estado, String tipo, String descripcion) {
         this.id = id;
+        this.indicadorTipoId = indicadorTipoId;
         this.nombre = nombre;
         this.estado = estado;
         this.tipo = tipo;
@@ -104,11 +104,11 @@ public class Clasificacion implements Serializable {
         this.nombre = nombre;
     }
 
-    public byte[] getEstado() {
+    public Short getEstado() {
         return estado;
     }
 
-    public void setEstado(byte[] estado) {
+    public void setEstado(Short estado) {
         this.estado = estado;
     }
 
@@ -169,5 +169,5 @@ public class Clasificacion implements Serializable {
     public String toString() {
         return "com.ua.sistemaindicadores.backend.entities.Clasificacion[ id=" + id + " ]";
     }
-    
+
 }
