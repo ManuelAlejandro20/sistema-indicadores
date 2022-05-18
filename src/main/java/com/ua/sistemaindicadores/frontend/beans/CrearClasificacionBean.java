@@ -123,7 +123,7 @@ public class CrearClasificacionBean implements Serializable {
         } catch (EJBException e) {
 
             context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN",
-                    "La clasificacion " + nombreClasificacion + " ya existe en los registros")
+                    "La clasificación " + nombreClasificacion + " ya existe en los registros")
             );
 
         }
