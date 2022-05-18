@@ -89,7 +89,7 @@ public class CrearClasificacionBean implements Serializable {
         try {
             clasificacionService.crearClasificacion(nuevaClasificacion);
             context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
-                    "La clasificacion " + nombreClasificacion + " ha sido agregada correctamente")
+                    "La clasificación " + nombreClasificacion + " ha sido agregada correctamente")
             );
             context.getExternalContext().getFlash().setKeepMessages(true);
             context.getExternalContext()
