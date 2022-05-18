@@ -41,6 +41,9 @@
                              columns="5" >
                     <p:outputLabel style="font-weight:bold;" id="nombreLabel" value="NOMBRE"/>
                     <p:outputLabel style="font-weight:bold;" id="estadoLabel" value="ESTADO"/>
+                    <p:outputLabel style="font-weight:bold;" id="tipoLabel" value="TIPO"/>
+                    <p:outputLabel style="font-weight:bold;" id="fechaCLabel" value="AÑO DE CREACIÓN"/>
+                    <p:outputLabel style="font-weight:bold;" id="fechaALabel" value="AÑO DE LA ÚLTIMA ACTUALIZACIÓN"/>
                     <p:outputLabel style="font-weight:bold;" id="descripcionLabel" value="DESCRIPCIÓN"/>
                     <p:inputText id="nombre"
                                  value="#{verClasificacionBean.nombreSeleccionado}">
@@ -48,7 +51,7 @@
                                 delay="50"
                                 listener="#{verClasificacionBean.onSeleccionNombreListener}"
                                 process="@this" 
-                                update="@form:tipo_indicadores" />
+                                update="@form:clasificaciones" />
                     </p:inputText>            
                     <p:selectOneMenu id="estado"
                                      value="#{verClasificacionBean.estadoSeleccionado}"
@@ -60,22 +63,50 @@
                                 delay="50"
                                 listener="#{verClasificacionBean.onSeleccionEstadoListener}"
                                 process="@this" 
-                                update="@form:tipo_indicadores" />
-                    </p:selectOneMenu>  
+                                update="@form:clasificaciones" />
+                    </p:selectOneMenu>
+                    <p:selectOneMenu id="listaTipo"
+                                     value="#{verClasificacionBean.indicadorTipoSeleccionado}"
+                                     >
+                        <f:selectItems value="#{crearClasificacionBean.listaIndicadorTipo}"
+                                       var="indTipo"
+                                       itemLabel="#{indTipo.nombre}"
+                                       itemValue="#{indTipo}"
+                                       itemDescription="#{indTipo.descripcion}"/>
+                        <p:column>
+                            #{tipo.nombre}
+                        </p:column>     
+                    </p:selectOneMenu>
                     <p:inputText id="descripcion"
-                                 value="#{verClasificacionBean.descripcionSeleccionada}">
+                                 value="#{verTipoIndicadorBean.descripcionSeleccionada}">
                         <p:ajax event="keyup" 
                                 delay="50"
-                                listener="#{verClasificacionBean.onSeleccionDescripcionListener}"
+                                listener="#{verTipoIndicadorBean.onSeleccionDescripcionListener}"
                                 process="@this" 
-                                update="@form:tipo_indicadores" />
+                                update="@form:clasificaciones" />
+                    </p:inputText>   
+                    <p:inputText id="anioCreacion"
+                                 value="#{verTipoIndicadorBean.anioCreacionSeleccionado}">
+                        <p:ajax event="keyup" 
+                                delay="500"
+                                listener="#{verTipoIndicadorBean.onSeleccionAnioCreacionListener}"
+                                process="@this" 
+                                update="@form:clasificaciones" />
+                    </p:inputText>  
+                    <p:inputText id="anioActualizacion"
+                                 value="#{verTipoIndicadorBean.anioActualizacionSeleccionado}">
+                        <p:ajax event="keyup" 
+                                delay="500"
+                                listener="#{verTipoIndicadorBean.onSeleccionAnioActualizacionListener}"
+                                process="@this" 
+                                update="@form:clasificaciones" />
                     </p:inputText>                                 
                 </h:panelGrid>
             </p:panel>
         </div>
         <div class="ui-g-12">
             <p:dataTable class="ui-g-tabla-adm"                          
-                         id="tipo_indicadores"
+                         id="clasificaciones"
                          var="clasificacionDTO" 
                          value="#{verClasificacionBean.model}"
                          widgetVar="tablaClasificacion"                         
@@ -96,13 +127,20 @@
 
                 <f:facet name="header">
                     <div style="height: 30px;">
-                        <span>Lista de tipos de indicadores</span>
+                        <span>Lista de clasificaciones</span>
                     </div>
                 </f:facet>              
                 <p:column headerText="Nombre"
                           width="5"
                           styleClass="align-center">                 
                     <h:outputText value="#{clasificacionDTO.nombre eq null?'Sin dato':clasificacionDTO.nombre }">
+                        <f:convertNumber integerOnly="true"/>
+                    </h:outputText>                    
+                </p:column>
+                <p:column headerText="Tipo"
+                          width="5"
+                          styleClass="align-center">                 
+                    <h:outputText value="#{clasificacionDTO.tipo eq null?'Sin dato':clasificacionDTO.tipo }">
                         <f:convertNumber integerOnly="true"/>
                     </h:outputText>                    
                 </p:column>
@@ -117,6 +155,20 @@
                           styleClass="align-center">
                     <h:outputText value="#{clasificacionDTO.descripcion eq null?'Sin dato':clasificacionDTO.descripcion }">
                     </h:outputText>                            
+                </p:column>
+                <p:column headerText="Fecha de creación"
+                          width="30"
+                          styleClass="align-center">                          
+                    <h:outputText value="#{clasificacionDTO.fechaCreacion eq null?'Sin dato':clasificacionDTO.fechaCreacion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
+                    </h:outputText>                    
+                </p:column>
+                <p:column headerText="Última actualización"
+                          width="30"
+                          styleClass="align-center">
+                    <h:outputText value="#{clasificacionDTO.fechaActualizacion eq null?'Sin dato':clasificacionDTO.fechaActualizacion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
+                    </h:outputText>                         
                 </p:column>
                 <p:column headerText="Editar"
                           width="4"

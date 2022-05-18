@@ -9,6 +9,8 @@ import com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO;
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.models.ClasificacionLazyDataModel;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
+import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
+import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.annotation.PostConstruct;
@@ -21,6 +23,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.text.ParseException;
+import java.util.List;
 
 /**
  *
@@ -36,13 +39,20 @@ public class VerClasificacionBean implements Serializable {
     private ClasificacionLazyDataModel model;
     @Inject
     transient private ClasificacionService clasificacionService;
+    @Inject
+    transient private TipoIndicadorService tipoIndicadorService;
 
     private String nombreSeleccionado;
     private String estadoSeleccionado;
     private String descripcionSeleccionada;
+    private String anioCreacionSeleccionado;
+    private String anioActualizacionSeleccionado;
 
     private Boolean filtros;
     private String mensajeFiltros;
+
+    private List<IndicadorTipo> listaIndicadorTipo;
+    private IndicadorTipo indicadorTipoSeleccionado;
 
     private ClasificacionDTO clasificacionSeleccionadoDTO;
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -52,6 +62,7 @@ public class VerClasificacionBean implements Serializable {
         System.out.println("Inicio Bean Ver Tipo Indicador");
         filtros = true;
         mensajeFiltros = "Mostrar filtros";
+        listaIndicadorTipo = tipoIndicadorService.obtenerIndicadorTipos();
     }
 
     /**
@@ -100,6 +111,30 @@ public class VerClasificacionBean implements Serializable {
         this.descripcionSeleccionada = descripcionSeleccionada;
     }
 
+    public TipoIndicadorService getTipoIndicadorService() {
+        return tipoIndicadorService;
+    }
+
+    public void setTipoIndicadorService(TipoIndicadorService tipoIndicadorService) {
+        this.tipoIndicadorService = tipoIndicadorService;
+    }
+
+    public List<IndicadorTipo> getListaIndicadorTipo() {
+        return listaIndicadorTipo;
+    }
+
+    public void setListaIndicadorTipo(List<IndicadorTipo> listaIndicadorTipo) {
+        this.listaIndicadorTipo = listaIndicadorTipo;
+    }
+
+    public IndicadorTipo getIndicadorTipoSeleccionado() {
+        return indicadorTipoSeleccionado;
+    }
+
+    public void setIndicadorTipoSeleccionado(IndicadorTipo indicadorTipoSeleccionado) {
+        this.indicadorTipoSeleccionado = indicadorTipoSeleccionado;
+    }
+
     public Boolean getFiltros() {
         return filtros;
     }
@@ -114,6 +149,22 @@ public class VerClasificacionBean implements Serializable {
 
     public void setMensajeFiltros(String mensajeFiltros) {
         this.mensajeFiltros = mensajeFiltros;
+    }
+
+    public String getAnioCreacionSeleccionado() {
+        return anioCreacionSeleccionado;
+    }
+
+    public void setAnioCreacionSeleccionado(String anioCreacionSeleccionado) {
+        this.anioCreacionSeleccionado = anioCreacionSeleccionado;
+    }
+
+    public String getAnioActualizacionSeleccionado() {
+        return anioActualizacionSeleccionado;
+    }
+
+    public void setAnioActualizacionSeleccionado(String anioActualizacionSeleccionado) {
+        this.anioActualizacionSeleccionado = anioActualizacionSeleccionado;
     }
 
     public void eventofiltros() {
@@ -132,6 +183,8 @@ public class VerClasificacionBean implements Serializable {
             nombreSeleccionado = null;
             estadoSeleccionado = null;
             descripcionSeleccionada = null;
+            anioCreacionSeleccionado = null;
+            anioActualizacionSeleccionado = null;
             onSeleccionNombreListener();
             onSeleccionEstadoListener();
             onSeleccionDescripcionListener();
@@ -197,4 +250,42 @@ public class VerClasificacionBean implements Serializable {
                     );
         }
     }
+    
+        public void onSeleccionAnioCreacionListener(){        
+        try {
+            if (anioCreacionSeleccionado != null) {
+                model.setFechaCreacion(formatter.parse("01-01-" + anioCreacionSeleccionado));
+            } else {
+                model.setFechaCreacion(null);
+            }
+        } catch (EJBException ex) {
+            Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha creacion. Contacte al administrador.")
+                    );
+        } catch (ParseException ex){
+            model.setFechaCreacion(null);
+        }
+    }            
+    
+    public void onSeleccionAnioActualizacionListener(){        
+        try {
+            if (anioActualizacionSeleccionado != null) {
+                model.setFechaActualizacion(formatter.parse("01-01-" + anioActualizacionSeleccionado));
+            } else {
+                model.setFechaActualizacion(null);
+            }
+        } catch (EJBException ex) {
+            Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha actualizacion. Contacte al administrador.")
+                    );
+        } catch (ParseException ex){
+            model.setFechaCreacion(null);
+        }
+    }  
 }
