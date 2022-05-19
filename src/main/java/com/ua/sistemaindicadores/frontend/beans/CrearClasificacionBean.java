@@ -7,6 +7,7 @@ package com.ua.sistemaindicadores.frontend.beans;
 
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
+import com.ua.sistemaindicadores.backend.exceptions.NotificacionCorreoException;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
 import com.ua.sistemaindicadores.backend.services.CorreoService;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
@@ -36,6 +37,7 @@ import javax.inject.Inject;
 public class CrearClasificacionBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final String direccionSI = "http://localhost:8080/SistemaIndicadores-1.0-SNAPSHOT/faces/inicio/inicio.xhtml";
 
     @Inject
     transient private ClasificacionService clasificacionService;
@@ -91,9 +93,6 @@ public class CrearClasificacionBean implements Serializable {
             context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
                     "La clasificación " + nombreClasificacion + " ha sido agregada correctamente")
             );
-            context.getExternalContext().getFlash().setKeepMessages(true);
-            context.getExternalContext()
-                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-clasificacion.xhtml");
         
             try {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -106,20 +105,28 @@ public class CrearClasificacionBean implements Serializable {
                         + "<li>Descripción: " + nuevaClasificacion.getDescripcion() + ".</li>"       
                         + "<li>Fecha creación: " + formatter.format(nuevaClasificacion.getFechaCreacion()) + ".</li>"                              
                         + "</ul>"
+                        + "<br/><br/>"                                
+                        + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
                         + "<br/><br/>"
+                        + "<br/><br/>"                                
                         + "Saludos cordiales. <br/><br/>"
                         + "Sistema de Indicadores."
                 );   
-            } catch (Exception ex) {
+            }  catch (NotificacionCorreoException ex) {
+                
+                context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
+                        "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
+                );                           
                 
                 //En caso de capturar algun error se retorna un mensaje y se guarda en el log el error
                 Logger.getLogger(CrearTipoIndicadorBean.class
                         .getName()).log(Level.SEVERE, "Ocurrio un error al enviar el correo.", ex);
-                FacesContext
-                        .getCurrentInstance()
-                        .addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
-                        );
-            }           
+            }
+
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            context.getExternalContext()
+                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-clasificacion.xhtml");            
+            
         } catch (EJBException e) {
 
             context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN",
