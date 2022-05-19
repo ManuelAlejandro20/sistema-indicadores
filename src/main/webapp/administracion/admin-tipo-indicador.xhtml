@@ -37,20 +37,21 @@
         </p:toolbar>
         <div class="ui-g-12" style="display:#{verTipoIndicadorBean.filtros?'none':'block'}">
             <p:panel class="formulario" header="FILTROS">
-                        <p:panelGrid layout="grid" columns="5">
+                        <p:panelGrid layout="grid" columns="6">
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="nombreLabel" value="NOMBRE"/>                            
                             <p:inputText id="nombre"
-                                         placeholder="NOMBRE"
                                          value="#{verTipoIndicadorBean.nombreSeleccionado}">
                                 <p:ajax event="keyup" 
-                                        delay="50"
+                                        delay="50"                                        
                                         listener="#{verTipoIndicadorBean.onSeleccionNombreListener}"
                                         process="@this" 
                                         update="@form:tipo_indicadores" />
                             </p:inputText>            
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="estadoLabel" value="ESTADO"/>                            
                             <p:selectOneMenu id="estado"
                                              value="#{verTipoIndicadorBean.estadoSeleccionado}"
                                              >
-                                <f:selectItem itemLabel="ESTADO" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItem itemLabel="Vigente" itemValue="1"/>
                                 <f:selectItem itemLabel="No Vigente" itemValue="0"/>
                                 <p:ajax event="itemSelect" 
@@ -59,34 +60,33 @@
                                         process="@this" 
                                         update="@form:tipo_indicadores" />
                             </p:selectOneMenu>  
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="descripcionLabel" value="DESCRIPCIÓN"/>                            
                             <p:inputText id="descripcion"
-                                         placeholder="DESCRIPCIÓN"
                                          value="#{verTipoIndicadorBean.descripcionSeleccionada}">
                                 <p:ajax event="keyup" 
                                         delay="50"
                                         listener="#{verTipoIndicadorBean.onSeleccionDescripcionListener}"
                                         process="@this" 
                                         update="@form:tipo_indicadores" />
-                            </p:inputText>   
+                            </p:inputText>    
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="fechaCLabel" value="AÑO DE CREACIÓN"/>                            
                             <p:inputText id="anioCreacion"
-                                         placeholder="AÑO DE CREACIÓN"
                                          value="#{verTipoIndicadorBean.anioCreacionSeleccionado}">                                         
                                 <p:ajax event="keyup" 
                                         delay="500"
                                         listener="#{verTipoIndicadorBean.onSeleccionAnioCreacionListener}"
                                         process="@this" 
                                         update="@form:tipo_indicadores" />
-                            </p:inputText>  
+                            </p:inputText> 
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="fechaALabel" value="AÑO DE ÚLTIMA ACT."/>                            
                             <p:inputText id="anioActualizacion"
-                                         placeholder="AÑO ÚLTIMA ACTUALIZACIÓN"
-                                         style="width:200px;"
                                          value="#{verTipoIndicadorBean.anioActualizacionSeleccionado}">
                                 <p:ajax event="keyup" 
                                         delay="500"
                                         listener="#{verTipoIndicadorBean.onSeleccionAnioActualizacionListener}"
                                         process="@this" 
                                         update="@form:tipo_indicadores" />
-                            </p:inputText>                               
+                            </p:inputText>                             
                         </p:panelGrid>
             </p:panel>
         </div>              
