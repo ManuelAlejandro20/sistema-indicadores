@@ -16,14 +16,14 @@
         <p:toolbar class="ui-g-toolbar-adm">
 
             <p:toolbarGroup>
-                <p:commandButton value="Crear tipo de indicador" 
-                                 class="btn btn-blue btn-group-align"                                     
+                <p:commandButton value="Crear tipo" 
+                                 class="btn btn-blue btn-group-align"  
                                  action="/faces/creacion/crear-tipo-indicador.xhtml?faces-redirect=true"/>
             </p:toolbarGroup>
 
             <p:toolbarGroup align="right">
                 <p:commandButton value="#{verTipoIndicadorBean.mensajeFiltros}" 
-                                 class="btn btn-orange btn-group-align"
+                                 class="btn btn-orange btn-group-align"        
                                  process="@this" 
                                  update="@form"
                                  actionListener="#{verTipoIndicadorBean.eventofiltros}"
@@ -37,14 +37,9 @@
         </p:toolbar>
         <div class="ui-g-12" style="display:#{verTipoIndicadorBean.filtros?'none':'block'}">
             <p:panel class="formulario" header="FILTROS">
-                        <h:panelGrid width="100%"
-                            columns="5" >
-                            <p:outputLabel style="font-weight:bold;" id="nombreLabel" value="NOMBRE"/>
-                            <p:outputLabel style="font-weight:bold;" id="estadoLabel" value="ESTADO"/>
-                            <p:outputLabel style="font-weight:bold;" id="descripcionLabel" value="DESCRIPCIÓN"/>
-                            <p:outputLabel style="font-weight:bold;" id="fechaCLabel" value="AÑO DE CREACIÓN"/>
-                            <p:outputLabel style="font-weight:bold;" id="fechaALabel" value="AÑO DE LA ÚLTIMA ACTUALIZACIÓN"/>
+                        <p:panelGrid layout="grid" columns="5">
                             <p:inputText id="nombre"
+                                         placeholder="NOMBRE"
                                          value="#{verTipoIndicadorBean.nombreSeleccionado}">
                                 <p:ajax event="keyup" 
                                         delay="50"
@@ -55,7 +50,7 @@
                             <p:selectOneMenu id="estado"
                                              value="#{verTipoIndicadorBean.estadoSeleccionado}"
                                              >
-                                <f:selectItem itemLabel="Seleccione una opción" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItem itemLabel="ESTADO" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItem itemLabel="Vigente" itemValue="1"/>
                                 <f:selectItem itemLabel="No Vigente" itemValue="0"/>
                                 <p:ajax event="itemSelect" 
@@ -65,6 +60,7 @@
                                         update="@form:tipo_indicadores" />
                             </p:selectOneMenu>  
                             <p:inputText id="descripcion"
+                                         placeholder="DESCRIPCIÓN"
                                          value="#{verTipoIndicadorBean.descripcionSeleccionada}">
                                 <p:ajax event="keyup" 
                                         delay="50"
@@ -73,7 +69,8 @@
                                         update="@form:tipo_indicadores" />
                             </p:inputText>   
                             <p:inputText id="anioCreacion"
-                                         value="#{verTipoIndicadorBean.anioCreacionSeleccionado}">
+                                         placeholder="AÑO DE CREACIÓN"
+                                         value="#{verTipoIndicadorBean.anioCreacionSeleccionado}">                                         
                                 <p:ajax event="keyup" 
                                         delay="500"
                                         listener="#{verTipoIndicadorBean.onSeleccionAnioCreacionListener}"
@@ -81,6 +78,8 @@
                                         update="@form:tipo_indicadores" />
                             </p:inputText>  
                             <p:inputText id="anioActualizacion"
+                                         placeholder="AÑO ÚLTIMA ACTUALIZACIÓN"
+                                         style="width:200px;"
                                          value="#{verTipoIndicadorBean.anioActualizacionSeleccionado}">
                                 <p:ajax event="keyup" 
                                         delay="500"
@@ -88,7 +87,7 @@
                                         process="@this" 
                                         update="@form:tipo_indicadores" />
                             </p:inputText>                               
-                        </h:panelGrid>
+                        </p:panelGrid>
             </p:panel>
         </div>              
         <div class="ui-g-12">

@@ -45,7 +45,9 @@
 }
 
 .btn-group-align{
-    margin-right: 7px;
+    margin-right : 7px;
+    padding-left : 0px !important;
+    padding-right : 0px !important;
 }
 
 .btn {
@@ -71,9 +73,11 @@
     background-color: #ffffff !important;
     text-decoration: none;
 }
-.btn-orange {
+.btn-orange {   
     color: #fff !important;
     background-color: #FF6600 !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
     border-color: #FF6600 !important;
 }
 
@@ -81,7 +85,7 @@
     color: #000 !important;
     border-color: #FF6600 !important;
 }
-.btn-blue {
+.btn-blue {    
     color: #fff !important;
     background-color: #0C5DC6 !important;
     border-color: #004AAE !important;
