@@ -5,6 +5,9 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">    
+        <f:metadata>
+            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.VerIndicadorBean"/>
+        </f:metadata>          
         <div class="ui-g-12 ui-g-title align-center">
             <h2 class="border-bottom-orange align-center">Administración de Indicadores</h2>   
         </div>
@@ -19,11 +22,112 @@
             </p:toolbarGroup>
 
             <p:toolbarGroup align="right">
-                <p:commandButton value="Mostrar filtros" 
-                                 class="btn btn-orange btn-group-align"/>
+                <p:commandButton value="#{verIndicadorBean.mensajeFiltros}" 
+                                 class="btn btn-orange btn-group-align"
+                                 process="@this" 
+                                 update="@form"
+                                 actionListener="#{verIndicadorBean.eventofiltros}"
+                                 />                                 
                 <p:commandButton value="Limpiar filtros" 
-                                 class="btn btn-orange"/>                                                                                                 
+                                 class="btn btn-orange"
+                                 process="@this" 
+                                 update="@form"/>                                   
             </p:toolbarGroup>
-        </p:toolbar>                
+        </p:toolbar>   
+        <div class="ui-g-12" style="display:#{verIndicadorBean.filtros?'none':'block'}">
+            <p:panel class="formulario" header="FILTROS">                       
+                <p:wizard flowListener="#{verIndicadorBean.flujoProceso}"
+                          showStepStatus="true"
+                          nextLabel="Siguiente"
+                          backLabel="Anterior"
+                          >        
+                    <p:tab id="pag1" title="1">
+                        <p:panelGrid layout="grid" columns="6">
+                            <p:outputLabel class="label-centered" id="tipoIndicadorLabel" value="TIPO"/>
+                            <p:selectOneMenu id="tipoIndicador">
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                            </p:selectOneMenu>                      
+                            <p:outputLabel class="label-centered" id="clasLabel" value="CLASIFICACIÓN"/>
+                            <p:selectOneMenu id="clas">
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                            </p:selectOneMenu>                                       
+                            <p:outputLabel class="label-centered" id="nIndicadorLabel" value="N° INDICADOR"/>
+                            <p:inputText id="nIndicador">
+                            </p:inputText>                                     
+                            <!---->
+                            <!---->
+                            <p:outputLabel class="label-centered" id="nombreIndLabel" value="NOMBRE DE INDICADOR"/>
+                            <p:inputText id="nombreInd">
+                            </p:inputText>                               
+                            <p:outputLabel class="label-centered" id="descripcionLabel" title="DESCRIPCIÓN DE INDICADOR" value="DES. DE INDICADOR"/>                                                                            
+                            <p:inputText id="descripcion">
+                            </p:inputText>                               
+                            <p:outputLabel class="label-centered" id="aLineamientosLabel" value="APLICA LINEAMIENTO"/>                               
+                            <p:inputText id="aLineamientos">
+                            </p:inputText>                                       
+                            <!---->
+                            <!---->      
+                            <p:outputLabel class="label-centered" id="aObjetivoLabel" value="APLICA OBJETIVO"/>
+                            <p:inputText id="aObjetivo">
+                            </p:inputText>                               
+                            <p:outputLabel class="label-centered" id="descripcionObjLabel" title="DESCRIPCIÓN DE OBJETIVO" value="DES. DE OBJETIVO"/>                                                                            
+                            <p:inputText id="descripcionObj">
+                            </p:inputText>                               
+                            <p:outputLabel class="label-centered" id="ajustepdeiLabel" value="AJUSTE PDEI"/>                               
+                            <p:selectOneMenu id="ajustepdei">
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                            </p:selectOneMenu>                                                                
+                        </p:panelGrid>
+                    </p:tab>
+                    <p:tab id="pag2" title="2">
+                        <p:panelGrid layout="grid" columns="6"> 
+                            <p:outputLabel class="label-centered" id="uReprLabel" title="UNIDAD DE REPRESENTACIÓN" value="U. DE REPRESENTACIÓN"/>
+                            <p:selectOneMenu id="uRepr">
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                            </p:selectOneMenu>                                  
+                            <p:outputLabel class="label-centered" id="gendatosLabel" title="GENERACIÓN DE LOS DATOS" value="GEN. DE LOS DATOS"/>                                                                            
+                            <p:selectOneMenu id="gendatos">
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                            </p:selectOneMenu>                               
+                            <p:outputLabel class="label-centered" id="plazoLabel" value="PLAZO"/>                               
+                            <p:selectOneMenu id="plazo">
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                            </p:selectOneMenu>        
+                            <!---->
+                            <!---->    
+                            <p:outputLabel class="label-centered" id="versionLabel" value="VERSIÓN"/>
+                            <p:inputText id="version">
+                            </p:inputText>    
+                            <p:outputLabel class="label-centered" id="lbaseLabel" value="LÍNEA BASE"/>
+                            <p:inputText id="lbase">
+                            </p:inputText>                                
+                            <p:outputLabel class="label-centered" id="metasLabel" value="METAS"/>
+                            <p:inputText id="metas">
+                            </p:inputText>    
+                            <!---->
+                            <!---->            
+                            <p:outputLabel class="label-centered" id="aniocumLabel" value="AÑO CUMPLIMIENTO"/>                               
+                            <p:selectOneMenu id="aniocum">
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                            </p:selectOneMenu>                               
+                            <p:outputLabel class="label-centered" id="porcLogroLabel" value="% LOGRO"/>
+                            <p:inputText id="porcLogro">
+                            </p:inputText> 
+                            <p:outputLabel class="label-centered" id="frecuenciaLabel" value="FRECUENCIA MEDICIÓN"/>                                                           
+                            <p:selectOneMenu id="frecuencia">
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                            </p:selectOneMenu>                                                      
+                        </p:panelGrid>                                                                         
+                    </p:tab>                           
+                    <p:tab id="pag3" title="3">
+                        <p:panelGrid layout="grid" columns="6"> 
+                            <p:outputLabel class="label-centered" id="medioVerLabel" value="MEDIO DE VERIFICACIÓN"/>
+                            <p:inputText id="medioVer">
+                            </p:inputText>                                  
+                        </p:panelGrid>
+                    </p:tab>                    
+                </p:wizard>                                                
+            </p:panel>
+        </div>        
     </ui:define>
 </ui:composition>
