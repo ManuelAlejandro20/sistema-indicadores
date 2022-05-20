@@ -87,17 +87,17 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
             }
                         if(fechaCreacion != null)
             {
-                filters.put(ClasificacionDAO.KEY_FCREACION, fechaCreacion);
+                filters.put(ClasificacionDAO.KEY_FECHA_CREACION, fechaCreacion);
             }else
             {
-                filters.remove(ClasificacionDAO.KEY_FCREACION);
+                filters.remove(ClasificacionDAO.KEY_FECHA_CREACION);
             }
             if(fechaActualizacion != null)
             {
-                filters.put(ClasificacionDAO.KEY_FACT, fechaActualizacion);
+                filters.put(ClasificacionDAO.KEY_FECHA_ACTUALIZACION, fechaActualizacion);
             }else
             {
-                filters.remove(ClasificacionDAO.KEY_FACT);
+                filters.remove(ClasificacionDAO.KEY_FECHA_ACTUALIZACION);
             }
 
             String order = null;

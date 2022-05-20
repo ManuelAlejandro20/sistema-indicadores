@@ -71,7 +71,7 @@ public class CrearClasificacionBean implements Serializable {
 
         FacesContext context = FacesContext.getCurrentInstance();
         
-        nuevaClasificacion.setIndicadorTipoId(indicadorTipoSeleccionado);
+        nuevaClasificacion.setIndicadorTipoId(indicadorTipoSeleccionado.getId());
         nuevaClasificacion.setNombre(nombreClasificacion);
         nuevaClasificacion.setEstado(numVigencia);
         nuevaClasificacion.setTipo(indicadorTipoSeleccionado.getNombre());
@@ -93,7 +93,6 @@ public class CrearClasificacionBean implements Serializable {
             context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN",
                     "La clasificacion " + nombreClasificacion + " ya existe en los registros")
             );
-
         }
     }
 

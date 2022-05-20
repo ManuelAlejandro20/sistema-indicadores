@@ -30,11 +30,12 @@ import javax.persistence.criteria.Predicate;
 public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
 
     public static final String KEY_NOMBRE = "nombre";
+    public static final String KEY_INDICADOR_TIPO_ID = "indicadorTipoId";
     public static final String KEY_TIPO = "tipo";
     public static final String KEY_ESTADO = "estado";
     public static final String KEY_DESCRIPCION = "descripcion";
-    public static final String KEY_FCREACION = "fechaCreacion";
-    public static final String KEY_FACT = "fechaActualizacion";
+    public static final String KEY_FECHA_CREACION = "fechaCreacion";
+    public static final String KEY_FECHA_ACTUALIZACION = "fechaActualizacion";
 
     @Inject
     private EntityManagerProvider entityManagerProvider;
@@ -105,8 +106,8 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
                                 )
                         );
                         break;
-                    case KEY_FCREACION:
-                    case KEY_FACT:
+                    case KEY_FECHA_CREACION:
+                    case KEY_FECHA_ACTUALIZACION:
                         SimpleDateFormat df = new SimpleDateFormat("yyyy");
                         Integer year = Integer.parseInt(df.format((Date) filters.get(key)));
                         p = cb.and(p,
@@ -149,7 +150,7 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
                 cb.construct(
                         ClasificacionDTO.class,
                         rootInformacion.get(Clasificacion_.ID),
-                        //rootInformacion.get(Clasificacion_.INDICADOR_TIPO_ID),
+                        rootInformacion.get(Clasificacion_.INDICADOR_TIPO_ID),
                         rootInformacion.get(Clasificacion_.NOMBRE),
                         rootInformacion.get(Clasificacion_.TIPO),
                         rootInformacion.get(Clasificacion_.ESTADO),

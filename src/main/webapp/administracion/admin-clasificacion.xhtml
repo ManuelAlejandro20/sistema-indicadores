@@ -41,10 +41,10 @@
                              columns="5" >
                     <p:outputLabel style="font-weight:bold;" id="nombreLabel" value="NOMBRE"/>
                     <p:outputLabel style="font-weight:bold;" id="estadoLabel" value="ESTADO"/>
+                    <p:outputLabel style="font-weight:bold;" id="descripcionLabel" value="DESCRIPCIÓN"/>
                     <p:outputLabel style="font-weight:bold;" id="tipoLabel" value="TIPO"/>
                     <p:outputLabel style="font-weight:bold;" id="fechaCLabel" value="AÑO DE CREACIÓN"/>
-                    <p:outputLabel style="font-weight:bold;" id="fechaALabel" value="AÑO DE LA ÚLTIMA ACTUALIZACIÓN"/>
-                    <p:outputLabel style="font-weight:bold;" id="descripcionLabel" value="DESCRIPCIÓN"/>
+                    <p:outputLabel style="font-weight:bold;" id="fechaALabel" value="AÑO DE LA ÚLTIMA ACTUALIZACIÓN"/> 
                     <p:inputText id="nombre"
                                  value="#{verClasificacionBean.nombreSeleccionado}">
                         <p:ajax event="keyup" 
@@ -65,6 +65,14 @@
                                 process="@this" 
                                 update="@form:clasificaciones" />
                     </p:selectOneMenu>
+                    <p:inputText id="descripcion"
+                                 value="#{verClasificacionBean.descripcionSeleccionada}">
+                        <p:ajax event="keyup" 
+                                delay="50"
+                                listener="#{verClasificacionBean.onSeleccionDescripcionListener}"
+                                process="@this" 
+                                update="@form:clasificaciones" />
+                    </p:inputText> 
                     <p:selectOneMenu id="listaTipo"
                                      value="#{verClasificacionBean.indicadorTipoSeleccionado}"
                                      >
@@ -76,28 +84,20 @@
                         <p:column>
                             #{tipo.nombre}
                         </p:column>     
-                    </p:selectOneMenu>
-                    <p:inputText id="descripcion"
-                                 value="#{verTipoIndicadorBean.descripcionSeleccionada}">
-                        <p:ajax event="keyup" 
-                                delay="50"
-                                listener="#{verTipoIndicadorBean.onSeleccionDescripcionListener}"
-                                process="@this" 
-                                update="@form:clasificaciones" />
-                    </p:inputText>   
+                    </p:selectOneMenu>  
                     <p:inputText id="anioCreacion"
-                                 value="#{verTipoIndicadorBean.anioCreacionSeleccionado}">
+                                 value="#{verClasificacionBean.anioCreacionSeleccionado}">
                         <p:ajax event="keyup" 
                                 delay="500"
-                                listener="#{verTipoIndicadorBean.onSeleccionAnioCreacionListener}"
+                                listener="#{verClasificacionBean.onSeleccionAnioCreacionListener}"
                                 process="@this" 
                                 update="@form:clasificaciones" />
                     </p:inputText>  
                     <p:inputText id="anioActualizacion"
-                                 value="#{verTipoIndicadorBean.anioActualizacionSeleccionado}">
+                                 value="#{verClasificacionBean.anioActualizacionSeleccionado}">
                         <p:ajax event="keyup" 
                                 delay="500"
-                                listener="#{verTipoIndicadorBean.onSeleccionAnioActualizacionListener}"
+                                listener="#{verClasificacionBean.onSeleccionAnioActualizacionListener}"
                                 process="@this" 
                                 update="@form:clasificaciones" />
                     </p:inputText>                                 
@@ -144,16 +144,16 @@
                         <f:convertNumber integerOnly="true"/>
                     </h:outputText>                    
                 </p:column>
-                <p:column headerText="Estado"
-                          width="5"
-                          styleClass="align-center">
-                    <h:outputText value="#{clasificacionDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
-                    </h:outputText>                            
-                </p:column>
                 <p:column headerText="Descripción"
                           width="50"
                           styleClass="align-center">
                     <h:outputText value="#{clasificacionDTO.descripcion eq null?'Sin dato':clasificacionDTO.descripcion }">
+                    </h:outputText>                            
+                </p:column>
+                <p:column headerText="Estado"
+                          width="5"
+                          styleClass="align-center">
+                    <h:outputText value="#{clasificacionDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
                     </h:outputText>                            
                 </p:column>
                 <p:column headerText="Fecha de creación"

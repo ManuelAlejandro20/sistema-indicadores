@@ -45,6 +45,7 @@ public class VerClasificacionBean implements Serializable {
     private String nombreSeleccionado;
     private String estadoSeleccionado;
     private String descripcionSeleccionada;
+    private String tipoSeleccionado;
     private String anioCreacionSeleccionado;
     private String anioActualizacionSeleccionado;
 
@@ -69,6 +70,14 @@ public class VerClasificacionBean implements Serializable {
      * Creates a new instance of convenioBean
      */
     public VerClasificacionBean() {
+    }
+
+    public String getTipoSeleccionado() {
+        return tipoSeleccionado;
+    }
+
+    public void setTipoSeleccionado(String tipoSeleccionado) {
+        this.tipoSeleccionado = tipoSeleccionado;
     }
 
     public ClasificacionLazyDataModel getModel() {
@@ -183,6 +192,7 @@ public class VerClasificacionBean implements Serializable {
             nombreSeleccionado = null;
             estadoSeleccionado = null;
             descripcionSeleccionada = null;
+            tipoSeleccionado = null;
             anioCreacionSeleccionado = null;
             anioActualizacionSeleccionado = null;
             onSeleccionNombreListener();
