@@ -9,7 +9,6 @@ import com.ua.sistemaindicadores.backend.daos.AbstractDAO;
 import com.ua.sistemaindicadores.backend.daos.ClasificacionDAO;
 import org.primefaces.model.LazyDataModel;
 import com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO;
-import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,13 +34,11 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
 
     @Inject
     transient private ClasificacionService clasificacionService;
-    private IndicadorTipo indicadorTipoId;
+    private Integer indicador_tipo_id;
     private String nombre;
     private Short estado;
     private String tipo;
     private String descripcion;
-    private Date fechaCreacion;
-    private Date fechaActualizacion;    
 
     @Override
     public Object getRowKey(ClasificacionDTO object) {
@@ -86,25 +83,6 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
             } else {
                 filters.remove(ClasificacionDAO.KEY_DESCRIPCION);
             }
-            if(fechaCreacion != null)
-            {
-                filters.put(ClasificacionDAO.KEY_FCREACION, fechaCreacion);
-            }else
-            {
-                filters.remove(ClasificacionDAO.KEY_FCREACION);
-            }
-            if(fechaActualizacion != null)
-            {
-                filters.put(ClasificacionDAO.KEY_FACT, fechaActualizacion);
-            }else
-            {
-                filters.remove(ClasificacionDAO.KEY_FACT);
-            }      
-            if (indicadorTipoId != null) {
-                filters.put(ClasificacionDAO.KEY_TIPO_INDICADOR_ID, indicadorTipoId.getId());
-            } else {
-                filters.remove(ClasificacionDAO.KEY_TIPO_INDICADOR_ID);
-            }            
 
             String order = null;
             if (sortOrder != null) {
@@ -168,39 +146,5 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
     public void setEstado(Short estado) {
         this.estado = estado;
     }
-
-    public IndicadorTipo getIndicadorTipoId() {
-        return indicadorTipoId;
-    }
-
-    public void setIndicadorTipoId(IndicadorTipo indicadorTipoId) {
-        this.indicadorTipoId = indicadorTipoId;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public Date getFechaActualizacion() {
-        return fechaActualizacion;
-    }
-
-    public void setFechaActualizacion(Date fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
-    }
-    
-    
 
 }

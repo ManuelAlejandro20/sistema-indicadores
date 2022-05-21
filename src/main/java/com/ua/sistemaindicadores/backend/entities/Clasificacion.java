@@ -42,7 +42,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Clasificacion.findByEstado", query = "SELECT c FROM Clasificacion c WHERE c.estado = :estado"),
     @NamedQuery(name = "Clasificacion.findByTipo", query = "SELECT c FROM Clasificacion c WHERE c.tipo = :tipo"),
     @NamedQuery(name = "Clasificacion.findByDescripcion", query = "SELECT c FROM Clasificacion c WHERE c.descripcion = :descripcion"),
-    @NamedQuery(name = "Clasificacion.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO(i.id, r.id, i.nombre, i.estado, i.tipo, i.descripcion, i.fechaCreacion, i.fechaActualizacion) FROM Clasificacion i INNER JOIN i.indicadorTipoId r WHERE i.id = :Id"),       
     @NamedQuery(name = "Clasificacion.findByFechaCreacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaCreacion = :fechaCreacion"), 
     @NamedQuery(name = "Clasificacion.findByFechaActualizacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaActualizacion = :fechaActualizacion")})
 public class Clasificacion implements Serializable {

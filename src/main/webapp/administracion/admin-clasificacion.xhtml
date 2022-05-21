@@ -48,7 +48,7 @@
                                 delay="50"
                                 listener="#{verClasificacionBean.onSeleccionNombreListener}"
                                 process="@this" 
-                                update="@form:clasificaciones" />
+                                update="@form:tipo_indicadores" />
                     </p:inputText>            
                     <p:selectOneMenu id="estado"
                                      value="#{verClasificacionBean.estadoSeleccionado}"
@@ -60,7 +60,7 @@
                                 delay="50"
                                 listener="#{verClasificacionBean.onSeleccionEstadoListener}"
                                 process="@this" 
-                                update="@form:clasificaciones" />
+                                update="@form:tipo_indicadores" />
                     </p:selectOneMenu>  
                     <p:inputText id="descripcion"
                                  value="#{verClasificacionBean.descripcionSeleccionada}">
@@ -68,14 +68,14 @@
                                 delay="50"
                                 listener="#{verClasificacionBean.onSeleccionDescripcionListener}"
                                 process="@this" 
-                                update="@form:clasificaciones" />
+                                update="@form:tipo_indicadores" />
                     </p:inputText>                                 
                 </h:panelGrid>
             </p:panel>
         </div>
         <div class="ui-g-12">
             <p:dataTable class="ui-g-tabla-adm"                          
-                         id="clasificaciones"
+                         id="tipo_indicadores"
                          var="clasificacionDTO" 
                          value="#{verClasificacionBean.model}"
                          widgetVar="tablaClasificacion"                         
@@ -96,7 +96,7 @@
 
                 <f:facet name="header">
                     <div style="height: 30px;">
-                        <span>Lista de clasificaciones</span>
+                        <span>Lista de tipos de indicadores</span>
                     </div>
                 </f:facet>              
                 <p:column headerText="Nombre"
@@ -112,38 +112,17 @@
                     <h:outputText value="#{clasificacionDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
                     </h:outputText>                            
                 </p:column>
-                <p:column headerText="Tipo Indicador"
-                          width="5"
-                          styleClass="align-center">                 
-                    <h:outputText value="#{clasificacionDTO.tipo eq null?'Sin dato': clasificacionDTO.tipo }">
-                        <f:convertNumber integerOnly="true"/>
-                    </h:outputText>                    
-                </p:column>                
                 <p:column headerText="Descripción"
                           width="50"
                           styleClass="align-center">
                     <h:outputText value="#{clasificacionDTO.descripcion eq null?'Sin dato':clasificacionDTO.descripcion }">
                     </h:outputText>                            
                 </p:column>
-                <p:column headerText="Fecha de creación"
-                          width="30"
-                          styleClass="align-center">                          
-                    <h:outputText value="#{clasificacionDTO.fechaCreacion eq null?'Sin dato':clasificacionDTO.fechaCreacion}">
-                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
-                    </h:outputText>                    
-                </p:column>
-                <p:column headerText="Última actualización"
-                          width="30"
-                          styleClass="align-center">
-                    <h:outputText value="#{clasificacionDTO.fechaActualizacion eq null?'Sin dato':clasificacionDTO.fechaActualizacion}">
-                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
-                    </h:outputText>                         
-                </p:column>                
                 <p:column headerText="Editar"
                           width="4"
                           styleClass="align-center">
                     <p:button
-                        outcome="/edicion/edicion-clasificacion.xhtml?id=#{clasificacionDTO.id}"
+                        outcome="/edicion/edicion-tipo-indicador.xhtml?id=#{clasificacionDTO.id}"
                         class="btn btn-info"
                         icon="fa fa-edit">
                     </p:button>
