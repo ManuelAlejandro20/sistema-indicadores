@@ -15,11 +15,11 @@
         <div class="ui-g-12 align-center">
             <div class="ui-g-12 ui-md-4"></div>
             <div class="ui-g-12 ui-md-4 ui-g-nopad">
-                <div class="card card-creacion-clasificacion">                                              
+                <div class="card card-creacion-tipo-indicador">                                              
                     <p:panel class="formulario" header="CREAR CLASIFICACIÓN">
-                        <h:panelGrid class="crear-clasificacion-table" 
+                        <h:panelGrid class="crear-tipo-indicadores-table" 
                                      width="100%"
-                                     columns="2" columnClasses="label label-creacion-clasificacion, value">
+                                     columns="2" columnClasses="label label-creacion-tipo-indicador, value">
                             <p:outputLabel id="nombreLabel" value="Nombre de clasificación: *"/>
                             <p:inputText 
                                 id="nombre"
@@ -34,21 +34,21 @@
                             <p:outputLabel id="vigenciaLabel" value="Vigencia: *"/>
                             <p:selectOneMenu 
                                 value="#{crearClasificacionBean.estado}" 
-                                class="select-crear-clasificacion" id="vigencia" required="true" style="width: 72%;">
+                                class="select-crear-tipo-indicadores" id="vigencia" required="true" style="width: 72%;">
                                 <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
-                                <f:selectItem itemLabel="No Vigente" itemValue="NOVIGENTE"/>
+                                <f:selectItem itemLabel="No Vigente" itemValue="NO VIGENTE"/>
                             </p:selectOneMenu>
                             <p:message for="vigenciaLabel"/>                                     
                             <p:message for="vigencia"/>
                             <p:outputLabel id="tipoLabel" value="Tipo: *"/>
 
                             <p:selectOneMenu id="listaTipo"
-                                             class="select-crear-clasificacion"
+                                             class="select-crear-tipo-indicadores"
                                              value="#{crearClasificacionBean.indicadorTipoSeleccionado}"
                                              required="true"
                                              style="width: 72%;"
                                              var="tipo"
-                                             converter="clasificacionConverter"
+                                             converter="tipoIndicadorConverter"
                                              filter="true" 
                                              filterMatchMode="contains" 
                                              styleClass="manymenu-advanced"
@@ -69,7 +69,7 @@
                             <p:inputTextarea 
                                 value="#{crearClasificacionBean.descripcion}"
                                 maxlength="240"
-                                required="true" requiredMessage="Campo descripción es requerido." class="text-area-clasificaciones" id="descripcion" rows="8" cols="18"/>
+                                required="true" requiredMessage="Campo descripción es requerido." class="text-area-tipo-indicadores" id="descripcion" rows="8" cols="18"/>
                             <p:message for="descripcionLabel"/>                                     
                             <p:message for="descripcion"/>      
                             <p:commandButton widgetVar="crearButton"

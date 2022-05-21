@@ -9,6 +9,7 @@ import com.ua.sistemaindicadores.backend.daos.AbstractDAO;
 import com.ua.sistemaindicadores.backend.daos.ClasificacionDAO;
 import org.primefaces.model.LazyDataModel;
 import com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO;
+import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,13 +35,13 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
 
     @Inject
     transient private ClasificacionService clasificacionService;
-    private Integer indicador_tipo_id;
+    private IndicadorTipo indicadorTipoId;
     private String nombre;
     private Short estado;
     private String tipo;
     private String descripcion;
     private Date fechaCreacion;
-    private Date fechaActualizacion;
+    private Date fechaActualizacion;    
 
     @Override
     public Object getRowKey(ClasificacionDTO object) {
@@ -85,20 +86,25 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
             } else {
                 filters.remove(ClasificacionDAO.KEY_DESCRIPCION);
             }
-                        if(fechaCreacion != null)
+            if(fechaCreacion != null)
             {
-                filters.put(ClasificacionDAO.KEY_FECHA_CREACION, fechaCreacion);
+                filters.put(ClasificacionDAO.KEY_FCREACION, fechaCreacion);
             }else
             {
-                filters.remove(ClasificacionDAO.KEY_FECHA_CREACION);
+                filters.remove(ClasificacionDAO.KEY_FCREACION);
             }
             if(fechaActualizacion != null)
             {
-                filters.put(ClasificacionDAO.KEY_FECHA_ACTUALIZACION, fechaActualizacion);
+                filters.put(ClasificacionDAO.KEY_FACT, fechaActualizacion);
             }else
             {
-                filters.remove(ClasificacionDAO.KEY_FECHA_ACTUALIZACION);
-            }
+                filters.remove(ClasificacionDAO.KEY_FACT);
+            }      
+            if (indicadorTipoId != null) {
+                filters.put(ClasificacionDAO.KEY_TIPO_INDICADOR_ID, indicadorTipoId.getId());
+            } else {
+                filters.remove(ClasificacionDAO.KEY_TIPO_INDICADOR_ID);
+            }            
 
             String order = null;
             if (sortOrder != null) {
@@ -163,12 +169,12 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
         this.estado = estado;
     }
 
-    public Integer getIndicador_tipo_id() {
-        return indicador_tipo_id;
+    public IndicadorTipo getIndicadorTipoId() {
+        return indicadorTipoId;
     }
 
-    public void setIndicador_tipo_id(Integer indicador_tipo_id) {
-        this.indicador_tipo_id = indicador_tipo_id;
+    public void setIndicadorTipoId(IndicadorTipo indicadorTipoId) {
+        this.indicadorTipoId = indicadorTipoId;
     }
 
     public String getTipo() {
@@ -194,5 +200,7 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
     public void setFechaActualizacion(Date fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
     }
+    
+    
 
 }

@@ -42,10 +42,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Clasificacion.findByEstado", query = "SELECT c FROM Clasificacion c WHERE c.estado = :estado"),
     @NamedQuery(name = "Clasificacion.findByTipo", query = "SELECT c FROM Clasificacion c WHERE c.tipo = :tipo"),
     @NamedQuery(name = "Clasificacion.findByDescripcion", query = "SELECT c FROM Clasificacion c WHERE c.descripcion = :descripcion"),
-    @NamedQuery(name = "Clasificacion.findByFechaCreacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaCreacion = :fechaCreacion"),
-    @NamedQuery(name = "Clasificacion.findByFechaActualizacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaActualizacion = :fechaActualizacion"),
-    @NamedQuery(name = "Clasificacion.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO(c.id, c.indicadorTipoId, c.nombre, c.tipo, c.descripcion, c.estado, c.fechaCreacion, c.fechaActualizacion) FROM Clasificacion c WHERE c.id = :Id"),})
-
+    @NamedQuery(name = "Clasificacion.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO(i.id, r.id, i.nombre, i.estado, i.tipo, i.descripcion, i.fechaCreacion, i.fechaActualizacion) FROM Clasificacion i INNER JOIN i.indicadorTipoId r WHERE i.id = :Id"),       
+    @NamedQuery(name = "Clasificacion.findByFechaCreacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaCreacion = :fechaCreacion"), 
+    @NamedQuery(name = "Clasificacion.findByFechaActualizacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaActualizacion = :fechaActualizacion")})
 public class Clasificacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,13 +55,13 @@ public class Clasificacion implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "indicador_tipo_id")
-    private Integer indicadorTipoId;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "nombre")
     private String nombre;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "estado")
+    private Short estado;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -75,11 +74,6 @@ public class Clasificacion implements Serializable {
     private String descripcion;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "estado")
-    private Short estado;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
@@ -87,9 +81,12 @@ public class Clasificacion implements Serializable {
     @NotNull
     @Column(name = "fecha_actualizacion")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaActualizacion;
+    private Date fechaActualizacion;    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clasificacionId")
     private Collection<Indicador> indicadorCollection;
+    @JoinColumn(name = "indicador_tipo_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private IndicadorTipo indicadorTipoId;
 
     public Clasificacion() {
     }
@@ -98,15 +95,15 @@ public class Clasificacion implements Serializable {
         this.id = id;
     }
 
-    public Clasificacion(Integer id, String nombre, Integer indicadorTipoId, String tipo, Short estado, String descripcion, Date fechaCreacion, Date fechaActualizacion) {
+    public Clasificacion(Integer id, IndicadorTipo indicadorTipoId, String nombre, Short estado, String tipo, String descripcion, Date fechaCreacion, Date fechaActualizacion) {
         this.id = id;
-        this.nombre = nombre;
         this.indicadorTipoId = indicadorTipoId;
-        this.tipo = tipo;
+        this.nombre = nombre;
         this.estado = estado;
+        this.tipo = tipo;
         this.descripcion = descripcion;
         this.fechaCreacion = fechaCreacion;
-        this.fechaActualizacion = fechaActualizacion;
+        this.fechaActualizacion = fechaActualizacion;        
     }
 
     public Integer getId() {
@@ -125,12 +122,12 @@ public class Clasificacion implements Serializable {
         this.nombre = nombre;
     }
 
-    public Integer getIndicadorTipoId() {
-        return indicadorTipoId;
+    public Short getEstado() {
+        return estado;
     }
 
-    public void setIndicadorTipoId(Integer indicadorTipoId) {
-        this.indicadorTipoId = indicadorTipoId;
+    public void setEstado(Short estado) {
+        this.estado = estado;
     }
 
     public String getTipo() {
@@ -164,7 +161,7 @@ public class Clasificacion implements Serializable {
     public void setFechaActualizacion(Date fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
     }
-
+    
     @XmlTransient
     public Collection<Indicador> getIndicadorCollection() {
         return indicadorCollection;
@@ -174,12 +171,12 @@ public class Clasificacion implements Serializable {
         this.indicadorCollection = indicadorCollection;
     }
 
-    public Short getEstado() {
-        return estado;
+    public IndicadorTipo getIndicadorTipoId() {
+        return indicadorTipoId;
     }
 
-    public void setEstado(Short estado) {
-        this.estado = estado;
+    public void setIndicadorTipoId(IndicadorTipo indicadorTipoId) {
+        this.indicadorTipoId = indicadorTipoId;
     }
 
     @Override
