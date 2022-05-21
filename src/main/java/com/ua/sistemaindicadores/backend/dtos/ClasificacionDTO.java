@@ -5,6 +5,9 @@
  */
 package com.ua.sistemaindicadores.backend.dtos;
 
+import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
+import java.util.Date;
+
 /**
  *
  * @author diego
@@ -12,19 +15,26 @@ package com.ua.sistemaindicadores.backend.dtos;
 public class ClasificacionDTO {
 
     private Integer id;
-    private Integer indicador_tipo_id;
     private String nombre;
     private Short estado;
     private String tipo;
     private String descripcion;
+    private Date fechaCreacion;
+    private Date fechaActualizacion;    
+    private Integer indicadorTipoId;
 
-    public ClasificacionDTO(Integer id, Integer indicador_tipo_id, String nombre, Short estado, String tipo, String descripcion) {
+    public ClasificacionDTO(Integer id, Integer indicadorTipoId, String nombre, Short estado, String tipo, String descripcion, Date fechaCreacion, Date fechaActualizacion) {
         this.id = id;
-        this.indicador_tipo_id = indicador_tipo_id;
+        this.indicadorTipoId = indicadorTipoId;
         this.nombre = nombre;
         this.estado = estado;
         this.tipo = tipo;
         this.descripcion = descripcion;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaActualizacion = fechaActualizacion;
+    }
+    
+    public ClasificacionDTO(){
     }
 
     public Integer getId() {
@@ -33,14 +43,6 @@ public class ClasificacionDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getIndicador_tipo_id() {
-        return indicador_tipo_id;
-    }
-
-    public void setIndicador_tipo_id(Integer indicador_tipo_id) {
-        this.indicador_tipo_id = indicador_tipo_id;
     }
 
     public String getNombre() {
@@ -74,4 +76,30 @@ public class ClasificacionDTO {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }    
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Date getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(Date fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
+    }
+
+    public Integer getIndicadorTipoId() {
+        return indicadorTipoId;
+    }
+
+    public void setIndicadorTipoId(Integer indicadorTipoId) {
+        this.indicadorTipoId = indicadorTipoId;
+    }
+    
+    
 }

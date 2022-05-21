@@ -39,7 +39,10 @@ public class VerClasificacionBean implements Serializable {
 
     private String nombreSeleccionado;
     private String estadoSeleccionado;
+    private String tipoSeleccionado;
     private String descripcionSeleccionada;
+    private String anioCreacionSeleccionado;
+    private String anioActualizacionSeleccionado;
 
     private Boolean filtros;
     private String mensajeFiltros;
@@ -100,6 +103,30 @@ public class VerClasificacionBean implements Serializable {
         this.descripcionSeleccionada = descripcionSeleccionada;
     }
 
+    public String getTipoSeleccionado() {
+        return tipoSeleccionado;
+    }
+
+    public void setTipoSeleccionado(String tipoSeleccionado) {
+        this.tipoSeleccionado = tipoSeleccionado;
+    }
+
+    public String getAnioCreacionSeleccionado() {
+        return anioCreacionSeleccionado;
+    }
+
+    public void setAnioCreacionSeleccionado(String anioCreacionSeleccionado) {
+        this.anioCreacionSeleccionado = anioCreacionSeleccionado;
+    }
+
+    public String getAnioActualizacionSeleccionado() {
+        return anioActualizacionSeleccionado;
+    }
+
+    public void setAnioActualizacionSeleccionado(String anioActualizacionSeleccionado) {
+        this.anioActualizacionSeleccionado = anioActualizacionSeleccionado;
+    }
+    
     public Boolean getFiltros() {
         return filtros;
     }
@@ -131,7 +158,11 @@ public class VerClasificacionBean implements Serializable {
         try {
             nombreSeleccionado = null;
             estadoSeleccionado = null;
+            tipoSeleccionado = null;
             descripcionSeleccionada = null;
+            anioCreacionSeleccionado = null;
+            anioActualizacionSeleccionado = null;
+            //TODO: filtros para el resto de campos
             onSeleccionNombreListener();
             onSeleccionEstadoListener();
             onSeleccionDescripcionListener();
