@@ -8,6 +8,8 @@ package com.ua.sistemaindicadores.backend.daos;
 import com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO;
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.entities.Clasificacion_;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +28,15 @@ import javax.persistence.criteria.Predicate;
  */
 @Stateless
 public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
-    
+
     public static final String KEY_NOMBRE = "nombre";
+    public static final String KEY_INDICADOR_TIPO_ID = "indicadorTipoId";
     public static final String KEY_TIPO = "tipo";
     public static final String KEY_ESTADO = "estado";
     public static final String KEY_DESCRIPCION = "descripcion";
+    public static final String KEY_FECHA_CREACION = "fechaCreacion";
+    public static final String KEY_FECHA_ACTUALIZACION = "fechaActualizacion";
+
     @Inject
     private EntityManagerProvider entityManagerProvider;
 
@@ -100,6 +106,17 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
                                 )
                         );
                         break;
+                    case KEY_FECHA_CREACION:
+                    case KEY_FECHA_ACTUALIZACION:
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy");
+                        Integer year = Integer.parseInt(df.format((Date) filters.get(key)));
+                        p = cb.and(p,
+                                cb.equal(
+                                        cb.function("YEAR", Integer.class, root.get(key)),
+                                        year
+                                )
+                        );
+                        break;
                     default:
                         break;
                 }
@@ -137,7 +154,9 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
                         rootInformacion.get(Clasificacion_.NOMBRE),
                         rootInformacion.get(Clasificacion_.TIPO),
                         rootInformacion.get(Clasificacion_.ESTADO),
-                        rootInformacion.get(Clasificacion_.DESCRIPCION)
+                        rootInformacion.get(Clasificacion_.DESCRIPCION),
+                        rootInformacion.get(Clasificacion_.FECHA_CREACION),
+                        rootInformacion.get(Clasificacion_.FECHA_ACTUALIZACION)
                 )).distinct(true);
 
         javax.persistence.Query q = getEntityManager().createQuery(cq);

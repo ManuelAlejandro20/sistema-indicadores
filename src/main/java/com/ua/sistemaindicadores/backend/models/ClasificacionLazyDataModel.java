@@ -39,6 +39,8 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
     private Short estado;
     private String tipo;
     private String descripcion;
+    private Date fechaCreacion;
+    private Date fechaActualizacion;
 
     @Override
     public Object getRowKey(ClasificacionDTO object) {
@@ -82,6 +84,20 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
                 filters.put(ClasificacionDAO.KEY_DESCRIPCION, descripcion);
             } else {
                 filters.remove(ClasificacionDAO.KEY_DESCRIPCION);
+            }
+                        if(fechaCreacion != null)
+            {
+                filters.put(ClasificacionDAO.KEY_FECHA_CREACION, fechaCreacion);
+            }else
+            {
+                filters.remove(ClasificacionDAO.KEY_FECHA_CREACION);
+            }
+            if(fechaActualizacion != null)
+            {
+                filters.put(ClasificacionDAO.KEY_FECHA_ACTUALIZACION, fechaActualizacion);
+            }else
+            {
+                filters.remove(ClasificacionDAO.KEY_FECHA_ACTUALIZACION);
             }
 
             String order = null;
@@ -145,6 +161,38 @@ public class ClasificacionLazyDataModel extends LazyDataModel<ClasificacionDTO> 
 
     public void setEstado(Short estado) {
         this.estado = estado;
+    }
+
+    public Integer getIndicador_tipo_id() {
+        return indicador_tipo_id;
+    }
+
+    public void setIndicador_tipo_id(Integer indicador_tipo_id) {
+        this.indicador_tipo_id = indicador_tipo_id;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Date getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(Date fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
     }
 
 }
