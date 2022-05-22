@@ -38,10 +38,13 @@
         <div class="ui-g-12" style="display:#{verClasificacionBean.filtros?'none':'block'}">
             <p:panel class="formulario" header="FILTROS">
                 <h:panelGrid width="100%"
-                             columns="5" >
+                             columns="6" >
                     <p:outputLabel style="font-weight:bold;" id="nombreLabel" value="NOMBRE"/>
+                    <p:outputLabel style="font-weight:bold;" id="tipoLabel" value="TIPO"/>
                     <p:outputLabel style="font-weight:bold;" id="estadoLabel" value="ESTADO"/>
-                    <p:outputLabel style="font-weight:bold;" id="descripcionLabel" value="DESCRIPCIÓN"/>
+                    <p:outputLabel style="font-weight:bold;" id="descripcionLabel" value="DESCRIPCIÓN"/>                    
+                    <p:outputLabel style="font-weight:bold;" id="anioCreacionLabel" value="FECHA CREACIÓN"/>
+                    <p:outputLabel style="font-weight:bold;" id="anioActualizacionLabel" value="ÚLTIMA ACTUALIZACIÓN"/>
                     <p:inputText id="nombre"
                                  value="#{verClasificacionBean.nombreSeleccionado}">
                         <p:ajax event="keyup" 
@@ -49,7 +52,30 @@
                                 listener="#{verClasificacionBean.onSeleccionNombreListener}"
                                 process="@this" 
                                 update="@form:clasificaciones" />
-                    </p:inputText>            
+                    </p:inputText> 
+                    <p:selectOneMenu id="listaTipo"
+                                     value="#{verClasificacionBean.tipoSeleccionado}"
+                                     var="tipo"
+                                     converter="tipoIndicadorConverter"
+                                     filter="true" 
+                                     filterMatchMode="contains" 
+                                     styleClass="manymenu-advanced"                                     
+                                     >
+                        <f:selectItem itemLabel="Seleccione una opción" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{verClasificacionBean.listaIndicadorTipo}"
+                                       var="indTipo"
+                                       itemLabel="#{indTipo.nombre}"
+                                       itemValue="#{indTipo}"
+                                       itemDescription="#{indTipo.descripcion}"/>
+                        <p:column>
+                            #{tipo.nombre}
+                        </p:column>                              
+                        <p:ajax event="itemSelect" 
+                                delay="50"
+                                listener="#{verClasificacionBean.onSeleccionTipoListener}"
+                                process="@this" 
+                                update="@form:clasificaciones" />
+                    </p:selectOneMenu>                                  
                     <p:selectOneMenu id="estado"
                                      value="#{verClasificacionBean.estadoSeleccionado}"
                                      >
@@ -69,7 +95,23 @@
                                 listener="#{verClasificacionBean.onSeleccionDescripcionListener}"
                                 process="@this" 
                                 update="@form:clasificaciones" />
-                    </p:inputText>                                 
+                    </p:inputText>  
+                    <p:inputText id="anioCreacion"
+                                 value="#{verClasificacionBean.anioCreacionSeleccionado}">
+                        <p:ajax event="keyup" 
+                                delay="500"
+                                listener="#{verClasificacionBean.onSeleccionAnioCreacionListener}"
+                                process="@this" 
+                                update="@form:clasificaciones" />
+                    </p:inputText>  
+                    <p:inputText id="anioActualizacion"
+                                 value="#{verClasificacionBean.anioActualizacionSeleccionado}">
+                        <p:ajax event="keyup" 
+                                delay="500"
+                                listener="#{verClasificacionBean.onSeleccionAnioActualizacionListener}"
+                                process="@this" 
+                                update="@form:clasificaciones" />                    
+                    </p:inputText>                          
                 </h:panelGrid>
             </p:panel>
         </div>

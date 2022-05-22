@@ -7,8 +7,10 @@ package com.ua.sistemaindicadores.frontend.beans;
 
 import com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO;
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
+import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.models.ClasificacionLazyDataModel;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
+import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.annotation.PostConstruct;
@@ -21,6 +23,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.text.ParseException;
+import java.util.List;
 
 /**
  *
@@ -36,14 +39,18 @@ public class VerClasificacionBean implements Serializable {
     private ClasificacionLazyDataModel model;
     @Inject
     transient private ClasificacionService clasificacionService;
+    @Inject
+    transient private TipoIndicadorService tipoIndicadorService;    
 
     private String nombreSeleccionado;
     private String estadoSeleccionado;
-    private String tipoSeleccionado;
+    private IndicadorTipo tipoSeleccionado;
     private String descripcionSeleccionada;
     private String anioCreacionSeleccionado;
     private String anioActualizacionSeleccionado;
 
+    private List<IndicadorTipo> listaIndicadorTipo;
+    
     private Boolean filtros;
     private String mensajeFiltros;
 
@@ -53,6 +60,7 @@ public class VerClasificacionBean implements Serializable {
     @PostConstruct
     public void initalize() {
         System.out.println("Inicio Bean Ver Tipo Indicador");
+        listaIndicadorTipo = tipoIndicadorService.obtenerIndicadorTipos();
         filtros = true;
         mensajeFiltros = "Mostrar filtros";
     }
@@ -103,11 +111,11 @@ public class VerClasificacionBean implements Serializable {
         this.descripcionSeleccionada = descripcionSeleccionada;
     }
 
-    public String getTipoSeleccionado() {
+    public IndicadorTipo getTipoSeleccionado() {
         return tipoSeleccionado;
     }
 
-    public void setTipoSeleccionado(String tipoSeleccionado) {
+    public void setTipoSeleccionado(IndicadorTipo tipoSeleccionado) {
         this.tipoSeleccionado = tipoSeleccionado;
     }
 
@@ -143,6 +151,14 @@ public class VerClasificacionBean implements Serializable {
         this.mensajeFiltros = mensajeFiltros;
     }
 
+    public List<IndicadorTipo> getListaIndicadorTipo() {
+        return listaIndicadorTipo;
+    }
+
+    public void setListaIndicadorTipo(List<IndicadorTipo> listaIndicadorTipo) {
+        this.listaIndicadorTipo = listaIndicadorTipo;
+    }
+
     public void eventofiltros() {
         if (filtros) {
             mensajeFiltros = "Ocultar filtros";
@@ -164,9 +180,11 @@ public class VerClasificacionBean implements Serializable {
             anioActualizacionSeleccionado = null;
             //TODO: filtros para el resto de campos
             onSeleccionNombreListener();
+            onSeleccionTipoListener();            
             onSeleccionEstadoListener();
             onSeleccionDescripcionListener();
-
+            onSeleccionAnioCreacionListener();
+            onSeleccionAnioActualizacionListener();                        
         } catch (EJBException ex) {
             Logger.getLogger(Clasificacion.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance()
@@ -194,6 +212,23 @@ public class VerClasificacionBean implements Serializable {
                     );
         }
     }
+    
+    public void onSeleccionTipoListener() {
+        try {
+            if (tipoSeleccionado != null) {
+                model.setTipo(tipoSeleccionado.getNombre());
+            } else {
+                model.setTipo(null);
+            }
+        } catch (EJBException ex) {
+            Logger.getLogger(Clasificacion.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro nombre. Contacte al administrador.")
+                    );
+        }
+    }    
 
     public void onSeleccionEstadoListener() {
         try {
@@ -228,4 +263,43 @@ public class VerClasificacionBean implements Serializable {
                     );
         }
     }
+    
+    public void onSeleccionAnioCreacionListener(){        
+        try {
+            if (anioCreacionSeleccionado != null) {
+                model.setFechaCreacion(formatter.parse("01-01-" + anioCreacionSeleccionado));
+            } else {
+                model.setFechaCreacion(null);
+            }
+        } catch (EJBException ex) {
+            Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha creacion. Contacte al administrador.")
+                    );
+        } catch (ParseException ex){
+            model.setFechaCreacion(null);
+        }
+    }            
+    
+    public void onSeleccionAnioActualizacionListener(){        
+        try {
+            if (anioActualizacionSeleccionado != null) {
+                model.setFechaActualizacion(formatter.parse("01-01-" + anioActualizacionSeleccionado));
+            } else {
+                model.setFechaActualizacion(null);
+            }
+        } catch (EJBException ex) {
+            Logger.getLogger(IndicadorTipo.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance()
+                    .addMessage(
+                            "mensaje",
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha actualizacion. Contacte al administrador.")
+                    );
+        } catch (ParseException ex){
+            model.setFechaCreacion(null);
+        }
+    }            
+    
 }
