@@ -7,9 +7,9 @@ package com.ua.sistemaindicadores.frontend.beans;
 
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
-//import com.ua.sistemaindicadores.backend.exceptions.NotificacionCorreoException;
+import com.ua.sistemaindicadores.backend.exceptions.NotificacionCorreoException;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
-//import com.ua.sistemaindicadores.backend.services.CorreoService;
+import com.ua.sistemaindicadores.backend.services.CorreoService;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
 import java.io.IOException;
 import javax.inject.Named;
@@ -43,8 +43,8 @@ public class CrearClasificacionBean implements Serializable {
     transient private ClasificacionService clasificacionService;
     @Inject
     transient private TipoIndicadorService tipoIndicadorService;
-    //@Inject
-    //transient private CorreoService correoService;       
+    @Inject
+    transient private CorreoService correoService;       
 
     private Integer indicador_tipo_id;
     private String nombreClasificacion;
@@ -94,34 +94,34 @@ public class CrearClasificacionBean implements Serializable {
                     "La clasificación " + nombreClasificacion + " ha sido agregada correctamente")
             );
         
-//            try {
-//                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//                formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
-//                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha creado un registro de una nueva clasificación.<br/> "
-//                        + "<ul>"
-//                        + "<li>Nombre clasificación: " + nuevaClasificacion.getNombre() + ".</li>"
-//                        + "<li>Tipo de indicador asociado: " + nuevaClasificacion.getTipo() + ".</li>"                                    
-//                        + "<li>Estado: " + vigencia + ".</li>"
-//                        + "<li>Descripción: " + nuevaClasificacion.getDescripcion() + ".</li>"       
-//                        + "<li>Fecha creación: " + formatter.format(nuevaClasificacion.getFechaCreacion()) + ".</li>"                              
-//                        + "</ul>"
-//                        + "<br/><br/>"                                
-//                        + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
-//                        + "<br/><br/>"
-//                        + "<br/><br/>"                                
-//                        + "Saludos cordiales. <br/><br/>"
-//                        + "Sistema de Indicadores."
-//                );   
-//            }  catch (NotificacionCorreoException ex) {
-//                
-//                context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
-//                        "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
-//                );                           
-//                
-//                //En caso de capturar algun error se retorna un mensaje y se guarda en el log el error
-//                Logger.getLogger(CrearTipoIndicadorBean.class
-//                        .getName()).log(Level.SEVERE, "Ocurrio un error al enviar el correo.", ex);
-//            }
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
+                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha creado un registro de una nueva clasificación.<br/> "
+                        + "<ul>"
+                        + "<li>Nombre clasificación: " + nuevaClasificacion.getNombre() + ".</li>"
+                        + "<li>Tipo de indicador asociado: " + nuevaClasificacion.getTipo() + ".</li>"                                    
+                        + "<li>Estado: " + vigencia + ".</li>"
+                        + "<li>Descripción: " + nuevaClasificacion.getDescripcion() + ".</li>"       
+                        + "<li>Fecha creación: " + formatter.format(nuevaClasificacion.getFechaCreacion()) + ".</li>"                              
+                        + "</ul>"
+                        + "<br/><br/>"                                
+                        + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
+                        + "<br/><br/>"
+                        + "<br/><br/>"                                
+                        + "Saludos cordiales. <br/><br/>"
+                        + "Sistema de Indicadores."
+                );   
+            }  catch (NotificacionCorreoException ex) {
+                
+                context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
+                        "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
+                );                           
+                
+                //En caso de capturar algun error se retorna un mensaje y se guarda en el log el error
+                Logger.getLogger(CrearTipoIndicadorBean.class
+                        .getName()).log(Level.SEVERE, "Ocurrio un error al enviar el correo.", ex);
+            }
 
             context.getExternalContext().getFlash().setKeepMessages(true);
             context.getExternalContext()

@@ -38,7 +38,7 @@
                                 value="#{editarTipoIndicadorBean.vigencia}"
                                 class="select-crear-tipo-indicadores" id="vigencia" required="true" style="width: 72%;">
                                 <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
-                                <f:selectItem itemLabel="No Vigente" itemValue="NOVIGENTE"/>
+                                <f:selectItem itemLabel="No Vigente" itemValue="NO VIGENTE"/>
                             </p:selectOneMenu>
                             <p:message for="vigenciaLabel"/>                                     
                             <p:message for="vigencia"/>                                           
@@ -49,9 +49,12 @@
                                 required="true" requiredMessage="Campo descripción es requerido." class="text-area-tipo-indicadores" id="descripcion" rows="8" cols="18"/>
                             <p:message for="descripcionLabel"/>                                     
                             <p:message for="descripcion"/>      
-                            <p:commandButton value="Editar tipo de indicador"  
+                            <p:commandButton widgetVar="editarButton"
+                                             value="Editar tipo de indicador"  
                                              class="ui-button-formulario"
+                                             onclick="PF('editarButton').disable()"
                                              action="#{editarTipoIndicadorBean.actualizarDatos}"   
+                                             disabled="#{editarTipoIndicadorBean.disabled}"
                                              update="@form" 
                                              process="@this, @form"/>                                
                         </h:panelGrid>

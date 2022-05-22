@@ -16,14 +16,14 @@
         <p:toolbar class="ui-g-toolbar-adm">
 
             <p:toolbarGroup>
-                <p:commandButton value="Crear tipo de indicador" 
-                                 class="btn btn-blue btn-group-align"                                     
+                <p:commandButton value="Crear tipo" 
+                                 class="btn btn-blue btn-group-align"  
                                  action="/faces/creacion/crear-tipo-indicador.xhtml?faces-redirect=true"/>
             </p:toolbarGroup>
 
             <p:toolbarGroup align="right">
                 <p:commandButton value="#{verTipoIndicadorBean.mensajeFiltros}" 
-                                 class="btn btn-orange btn-group-align"
+                                 class="btn btn-orange btn-group-align"        
                                  process="@this" 
                                  update="@form"
                                  actionListener="#{verTipoIndicadorBean.eventofiltros}"
@@ -37,58 +37,57 @@
         </p:toolbar>
         <div class="ui-g-12" style="display:#{verTipoIndicadorBean.filtros?'none':'block'}">
             <p:panel class="formulario" header="FILTROS">
-                <h:panelGrid width="100%"
-                             columns="5" >
-                    <p:outputLabel style="font-weight:bold;" id="nombreLabel" value="NOMBRE"/>
-                    <p:outputLabel style="font-weight:bold;" id="estadoLabel" value="ESTADO"/>
-                    <p:outputLabel style="font-weight:bold;" id="descripcionLabel" value="DESCRIPCIÓN"/>
-                    <p:outputLabel style="font-weight:bold;" id="fechaCLabel" value="AÑO DE CREACIÓN"/>
-                    <p:outputLabel style="font-weight:bold;" id="fechaALabel" value="AÑO DE LA ÚLTIMA ACTUALIZACIÓN"/>
-                    <p:inputText id="nombre"
-                                 value="#{verTipoIndicadorBean.nombreSeleccionado}">
-                        <p:ajax event="keyup" 
-                                delay="50"
-                                listener="#{verTipoIndicadorBean.onSeleccionNombreListener}"
-                                process="@this" 
-                                update="@form:tipo_indicadores" />
-                    </p:inputText>            
-                    <p:selectOneMenu id="estado"
-                                     value="#{verTipoIndicadorBean.estadoSeleccionado}"
-                                     >
-                        <f:selectItem itemLabel="Seleccione una opción" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItem itemLabel="Vigente" itemValue="1"/>
-                        <f:selectItem itemLabel="No Vigente" itemValue="0"/>
-                        <p:ajax event="itemSelect" 
-                                delay="50"
-                                listener="#{verTipoIndicadorBean.onSeleccionEstadoListener}"
-                                process="@this" 
-                                update="@form:tipo_indicadores" />
-                    </p:selectOneMenu>
-                    <p:inputText id="descripcion"
-                                 value="#{verTipoIndicadorBean.descripcionSeleccionada}">
-                        <p:ajax event="keyup" 
-                                delay="50"
-                                listener="#{verTipoIndicadorBean.onSeleccionDescripcionListener}"
-                                process="@this" 
-                                update="@form:tipo_indicadores" />
-                    </p:inputText>   
-                    <p:inputText id="anioCreacion"
-                                 value="#{verTipoIndicadorBean.anioCreacionSeleccionado}">
-                        <p:ajax event="keyup" 
-                                delay="500"
-                                listener="#{verTipoIndicadorBean.onSeleccionAnioCreacionListener}"
-                                process="@this" 
-                                update="@form:tipo_indicadores" />
-                    </p:inputText>  
-                    <p:inputText id="anioActualizacion"
-                                 value="#{verTipoIndicadorBean.anioActualizacionSeleccionado}">
-                        <p:ajax event="keyup" 
-                                delay="500"
-                                listener="#{verTipoIndicadorBean.onSeleccionAnioActualizacionListener}"
-                                process="@this" 
-                                update="@form:tipo_indicadores" />
-                    </p:inputText>                               
-                </h:panelGrid>
+                        <p:panelGrid layout="grid" columns="6">
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="nombreLabel" value="NOMBRE"/>                            
+                            <p:inputText id="nombre"
+                                         value="#{verTipoIndicadorBean.nombreSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"                                        
+                                        listener="#{verTipoIndicadorBean.onSeleccionNombreListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText>            
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="estadoLabel" value="ESTADO"/>                            
+                            <p:selectOneMenu id="estado"
+                                             value="#{verTipoIndicadorBean.estadoSeleccionado}"
+                                             >
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItem itemLabel="Vigente" itemValue="1"/>
+                                <f:selectItem itemLabel="No Vigente" itemValue="0"/>
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verTipoIndicadorBean.onSeleccionEstadoListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:selectOneMenu>  
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="descripcionLabel" value="DESCRIPCIÓN"/>                            
+                            <p:inputText id="descripcion"
+                                         value="#{verTipoIndicadorBean.descripcionSeleccionada}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verTipoIndicadorBean.onSeleccionDescripcionListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText>    
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="fechaCLabel" value="AÑO DE CREACIÓN"/>                            
+                            <p:inputText id="anioCreacion"
+                                         value="#{verTipoIndicadorBean.anioCreacionSeleccionado}">                                         
+                                <p:ajax event="keyup" 
+                                        delay="500"
+                                        listener="#{verTipoIndicadorBean.onSeleccionAnioCreacionListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText> 
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="fechaALabel" value="AÑO DE ÚLTIMA ACT."/>                            
+                            <p:inputText id="anioActualizacion"
+                                         value="#{verTipoIndicadorBean.anioActualizacionSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="500"
+                                        listener="#{verTipoIndicadorBean.onSeleccionAnioActualizacionListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText>                             
+                        </p:panelGrid>
             </p:panel>
         </div>              
         <div class="ui-g-12">
@@ -99,7 +98,7 @@
                          widgetVar="tablaTiposIndicador"                         
                          lazy="true"
                          paginator="true"
-                         rows="5"
+                         rows="10"
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                          rowsPerPageTemplate="5,10,25,50,100"
                          currentPageReportTemplate="Mostrando {startRecord} - {endRecord} de {totalRecords}" 

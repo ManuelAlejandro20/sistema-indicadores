@@ -168,7 +168,16 @@ public class VerTipoIndicadorBean implements Serializable {
         }
     }    
     
+    public void desplegarVigentes(){
+        estadoSeleccionado = "1";
+        onSeleccionEstadoListener();
+    }
     
+    public void desplegarNoVigentes(){
+        estadoSeleccionado = "0";
+        onSeleccionEstadoListener();
+    }
+        
     //Filtros
     
     public void onSeleccionNombreListener() {
