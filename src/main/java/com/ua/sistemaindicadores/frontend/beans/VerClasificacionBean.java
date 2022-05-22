@@ -38,8 +38,6 @@ public class VerClasificacionBean implements Serializable {
     @Inject
     private ClasificacionLazyDataModel model;
     @Inject
-    transient private ClasificacionService clasificacionService;
-    @Inject
     transient private TipoIndicadorService tipoIndicadorService;    
 
     private String nombreSeleccionado;
@@ -178,7 +176,6 @@ public class VerClasificacionBean implements Serializable {
             descripcionSeleccionada = null;
             anioCreacionSeleccionado = null;
             anioActualizacionSeleccionado = null;
-            //TODO: filtros para el resto de campos
             onSeleccionNombreListener();
             onSeleccionTipoListener();            
             onSeleccionEstadoListener();
