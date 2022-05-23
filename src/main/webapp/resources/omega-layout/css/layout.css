@@ -1986,8 +1986,8 @@ html {
     padding: 50px 16px 16px 16px; }
   .wrapper .footer {
     margin-top:auto; 
-    padding-left: 20% !important;
-    height:40px; 
+    margin-left: 250px;
+    height: 40px;
     background-color: #ffffff;
     padding: .7em 1.5em 0em 1.5em; }
     .wrapper .footer img {
