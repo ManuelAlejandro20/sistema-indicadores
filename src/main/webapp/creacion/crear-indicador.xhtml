@@ -1,0 +1,324 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">    
+        <div class="ui-g-12 ui-g-title align-center">
+            <h2 class="border-bottom-orange align-center">Administración de Indicadores</h2>   
+        </div>
+        <p:growl id="growl" showDetail="true"/>
+        <div class="ui-g-12 align-center">
+            <div class="ui-g-12 ui-md-4"></div>
+            <div class="ui-g-12 ui-md-4 ui-g-nopad">
+                <div class="card card-creacion-tipo-indicador">                                              
+                    <p:panel class="formulario" header="CREAR INDICADOR">
+                        <h:panelGrid class="crear-tipo-indicadores-table" 
+                                     width="100%"
+                                     columns="2" columnClasses="label label-creacion-tipo-indicador, value">
+                            <!---->
+                            <p:outputLabel id="tipoIndicadorLabel" value="Tipo de indicador: *"/>
+                            <p:selectOneMenu  
+                                class="select-crear-tipo-indicadores" id="tipoIndicador" required="true" style="width: 72%;">
+                            </p:selectOneMenu>
+                            <p:message for="tipoIndicadorLabel"/>                                     
+                            <p:message for="tipoIndicador"/>                              
+                            <!---->
+                            <p:outputLabel id="clasLabel" value="Clasificación: *"/>
+                            <p:selectOneMenu  
+                                class="select-crear-tipo-indicadores" id="clas" required="true" style="width: 72%;">
+                            </p:selectOneMenu>
+                            <p:message for="clasLabel"/>                                     
+                            <p:message for="clas"/>     
+                            <!---->
+                            <p:outputLabel id="nIndLabel" value="N° de indicador: *"/>
+                            <p:inputText 
+                                id="nInd"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="nIndLabel"/>                                     
+                            <p:message for="nInd"/>     
+                            <!---->     
+                            <p:outputLabel id="nombreLabel" value="Nombre de indicador: *"/>
+                            <p:inputText 
+                                id="nombre"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="nombreLabel"/>                                     
+                            <p:message for="nombre"/>     
+                            <!---->                                             
+                            <p:outputLabel id="descripcionIndLabel" value="Descripción de indicador: *"/>
+                            <p:inputTextarea 
+                                id="descripcionInd"                                 
+                                maxlength="240"
+                                class="text-area-tipo-indicadores" 
+                                rows="8" cols="18"/>
+                            <p:message for="descripcionIndLabel"/>                                     
+                            <p:message for="descripcionInd"/>     
+                            <!---->    
+                            <p:outputLabel id="linLabel" value="Aplica lineamiento: *"/>
+                            <p:inputText 
+                                id="lin"                                 
+                                style="width: 80%;"
+                                />
+                            <p:message for="linLabel"/>                                     
+                            <p:message for="lin"/>     
+                            <!---->                              
+                            <p:outputLabel id="objetivoLabel" value="Aplica objetivo: *"/>
+                            <p:inputText 
+                                id="objetivo"                                 
+                                style="width: 80%;"
+                                />
+                            <p:message for="objetivoLabel"/>                                     
+                            <p:message for="objetivo"/>     
+                            <!---->                                  
+                            <p:outputLabel id="descripcionObjLabel" value="Descripción de objetivo: *"/>
+                            <p:inputTextarea 
+                                id="descripcionObj"                                 
+                                maxlength="240"
+                                class="text-area-tipo-indicadores" 
+                                rows="8" cols="18"/>                            
+                            <p:message for="objetivoLabel"/>                                     
+                            <p:message for="objetivo"/>     
+                            <!---->      
+                            <p:outputLabel id="ajustepdeiLabel" value="Ajuste PDEI: *"/>
+                            <p:selectOneMenu  
+                                class="select-crear-tipo-indicadores" id="ajustepdei" style="width: 72%;">
+                            </p:selectOneMenu>
+                            <p:message for="ajustepdeiLabel"/>                                     
+                            <p:message for="ajustepdei"/>                              
+                            <!---->  
+                            <p:outputLabel id="unidadLabel" value="Unidad de representación: *"/>
+                            <p:selectOneMenu  
+                                class="select-crear-tipo-indicadores" id="unidad" style="width: 72%;">
+                            </p:selectOneMenu>
+                            <p:message for="unidadLabel"/>                                     
+                            <p:message for="unidad"/>                              
+                            <!---->  
+                            <p:outputLabel id="gdatosLabel" value="Generación de los datos: *"/>
+                            <p:selectOneMenu  
+                                class="select-crear-tipo-indicadores" id="gdatos" style="width: 72%;">
+                            </p:selectOneMenu>
+                            <p:message for="gdatosLabel"/>                                     
+                            <p:message for="gdatos"/>                              
+                            <!---->                              
+                            <p:outputLabel id="plazoLabel" value="Plazo: *"/>
+                            <p:selectOneMenu  
+                                class="select-crear-tipo-indicadores" id="plazo" style="width: 72%;">
+                            </p:selectOneMenu>
+                            <p:message for="plazoLabel"/>                                     
+                            <p:message for="plazo"/>                              
+                            <!---->                                     
+                            <p:outputLabel id="versionLabel" value="Versión: *"/>
+                            <p:inputText 
+                                id="version"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="versionLabel"/>                                     
+                            <p:message for="version"/>    
+                            <!---->     
+                            <p:outputLabel id="linbaseLabel" value="Línea base: *"/>
+                            <p:inputText 
+                                id="linbase"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="versionLabel"/>                                     
+                            <p:message for="version"/>    
+                            <!---->                                 
+                            <p:outputLabel id="anio2020Label" value="2020: *"/>
+                            <p:inputText 
+                                id="anio2020"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2020Label"/>                                     
+                            <p:message for="anio2020"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anio2021Label" value="2021: *"/>
+                            <p:inputText 
+                                id="anio2021"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2021Label"/>                                     
+                            <p:message for="anio2021"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anio2022Label" value="2022: *"/>
+                            <p:inputText 
+                                id="anio2022"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2022Label"/>                                     
+                            <p:message for="anio2022"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anio2023Label" value="2023: *"/>
+                            <p:inputText 
+                                id="anio2023"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2023Label"/>                                     
+                            <p:message for="anio2023"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anio2024Label" value="2024: *"/>
+                            <p:inputText 
+                                id="anio2024"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2024Label"/>                                     
+                            <p:message for="anio2024"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anio2025Label" value="2025: *"/>
+                            <p:inputText 
+                                id="anio2025"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2025Label"/>                                     
+                            <p:message for="anio2025"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anio2026Label" value="2026: *"/>
+                            <p:inputText 
+                                id="anio2026"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2026Label"/>                                     
+                            <p:message for="anio2026"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anio2027Label" value="2027: *"/>
+                            <p:inputText 
+                                id="anio2027"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2027Label"/>                                     
+                            <p:message for="anio2027"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anio2028Label" value="2028: *"/>
+                            <p:inputText 
+                                id="anio2028"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2028Label"/>                                     
+                            <p:message for="anio2028"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anio2029Label" value="2029: *"/>
+                            <p:inputText 
+                                id="anio2029"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2029Label"/>                                     
+                            <p:message for="anio2029"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anio2030Label" value="2030: *"/>
+                            <p:inputText 
+                                id="anio2030"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="anio2030Label"/>                                     
+                            <p:message for="anio2030"/>    
+                            <!---->                                     
+                            <p:outputLabel id="metasLabel" value="Metas: *"/>
+                            <p:inputText 
+                                id="metas"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="metasLabel"/>                                     
+                            <p:message for="metas"/>   
+                            <!---->                                     
+                            <p:outputLabel id="anioCumplLabel" value="Año cumplimiento: *"/>
+                            <p:selectOneMenu  
+                                class="select-crear-tipo-indicadores" id="anioCumpl" style="width: 72%;">
+                            </p:selectOneMenu>
+                            <p:message for="anioCumplLabel"/>                                     
+                            <p:message for="anioCumpl"/>   
+                            <!---->                                     
+                            <p:outputLabel id="logroLabel" value="% Logro: *"/>
+                            <p:inputText 
+                                id="logro"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="logroLabel"/>                                     
+                            <p:message for="logro"/> 
+                            <!---->                                     
+                            <p:outputLabel id="frecuenciaLabel" value="Frecuencia de medición: *"/>
+                            <p:selectOneMenu  
+                                class="select-crear-tipo-indicadores" id="frecuencia" style="width: 72%;">
+                            </p:selectOneMenu>
+                            <p:message for="frecuenciaLabel"/>                                     
+                            <p:message for="frecuencia"/>  
+                            <!---->                                     
+                            <p:outputLabel id="medioLabel" value="Medio de verificación: *"/>
+                            <p:inputText 
+                                id="medio"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="medioLabel"/>                                     
+                            <p:message for="medio"/>  
+                            <!---->                                     
+                            <p:outputLabel id="formaCLabel" value="Forma de cálculo: *"/>
+                            <p:inputText 
+                                id="formaC"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="formaCLabel"/>                                     
+                            <p:message for="formaC"/>     
+                            <!---->                                     
+                            <p:outputLabel id="fuenteILabel" value="Fuente de información: *"/>
+                            <p:inputText 
+                                id="fuenteI"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="fuenteILabel"/>                                     
+                            <p:message for="fuenteI"/>        
+                            <!---->                                     
+                            <p:outputLabel id="unidadProvLabel" value="Unidad proveedora: *"/>
+                            <p:selectOneMenu  
+                                class="select-crear-tipo-indicadores" id="unidadProv" style="width: 72%;">
+                            </p:selectOneMenu>                            
+                            <p:message for="unidadProvLabel"/>                                     
+                            <p:message for="unidadProv"/>      
+                            <!---->                                     
+                            <p:outputLabel id="proyectoLabel" value="Proyecto asociado: *"/>
+                            <p:inputText 
+                                id="proyecto"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="proyectoLabel"/>                                     
+                            <p:message for="proyecto"/>           
+                            <!---->                                     
+                            <p:outputLabel id="comentarioLabel" value="Comentario: *"/>
+                            <p:inputTextarea 
+                                id="comentario"                                 
+                                maxlength="240"
+                                class="text-area-tipo-indicadores" 
+                                rows="8" cols="18"/>                            
+                            <p:message for="comentarioLabel"/>                                     
+                            <p:message for="comentario"/>        
+                            <!---->                                     
+                            <p:outputLabel id="actividadCompLabel" value="Actividad comprometida: *"/>
+                            <p:inputText 
+                                id="actividadComp"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="actividadCompLabel"/>                                     
+                            <p:message for="actividadComp"/>      
+                            <!---->                                     
+                            <p:outputLabel id="estadoActLabel" value="Estado de actividad: *"/>
+                            <p:inputText 
+                                id="estadoAct"                                
+                                style="width: 80%;"
+                                />
+                            <p:message for="estadoActLabel"/>                                     
+                            <p:message for="estadoAct"/>                                  
+                            <!---->     
+                            <!---->     
+                            <!---->     
+                            <p:commandButton value="Crear indicador"   
+                                             class="ui-button-formulario"                                                 
+                                             update="@form" 
+                                             process="@this, @form"/>                                
+                        </h:panelGrid>
+                    </p:panel>
+                </div>       
+            </div>
+            <div class="ui-g-12 ui-md-4"></div>
+        </div>         
+    </ui:define>
+</ui:composition>
