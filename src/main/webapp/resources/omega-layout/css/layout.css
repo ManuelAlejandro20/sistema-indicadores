@@ -373,7 +373,9 @@
   text-indent: 0px !important;
   text-align: center; }
   .ui-icon-arrowthick-1-e:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f30b";
+    font-weight: 600; }
 
 .ui-icon-arrowthick-1-se {
   background-position: -48px -48px; }
@@ -405,7 +407,9 @@
   text-indent: 0px !important;
   text-align: center; }
   .ui-icon-arrowthick-1-w:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f30a";
+    font-weight: 600; }
 
 .ui-icon-arrowthick-1-nw {
   background-position: -112px -48px; }
