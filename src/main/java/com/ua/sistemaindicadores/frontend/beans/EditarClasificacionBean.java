@@ -7,7 +7,6 @@ package com.ua.sistemaindicadores.frontend.beans;
 
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
-import com.ua.sistemaindicadores.backend.entities.SelectLineamiento;
 import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;

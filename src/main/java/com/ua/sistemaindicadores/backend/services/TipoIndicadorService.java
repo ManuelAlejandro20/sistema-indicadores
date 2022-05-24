@@ -6,10 +6,8 @@
 package com.ua.sistemaindicadores.backend.services;
 
 import com.ua.sistemaindicadores.backend.daos.IndicadorTipoDAO;
-import com.ua.sistemaindicadores.backend.daos.LineamientoDAO;
 import com.ua.sistemaindicadores.backend.dtos.TipoIndicadorDTO;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
-import com.ua.sistemaindicadores.backend.entities.SelectLineamiento;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.security.RolesAllowed;

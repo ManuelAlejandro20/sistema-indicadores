@@ -47,7 +47,14 @@
                                 />
                             <p:message for="nombreLabel"/>                                     
                             <p:message for="nombre"/>     
-                            <!---->                                             
+                            <!---->                  
+                            <p:outputLabel id="estadoLabel" value="Estado: *"/>
+                            <p:selectOneMenu  
+                                class="select-crear-tipo-indicadores" id="estado" required="true" style="width: 72%;">
+                            </p:selectOneMenu>
+                            <p:message for="estadoLabel"/>                                     
+                            <p:message for="estado"/>     
+                            <!---->                            
                             <p:outputLabel id="descripcionIndLabel" value="Descripción de indicador: *"/>
                             <p:inputTextarea 
                                 id="descripcionInd"                                 

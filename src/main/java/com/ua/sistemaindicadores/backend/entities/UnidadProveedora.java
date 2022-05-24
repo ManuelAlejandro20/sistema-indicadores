@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -25,20 +26,15 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author aleja
  */
 @Entity
-@Table(name = "anio")
+@Table(name = "unidad_proveedora")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Anio.findAll", query = "SELECT a FROM Anio a"),
-    @NamedQuery(name = "Anio.findByFlag", query = "SELECT a FROM Anio a WHERE a.flag = :flag"),
-    @NamedQuery(name = "Anio.findById", query = "SELECT a FROM Anio a WHERE a.id = :id"),
-    @NamedQuery(name = "Anio.findByFecha", query = "SELECT a FROM Anio a WHERE a.fecha = :fecha")})
-public class Anio implements Serializable {
+    @NamedQuery(name = "UnidadProveedora.findAll", query = "SELECT u FROM UnidadProveedora u"),
+    @NamedQuery(name = "UnidadProveedora.findById", query = "SELECT u FROM UnidadProveedora u WHERE u.id = :id"),
+    @NamedQuery(name = "UnidadProveedora.findByUnidadProveedora", query = "SELECT u FROM UnidadProveedora u WHERE u.unidadProveedora = :unidadProveedora")})
+public class UnidadProveedora implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "flag")
-    private short flag;
     @Id
     @Basic(optional = false)
     @NotNull
@@ -46,30 +42,22 @@ public class Anio implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "fecha")
-    private int fecha;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anio")
-    private Collection<IndicadorAnio> indicadorAnioCollection;
+    @Size(min = 1, max = 255)
+    @Column(name = "unidad_proveedora")
+    private String unidadProveedora;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "unidadProveedoraId")
+    private Collection<Indicador> indicadorCollection;
 
-    public Anio() {
+    public UnidadProveedora() {
     }
 
-    public Anio(Integer id) {
+    public UnidadProveedora(Integer id) {
         this.id = id;
     }
 
-    public Anio(Integer id, short flag, int fecha) {
+    public UnidadProveedora(Integer id, String unidadProveedora) {
         this.id = id;
-        this.flag = flag;
-        this.fecha = fecha;
-    }
-
-    public short getFlag() {
-        return flag;
-    }
-
-    public void setFlag(short flag) {
-        this.flag = flag;
+        this.unidadProveedora = unidadProveedora;
     }
 
     public Integer getId() {
@@ -80,21 +68,21 @@ public class Anio implements Serializable {
         this.id = id;
     }
 
-    public int getFecha() {
-        return fecha;
+    public String getUnidadProveedora() {
+        return unidadProveedora;
     }
 
-    public void setFecha(int fecha) {
-        this.fecha = fecha;
+    public void setUnidadProveedora(String unidadProveedora) {
+        this.unidadProveedora = unidadProveedora;
     }
 
     @XmlTransient
-    public Collection<IndicadorAnio> getIndicadorAnioCollection() {
-        return indicadorAnioCollection;
+    public Collection<Indicador> getIndicadorCollection() {
+        return indicadorCollection;
     }
 
-    public void setIndicadorAnioCollection(Collection<IndicadorAnio> indicadorAnioCollection) {
-        this.indicadorAnioCollection = indicadorAnioCollection;
+    public void setIndicadorCollection(Collection<Indicador> indicadorCollection) {
+        this.indicadorCollection = indicadorCollection;
     }
 
     @Override
@@ -107,10 +95,10 @@ public class Anio implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Anio)) {
+        if (!(object instanceof UnidadProveedora)) {
             return false;
         }
-        Anio other = (Anio) object;
+        UnidadProveedora other = (UnidadProveedora) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -119,7 +107,7 @@ public class Anio implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ua.sistemaindicadores.backend.entities.Anio[ id=" + id + " ]";
+        return "com.ua.sistemaindicadores.backend.entities.UnidadProveedora[ id=" + id + " ]";
     }
     
 }

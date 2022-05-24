@@ -6,10 +6,8 @@
 package com.ua.sistemaindicadores.backend.services;
 
 import com.ua.sistemaindicadores.backend.daos.ClasificacionDAO;
-import com.ua.sistemaindicadores.backend.daos.LineamientoDAO;
 import com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO;
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
-import com.ua.sistemaindicadores.backend.entities.SelectLineamiento;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;

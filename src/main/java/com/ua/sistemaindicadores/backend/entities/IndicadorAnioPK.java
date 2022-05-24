@@ -21,33 +21,33 @@ public class IndicadorAnioPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "indicador_id")
-    private Integer indicadorId;
+    private int indicadorId;
     @Basic(optional = false)
     @NotNull
     @Column(name = "anio_id")
-    private Integer anioId;
+    private int anioId;
 
     public IndicadorAnioPK() {
     }
 
-    public IndicadorAnioPK(Integer indicadorId, Integer anioId) {
+    public IndicadorAnioPK(int indicadorId, int anioId) {
         this.indicadorId = indicadorId;
         this.anioId = anioId;
     }
 
-    public Integer getIndicadorId() {
+    public int getIndicadorId() {
         return indicadorId;
     }
 
-    public void setIndicadorId(Integer indicadorId) {
+    public void setIndicadorId(int indicadorId) {
         this.indicadorId = indicadorId;
     }
 
-    public Integer getAnioId() {
+    public int getAnioId() {
         return anioId;
     }
 
-    public void setAnioId(Integer anioId) {
+    public void setAnioId(int anioId) {
         this.anioId = anioId;
     }
 

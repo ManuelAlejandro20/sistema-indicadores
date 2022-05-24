@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -25,20 +26,15 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author aleja
  */
 @Entity
-@Table(name = "anio")
+@Table(name = "ajuste_pdei")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Anio.findAll", query = "SELECT a FROM Anio a"),
-    @NamedQuery(name = "Anio.findByFlag", query = "SELECT a FROM Anio a WHERE a.flag = :flag"),
-    @NamedQuery(name = "Anio.findById", query = "SELECT a FROM Anio a WHERE a.id = :id"),
-    @NamedQuery(name = "Anio.findByFecha", query = "SELECT a FROM Anio a WHERE a.fecha = :fecha")})
-public class Anio implements Serializable {
+    @NamedQuery(name = "AjustePdei.findAll", query = "SELECT a FROM AjustePdei a"),
+    @NamedQuery(name = "AjustePdei.findById", query = "SELECT a FROM AjustePdei a WHERE a.id = :id"),
+    @NamedQuery(name = "AjustePdei.findByAjustePdei", query = "SELECT a FROM AjustePdei a WHERE a.ajustePdei = :ajustePdei")})
+public class AjustePdei implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "flag")
-    private short flag;
     @Id
     @Basic(optional = false)
     @NotNull
@@ -46,30 +42,22 @@ public class Anio implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "fecha")
-    private int fecha;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anio")
-    private Collection<IndicadorAnio> indicadorAnioCollection;
+    @Size(min = 1, max = 255)
+    @Column(name = "ajuste_pdei")
+    private String ajustePdei;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ajustePdeiId")
+    private Collection<Indicador> indicadorCollection;
 
-    public Anio() {
+    public AjustePdei() {
     }
 
-    public Anio(Integer id) {
+    public AjustePdei(Integer id) {
         this.id = id;
     }
 
-    public Anio(Integer id, short flag, int fecha) {
+    public AjustePdei(Integer id, String ajustePdei) {
         this.id = id;
-        this.flag = flag;
-        this.fecha = fecha;
-    }
-
-    public short getFlag() {
-        return flag;
-    }
-
-    public void setFlag(short flag) {
-        this.flag = flag;
+        this.ajustePdei = ajustePdei;
     }
 
     public Integer getId() {
@@ -80,21 +68,21 @@ public class Anio implements Serializable {
         this.id = id;
     }
 
-    public int getFecha() {
-        return fecha;
+    public String getAjustePdei() {
+        return ajustePdei;
     }
 
-    public void setFecha(int fecha) {
-        this.fecha = fecha;
+    public void setAjustePdei(String ajustePdei) {
+        this.ajustePdei = ajustePdei;
     }
 
     @XmlTransient
-    public Collection<IndicadorAnio> getIndicadorAnioCollection() {
-        return indicadorAnioCollection;
+    public Collection<Indicador> getIndicadorCollection() {
+        return indicadorCollection;
     }
 
-    public void setIndicadorAnioCollection(Collection<IndicadorAnio> indicadorAnioCollection) {
-        this.indicadorAnioCollection = indicadorAnioCollection;
+    public void setIndicadorCollection(Collection<Indicador> indicadorCollection) {
+        this.indicadorCollection = indicadorCollection;
     }
 
     @Override
@@ -107,10 +95,10 @@ public class Anio implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Anio)) {
+        if (!(object instanceof AjustePdei)) {
             return false;
         }
-        Anio other = (Anio) object;
+        AjustePdei other = (AjustePdei) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -119,7 +107,7 @@ public class Anio implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ua.sistemaindicadores.backend.entities.Anio[ id=" + id + " ]";
+        return "com.ua.sistemaindicadores.backend.entities.AjustePdei[ id=" + id + " ]";
     }
     
 }
