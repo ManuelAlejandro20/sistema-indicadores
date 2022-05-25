@@ -48,6 +48,13 @@ public class IndicadorTipoDAO extends AbstractDAO<IndicadorTipo> {
     public IndicadorTipoDAO() {
         super(IndicadorTipo.class);
     }
+    
+    public List<IndicadorTipo> obtenerTiposIndicadoresByEstado(Short estado) {
+        return getEntityManager()
+                .createNamedQuery("IndicadorTipo.findByEstado", IndicadorTipo.class)
+                .setParameter("estado", estado)
+                .getResultList();
+    }        
 
     public List<IndicadorTipo> obtenerIndicadorTipos()
     {

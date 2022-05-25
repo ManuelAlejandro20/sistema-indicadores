@@ -41,7 +41,13 @@ public class TipoIndicadorService {
     public List<IndicadorTipo> obtenerIndicadorTipos()
     {
         return indicadorTipoDAO.obtenerIndicadorTipos();
-    }    
+    }  
+    
+    @RolesAllowed({"ADMINISTRADOR"})
+    public List<IndicadorTipo> obtenerTiposIndicadoresByEstado(Short estado)
+    {
+        return indicadorTipoDAO.obtenerTiposIndicadoresByEstado(estado);
+    }      
     
     @RolesAllowed({"ADMINISTRADOR"})
     public int contarTipoIndicadores(Map<String, Object> filters) {

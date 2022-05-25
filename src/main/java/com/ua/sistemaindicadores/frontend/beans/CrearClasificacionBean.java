@@ -51,6 +51,8 @@ public class CrearClasificacionBean implements Serializable {
     private String vigencia;
     private String descripcion;
     private List<IndicadorTipo> listaIndicadorTipo;
+    private List<IndicadorTipo> listaIndicadorTipoVigente;
+    private List<IndicadorTipo> listaIndicadorTipoNoVigente;
     private IndicadorTipo indicadorTipoSeleccionado;
 
     private Clasificacion nuevaClasificacion;
@@ -60,7 +62,9 @@ public class CrearClasificacionBean implements Serializable {
     @PostConstruct
     public void initalize() {
         nuevaClasificacion = new Clasificacion();
-        listaIndicadorTipo = tipoIndicadorService.obtenerIndicadorTipos();
+        listaIndicadorTipoVigente = tipoIndicadorService.obtenerTiposIndicadoresByEstado(Short.valueOf("1"));
+        listaIndicadorTipoNoVigente = tipoIndicadorService.obtenerTiposIndicadoresByEstado(Short.valueOf("0"));
+        listaIndicadorTipo = listaIndicadorTipoVigente;
         disabled = false;
         System.out.println("Inicio Bean Crear Clasificacion");
     }
@@ -69,6 +73,15 @@ public class CrearClasificacionBean implements Serializable {
      * Creates a new instance of convenioBean
      */
     public CrearClasificacionBean() {
+    }
+    
+    public void cambiarEstado(){
+        
+        if(vigencia.equals("VIGENTE")){
+            listaIndicadorTipo = listaIndicadorTipoVigente;
+        }else{
+            listaIndicadorTipo = listaIndicadorTipoNoVigente;
+        }    
     }
 
     public void crearClasificacion() throws IOException {
