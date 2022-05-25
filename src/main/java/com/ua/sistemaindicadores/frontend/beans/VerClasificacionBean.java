@@ -38,7 +38,7 @@ public class VerClasificacionBean implements Serializable {
     @Inject
     private ClasificacionLazyDataModel model;
     @Inject
-    transient private TipoIndicadorService tipoIndicadorService;    
+    transient private TipoIndicadorService tipoIndicadorService;
 
     private String nombreSeleccionado;
     private String estadoSeleccionado;
@@ -48,7 +48,7 @@ public class VerClasificacionBean implements Serializable {
     private String anioActualizacionSeleccionado;
 
     private List<IndicadorTipo> listaIndicadorTipo;
-    
+
     private Boolean filtros;
     private String mensajeFiltros;
 
@@ -132,7 +132,7 @@ public class VerClasificacionBean implements Serializable {
     public void setAnioActualizacionSeleccionado(String anioActualizacionSeleccionado) {
         this.anioActualizacionSeleccionado = anioActualizacionSeleccionado;
     }
-    
+
     public Boolean getFiltros() {
         return filtros;
     }
@@ -177,11 +177,11 @@ public class VerClasificacionBean implements Serializable {
             anioCreacionSeleccionado = null;
             anioActualizacionSeleccionado = null;
             onSeleccionNombreListener();
-            onSeleccionTipoListener();            
+            onSeleccionTipoListener();
             onSeleccionEstadoListener();
             onSeleccionDescripcionListener();
             onSeleccionAnioCreacionListener();
-            onSeleccionAnioActualizacionListener();                        
+            onSeleccionAnioActualizacionListener();
         } catch (EJBException ex) {
             Logger.getLogger(Clasificacion.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance()
@@ -190,6 +190,16 @@ public class VerClasificacionBean implements Serializable {
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema al borrar los filtros. Contacte al administrador.")
                     );
         }
+    }
+
+    public void desplegarVigentes() {
+        estadoSeleccionado = "1";
+        onSeleccionEstadoListener();
+    }
+
+    public void desplegarNoVigentes() {
+        estadoSeleccionado = "0";
+        onSeleccionEstadoListener();
     }
 
     //Filtros
@@ -209,7 +219,7 @@ public class VerClasificacionBean implements Serializable {
                     );
         }
     }
-    
+
     public void onSeleccionTipoListener() {
         try {
             if (tipoSeleccionado != null) {
@@ -225,7 +235,7 @@ public class VerClasificacionBean implements Serializable {
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro nombre. Contacte al administrador.")
                     );
         }
-    }    
+    }
 
     public void onSeleccionEstadoListener() {
         try {
@@ -260,8 +270,8 @@ public class VerClasificacionBean implements Serializable {
                     );
         }
     }
-    
-    public void onSeleccionAnioCreacionListener(){        
+
+    public void onSeleccionAnioCreacionListener() {
         try {
             if (anioCreacionSeleccionado != null) {
                 model.setFechaCreacion(formatter.parse("01-01-" + anioCreacionSeleccionado));
@@ -275,12 +285,12 @@ public class VerClasificacionBean implements Serializable {
                             "mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha creacion. Contacte al administrador.")
                     );
-        } catch (ParseException ex){
+        } catch (ParseException ex) {
             model.setFechaCreacion(null);
         }
-    }            
-    
-    public void onSeleccionAnioActualizacionListener(){        
+    }
+
+    public void onSeleccionAnioActualizacionListener() {
         try {
             if (anioActualizacionSeleccionado != null) {
                 model.setFechaActualizacion(formatter.parse("01-01-" + anioActualizacionSeleccionado));
@@ -294,9 +304,9 @@ public class VerClasificacionBean implements Serializable {
                             "mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha actualizacion. Contacte al administrador.")
                     );
-        } catch (ParseException ex){
+        } catch (ParseException ex) {
             model.setFechaCreacion(null);
         }
-    }            
-    
+    }
+
 }
