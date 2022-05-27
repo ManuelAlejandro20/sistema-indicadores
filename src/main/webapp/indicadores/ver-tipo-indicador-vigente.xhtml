@@ -34,7 +34,7 @@
                          selection="#{verTipoIndicadorBean.tipoIndicadorSeleccionadoDTO}"
                          rowKey="#{tipoIndicadorDTO.id}"                         
                          >
-          
+
                 <p:column headerText="Nombre"
                           width="5"
                           styleClass="align-center">                 
@@ -59,6 +59,7 @@
                           width="4"
                           styleClass="align-center">
                     <p:button
+                        outcome="/indicadores/ver-clasificacion.xhtml?name=#{tipoIndicadorDTO.nombre}"
                         class="btn btn-view"
                         icon="fa fa-eye">
                     </p:button>

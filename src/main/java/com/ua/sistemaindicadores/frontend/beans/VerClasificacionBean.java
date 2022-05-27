@@ -42,6 +42,7 @@ public class VerClasificacionBean implements Serializable {
 
     private String nombreSeleccionado;
     private String estadoSeleccionado;
+    private String tipo;
     private IndicadorTipo tipoSeleccionado;
     private String descripcionSeleccionada;
     private String anioCreacionSeleccionado;
@@ -99,6 +100,14 @@ public class VerClasificacionBean implements Serializable {
 
     public void setEstadoSeleccionado(String estadoSeleccionado) {
         this.estadoSeleccionado = estadoSeleccionado;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public String getDescripcionSeleccionada() {
@@ -192,6 +201,10 @@ public class VerClasificacionBean implements Serializable {
         }
     }
 
+    public void desplegarTipoIndicador() {
+        onSeleccionTipoListener();
+    }
+
     public void desplegarVigentes() {
         estadoSeleccionado = "1";
         onSeleccionEstadoListener();
@@ -222,8 +235,8 @@ public class VerClasificacionBean implements Serializable {
 
     public void onSeleccionTipoListener() {
         try {
-            if (tipoSeleccionado != null) {
-                model.setTipo(tipoSeleccionado.getNombre());
+            if (tipo != null) {
+                model.setTipo(tipo);
             } else {
                 model.setTipo(null);
             }
@@ -232,7 +245,7 @@ public class VerClasificacionBean implements Serializable {
             FacesContext.getCurrentInstance()
                     .addMessage(
                             "mensaje",
-                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro nombre. Contacte al administrador.")
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro tipo. Contacte al administrador.")
                     );
         }
     }
