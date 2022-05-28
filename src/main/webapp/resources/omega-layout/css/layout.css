@@ -2298,6 +2298,27 @@ h2 {
     cursor: pointer;
 }
 
+.card-select-clasificacion {
+    background-color: #FF6600 !important; 
+    border-radius: 0.25rem;
+    color: white;
+    cursor: pointer;    
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.card-select-clasificacion:hover {
+    background-color: white !important; 
+    border-radius: 0.25rem;
+    color: black;
+    cursor: pointer;
+}
+
+.card-select-clasificacion:active {
+    background-color: black !important; 
+    border-radius: 0.25rem;
+    color: white;
+    cursor: pointer;
+}
 
 .ui-g {
   -ms-flex-wrap: wrap; }

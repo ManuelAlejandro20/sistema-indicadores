@@ -35,8 +35,13 @@ public class TipoIndicadorService {
     @RolesAllowed({"ADMINISTRADOR"})
     public void actualizarTipoIndicador(IndicadorTipo indicadorTipo) {
         indicadorTipoDAO.edit(indicadorTipo);
-    }    
+    } 
     
+    @RolesAllowed({"ADMINISTRADOR"})
+    public IndicadorTipo buscarTipoIndicadorNombre(String nombre) {
+        return indicadorTipoDAO.buscarTipoIndicadorNombre(nombre);
+    }     
+        
     @RolesAllowed({"ADMINISTRADOR"})
     public List<IndicadorTipo> obtenerIndicadorTipos()
     {

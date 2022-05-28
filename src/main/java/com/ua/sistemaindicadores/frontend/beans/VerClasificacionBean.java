@@ -10,6 +10,7 @@ import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.models.ClasificacionLazyDataModel;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
+import javax.faces.context.ExternalContext;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -24,6 +25,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -38,7 +40,7 @@ public class VerClasificacionBean implements Serializable {
     @Inject
     private ClasificacionLazyDataModel model;
     @Inject
-    transient private TipoIndicadorService tipoIndicadorService;    
+    transient private TipoIndicadorService tipoIndicadorService;
 
     private String nombreSeleccionado;
     private String estadoSeleccionado;
@@ -55,6 +57,9 @@ public class VerClasificacionBean implements Serializable {
     private ClasificacionDTO clasificacionSeleccionadoDTO;
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
+    //---- Variables pertenecientes a la interfaz visualizacion
+    private String mensajeVerClasifiaciones;
+    
     @PostConstruct
     public void initalize() {
         System.out.println("Inicio Bean Ver Tipo Indicador");
@@ -132,7 +137,7 @@ public class VerClasificacionBean implements Serializable {
     public void setAnioActualizacionSeleccionado(String anioActualizacionSeleccionado) {
         this.anioActualizacionSeleccionado = anioActualizacionSeleccionado;
     }
-    
+
     public Boolean getFiltros() {
         return filtros;
     }
@@ -157,6 +162,14 @@ public class VerClasificacionBean implements Serializable {
         this.listaIndicadorTipo = listaIndicadorTipo;
     }
 
+    public String getMensajeVerClasifiaciones() {
+        return mensajeVerClasifiaciones;
+    }
+
+    public void setMensajeVerClasifiaciones(String mensajeVerClasifiaciones) {
+        this.mensajeVerClasifiaciones = mensajeVerClasifiaciones;
+    }
+   
     public void eventofiltros() {
         if (filtros) {
             mensajeFiltros = "Ocultar filtros";
@@ -171,17 +184,18 @@ public class VerClasificacionBean implements Serializable {
     public void limpiarFiltros() {
         try {
             nombreSeleccionado = null;
-            estadoSeleccionado = null;
             tipoSeleccionado = null;
+            estadoSeleccionado = null;            
             descripcionSeleccionada = null;
             anioCreacionSeleccionado = null;
-            anioActualizacionSeleccionado = null;
+            anioActualizacionSeleccionado = null;                       
             onSeleccionNombreListener();
-            onSeleccionTipoListener();            
-            onSeleccionEstadoListener();
+            onSeleccionTipoListener();
+            onSeleccionEstadoListener();             
             onSeleccionDescripcionListener();
             onSeleccionAnioCreacionListener();
-            onSeleccionAnioActualizacionListener();                        
+            onSeleccionAnioActualizacionListener();                                          
+            
         } catch (EJBException ex) {
             Logger.getLogger(Clasificacion.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance()
@@ -189,6 +203,24 @@ public class VerClasificacionBean implements Serializable {
                             "mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema al borrar los filtros. Contacte al administrador.")
                     );
+        }
+    }
+
+    public void desplegarTipoIndicador() {
+        //Si el tipoSeleccionado es nulo (ya se porque la página carga por primera vez o porque se borran los filtros)
+        //capturara el parametro de la url, si no es nulo significa que ya cargo el parametro tipo y el filtro tipo
+        //fue fijado
+        if(tipoSeleccionado == null){
+            Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            tipoSeleccionado = tipoIndicadorService.buscarTipoIndicadorNombre(params.get("n"));
+            if(tipoSeleccionado != null){
+                mensajeVerClasifiaciones = "Clasificaciones de " + tipoSeleccionado.getNombre();                        
+            }else{
+                estadoSeleccionado = "-1";
+                mensajeVerClasifiaciones = "No hay datos sobre el tipo de indicador";                                        
+            }
+            onSeleccionTipoListener();
+            onSeleccionEstadoListener();
         }
     }
 
@@ -209,7 +241,7 @@ public class VerClasificacionBean implements Serializable {
                     );
         }
     }
-    
+
     public void onSeleccionTipoListener() {
         try {
             if (tipoSeleccionado != null) {
@@ -222,10 +254,10 @@ public class VerClasificacionBean implements Serializable {
             FacesContext.getCurrentInstance()
                     .addMessage(
                             "mensaje",
-                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro nombre. Contacte al administrador.")
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro tipo. Contacte al administrador.")
                     );
         }
-    }    
+    }
 
     public void onSeleccionEstadoListener() {
         try {
@@ -260,8 +292,8 @@ public class VerClasificacionBean implements Serializable {
                     );
         }
     }
-    
-    public void onSeleccionAnioCreacionListener(){        
+
+    public void onSeleccionAnioCreacionListener() {
         try {
             if (anioCreacionSeleccionado != null) {
                 model.setFechaCreacion(formatter.parse("01-01-" + anioCreacionSeleccionado));
@@ -275,12 +307,12 @@ public class VerClasificacionBean implements Serializable {
                             "mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha creacion. Contacte al administrador.")
                     );
-        } catch (ParseException ex){
+        } catch (ParseException ex) {
             model.setFechaCreacion(null);
         }
-    }            
-    
-    public void onSeleccionAnioActualizacionListener(){        
+    }
+
+    public void onSeleccionAnioActualizacionListener() {
         try {
             if (anioActualizacionSeleccionado != null) {
                 model.setFechaActualizacion(formatter.parse("01-01-" + anioActualizacionSeleccionado));
@@ -294,9 +326,9 @@ public class VerClasificacionBean implements Serializable {
                             "mensaje",
                             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema con el filtro fecha actualizacion. Contacte al administrador.")
                     );
-        } catch (ParseException ex){
+        } catch (ParseException ex) {
             model.setFechaCreacion(null);
         }
-    }            
-    
+    }
+
 }

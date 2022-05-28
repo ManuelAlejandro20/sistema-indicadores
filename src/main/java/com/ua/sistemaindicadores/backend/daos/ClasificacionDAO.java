@@ -31,15 +31,15 @@ import javax.persistence.criteria.Predicate;
  */
 @Stateless
 public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
-    
+
     public static final String KEY_NOMBRE = "nombre";
     public static final String KEY_TIPO = "tipo";
     public static final String KEY_ESTADO = "estado";
     public static final String KEY_DESCRIPCION = "descripcion";
     public static final String KEY_FCREACION = "fechaCreacion";
-    public static final String KEY_FACT = "fechaActualizacion";    
+    public static final String KEY_FACT = "fechaActualizacion";
     public static final String KEY_TIPO_INDICADOR_ID = "TIPO_INDICADOR_ID";
-    
+
     @Inject
     private EntityManagerProvider entityManagerProvider;
 
@@ -62,6 +62,10 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
 
     public Clasificacion buscarClasificacionID(Integer id) {
         return find(id);
+    }
+
+    public Clasificacion buscarClasificacionTipo(String tipo) {
+        return find(tipo);
     }
 
     public ClasificacionDTO obtenerClasificacionDTO(Integer clasificacionId) {
@@ -87,7 +91,7 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
     private Join obtenerJoin(Root<Clasificacion> root, String key) {
         if (!mapJoins.containsKey(key)) {
             switch (key) {
@@ -101,7 +105,7 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
             }
         }
         return mapJoins.get(key);
-    }    
+    }
 
     private Predicate construirPredicado(CriteriaBuilder cb, Root<Clasificacion> root, Map<String, Object> filters) {
         Predicate p = cb.conjunction();
@@ -125,16 +129,16 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
                         );
                         break;
                     case KEY_FCREACION:
-                    case KEY_FACT:         
+                    case KEY_FACT:
                         SimpleDateFormat df = new SimpleDateFormat("yyyy");
-                        Integer year = Integer.parseInt(df.format((Date) filters.get(key)));                        
-                        p = cb.and(p,          
+                        Integer year = Integer.parseInt(df.format((Date) filters.get(key)));
+                        p = cb.and(p,
                                 cb.equal(
-                                        cb.function("YEAR", Integer.class, root.get(key)), 
+                                        cb.function("YEAR", Integer.class, root.get(key)),
                                         year
                                 )
                         );
-                        break;    
+                        break;
                     case KEY_TIPO_INDICADOR_ID:
                         p = cb.and(
                                 p,
@@ -142,7 +146,7 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
                                         (Integer) filters.get(key)
                                 )
                         );
-                        break;                        
+                        break;
                     default:
                         break;
                 }
@@ -188,14 +192,13 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
 //        q.setFirstResult(first);
 //        return q.getResultList();
 //    }
-
     public List<ClasificacionDTO> cargar(int first, int pageSize, String sortField, String sortOrder, Map<String, Object> filters) {
         mapJoins.clear(); //limpiar map antes de crear la query
 
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<ClasificacionDTO> cq = cb.createQuery(ClasificacionDTO.class);
         Root<Clasificacion> rootClasificacion = cq.from(Clasificacion.class);
-        
+
         Join<Clasificacion, IndicadorTipo> joinTipoIndicador = rootClasificacion.join(Clasificacion_.INDICADOR_TIPO_ID, JoinType.INNER);
 
         Predicate p = construirPredicado(cb, rootClasificacion, filters);
@@ -218,17 +221,17 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
                         rootClasificacion.get(Clasificacion_.ID),
                         joinTipoIndicador.get(IndicadorTipo_.ID),
                         rootClasificacion.get(Clasificacion_.NOMBRE),
-                        rootClasificacion.get(Clasificacion_.ESTADO),                        
+                        rootClasificacion.get(Clasificacion_.ESTADO),
                         rootClasificacion.get(Clasificacion_.TIPO),
-                        rootClasificacion.get(Clasificacion_.DESCRIPCION),                        
+                        rootClasificacion.get(Clasificacion_.DESCRIPCION),
                         rootClasificacion.get(Clasificacion_.FECHA_CREACION),
-                        rootClasificacion.get(Clasificacion_.FECHA_ACTUALIZACION)                                                
+                        rootClasificacion.get(Clasificacion_.FECHA_ACTUALIZACION)
                 )).distinct(true);
 
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         q.setMaxResults(pageSize);
         q.setFirstResult(first);
         return q.getResultList();
-    }    
-    
+    }
+
 }
