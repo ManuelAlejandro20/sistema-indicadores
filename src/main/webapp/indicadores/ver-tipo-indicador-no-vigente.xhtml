@@ -13,8 +13,8 @@
             <h2 class="border-bottom-orange align-center">Tipos de indicadores no vigentes</h2>   
         </div>
         <br></br>       
-        <div class="ui-g-3"></div>
-        <div class="ui-g-6">
+        <div class="ui-g-1"></div>
+        <div class="ui-g-10">
             <p:dataTable class="ui-g-tabla-adm"                          
                          id="tipo_indicadores"
                          var="tipoIndicadorDTO" 
@@ -48,6 +48,12 @@
                     <h:outputText value="#{tipoIndicadorDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
                     </h:outputText>                            
                 </p:column>
+                <p:column headerText="Descripción"
+                          width="50"
+                          styleClass="align-center">
+                    <h:outputText value="#{tipoIndicadorDTO.descripcion eq null?'Sin dato':tipoIndicadorDTO.descripcion }">
+                    </h:outputText>                            
+                </p:column>                
                 <p:column headerText="Fecha de creación"
                           width="30"
                           styleClass="align-center">                          
@@ -59,14 +65,14 @@
                           width="4"
                           styleClass="align-center">
                     <p:button
-                        outcome="/indicadores/ver-clasificacion.xhtml?name=#{tipoIndicadorDTO.nombre}"
+                        outcome="/indicadores/ver-clasificacion.xhtml"
                         class="btn btn-view"
                         icon="fa fa-eye">
+                        <f:param name="n" value="#{tipoIndicadorDTO.nombre}" />                    
                     </p:button>
-
                 </p:column>
             </p:dataTable>
         </div>       
-        <div class="ui-g-3"></div>        
+        <div class="ui-g-1"></div>        
     </ui:define>
 </ui:composition>

@@ -7,23 +7,22 @@
     <ui:define name="content">
         <f:metadata>
             <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.VerClasificacionBean"/>
-            <f:viewParam name="name" value="#{verClasificacionBean.tipo}" />
             <f:event type="preRenderView" listener="#{verClasificacionBean.desplegarTipoIndicador}"/>            
         </f:metadata>          
         <div class="ui-g-12 ui-g-title align-center">
-            <h2 class="border-bottom-orange align-center">Clasificaciones</h2>   
+            <h2 class="border-bottom-orange align-center">#{verClasificacionBean.mensajeVerClasifiaciones}</h2>   
         </div>
         <br></br>       
         <div class="ui-g-12">
-            <p:toolbar class="ui-g-toolbar-adm">
-
+            <p:toolbar class="ui-g-toolbar-adm" style="margin-top:0px;">
                 <p:toolbarGroup>
                     <p:commandButton value="#{verClasificacionBean.mensajeFiltros}" 
                                      class="btn btn-orange btn-group-align"
                                      process="@this" 
                                      update="@form"
-                                     actionListener="#{verClasificacionBean.eventofiltros}"
-                                     />
+                                     actionListener="#{verClasificacionBean.eventofiltros}">
+                        <f:param name="n" value="#{param.n}"/>
+                    </p:commandButton>
                 </p:toolbarGroup>
 
                 <p:toolbarGroup align="right">
@@ -31,7 +30,9 @@
                                      class="btn btn-orange"
                                      process="@this" 
                                      update="@form"
-                                     actionListener="#{verClasificacionBean.limpiarFiltros}"/>                                                                                                 
+                                     actionListener="#{verClasificacionBean.limpiarFiltros}">
+                        <f:param name="n" value="#{param.n}"/>
+                    </p:commandButton>                        
                 </p:toolbarGroup>
             </p:toolbar>
             <div class="ui-g-12" style="display:#{verClasificacionBean.filtros?'none':'block'}">
@@ -45,44 +46,7 @@
                                     listener="#{verClasificacionBean.onSeleccionNombreListener}"
                                     process="@this" 
                                     update="@form:clasificaciones" />
-                        </p:inputText>                                         
-                        <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="tipoLabel" value="TIPO"/>
-                        <p:selectOneMenu id="listaTipo"
-                                         value="#{verClasificacionBean.tipoSeleccionado}"
-                                         var="tipo"
-                                         converter="tipoIndicadorConverter"
-                                         filter="true" 
-                                         filterMatchMode="contains" 
-                                         styleClass="manymenu-advanced"                                     
-                                         >
-                            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            <f:selectItems value="#{verClasificacionBean.listaIndicadorTipo}"
-                                           var="indTipo"
-                                           itemLabel="#{indTipo.nombre}"
-                                           itemValue="#{indTipo}"
-                                           itemDescription="#{indTipo.descripcion}"/>
-                            <p:column>
-                                #{tipo.nombre}
-                            </p:column>                              
-                            <p:ajax event="itemSelect" 
-                                    delay="50"
-                                    listener="#{verClasificacionBean.onSeleccionTipoListener}"
-                                    process="@this" 
-                                    update="@form:clasificaciones" />
-                        </p:selectOneMenu>                                           
-                        <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="estadoLabel" value="ESTADO"/>
-                        <p:selectOneMenu id="estado"
-                                         value="#{verClasificacionBean.estadoSeleccionado}"
-                                         >
-                            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            <f:selectItem itemLabel="Vigente" itemValue="1"/>
-                            <f:selectItem itemLabel="No Vigente" itemValue="0"/>
-                            <p:ajax event="itemSelect" 
-                                    delay="50"
-                                    listener="#{verClasificacionBean.onSeleccionEstadoListener}"
-                                    process="@this" 
-                                    update="@form:clasificaciones" />
-                        </p:selectOneMenu>                    
+                        </p:inputText>                                                                                                   
                         <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="descripcionLabel" value="DESCRIPCIÓN"/>                    
                         <p:inputText id="descripcion"
                                      value="#{verClasificacionBean.descripcionSeleccionada}">
@@ -100,16 +64,7 @@
                                     listener="#{verClasificacionBean.onSeleccionAnioCreacionListener}"
                                     process="@this" 
                                     update="@form:clasificaciones" />
-                        </p:inputText>                      
-                        <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="anioActualizacionLabel" value="AÑO ÚLTIMA ACTUALIZACIÓN"/>                                 
-                        <p:inputText id="anioActualizacion"
-                                     value="#{verClasificacionBean.anioActualizacionSeleccionado}">
-                            <p:ajax event="keyup" 
-                                    delay="500"
-                                    listener="#{verClasificacionBean.onSeleccionAnioActualizacionListener}"
-                                    process="@this" 
-                                    update="@form:clasificaciones" />                    
-                        </p:inputText>                          
+                        </p:inputText>                                             
                     </p:panelGrid>
                 </p:panel>
             </div>

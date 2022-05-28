@@ -10,6 +10,7 @@ import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.models.ClasificacionLazyDataModel;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
+import javax.faces.context.ExternalContext;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -24,6 +25,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -42,20 +44,22 @@ public class VerClasificacionBean implements Serializable {
 
     private String nombreSeleccionado;
     private String estadoSeleccionado;
-    private String tipo;
     private IndicadorTipo tipoSeleccionado;
     private String descripcionSeleccionada;
     private String anioCreacionSeleccionado;
     private String anioActualizacionSeleccionado;
 
     private List<IndicadorTipo> listaIndicadorTipo;
-
+    
     private Boolean filtros;
     private String mensajeFiltros;
 
     private ClasificacionDTO clasificacionSeleccionadoDTO;
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
+    //---- Variables pertenecientes a la interfaz visualizacion
+    private String mensajeVerClasifiaciones;
+    
     @PostConstruct
     public void initalize() {
         System.out.println("Inicio Bean Ver Tipo Indicador");
@@ -100,14 +104,6 @@ public class VerClasificacionBean implements Serializable {
 
     public void setEstadoSeleccionado(String estadoSeleccionado) {
         this.estadoSeleccionado = estadoSeleccionado;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
     }
 
     public String getDescripcionSeleccionada() {
@@ -166,6 +162,14 @@ public class VerClasificacionBean implements Serializable {
         this.listaIndicadorTipo = listaIndicadorTipo;
     }
 
+    public String getMensajeVerClasifiaciones() {
+        return mensajeVerClasifiaciones;
+    }
+
+    public void setMensajeVerClasifiaciones(String mensajeVerClasifiaciones) {
+        this.mensajeVerClasifiaciones = mensajeVerClasifiaciones;
+    }
+   
     public void eventofiltros() {
         if (filtros) {
             mensajeFiltros = "Ocultar filtros";
@@ -180,17 +184,18 @@ public class VerClasificacionBean implements Serializable {
     public void limpiarFiltros() {
         try {
             nombreSeleccionado = null;
-            estadoSeleccionado = null;
             tipoSeleccionado = null;
+            estadoSeleccionado = null;            
             descripcionSeleccionada = null;
             anioCreacionSeleccionado = null;
-            anioActualizacionSeleccionado = null;
+            anioActualizacionSeleccionado = null;                       
             onSeleccionNombreListener();
             onSeleccionTipoListener();
-            onSeleccionEstadoListener();
+            onSeleccionEstadoListener();             
             onSeleccionDescripcionListener();
             onSeleccionAnioCreacionListener();
-            onSeleccionAnioActualizacionListener();
+            onSeleccionAnioActualizacionListener();                                          
+            
         } catch (EJBException ex) {
             Logger.getLogger(Clasificacion.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance()
@@ -202,17 +207,21 @@ public class VerClasificacionBean implements Serializable {
     }
 
     public void desplegarTipoIndicador() {
-        onSeleccionTipoListener();
-    }
-
-    public void desplegarVigentes() {
-        estadoSeleccionado = "1";
-        onSeleccionEstadoListener();
-    }
-
-    public void desplegarNoVigentes() {
-        estadoSeleccionado = "0";
-        onSeleccionEstadoListener();
+        //Si el tipoSeleccionado es nulo (ya se porque la página carga por primera vez o porque se borran los filtros)
+        //capturara el parametro de la url, si no es nulo significa que ya cargo el parametro tipo y el filtro tipo
+        //fue fijado
+        if(tipoSeleccionado == null){
+            Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            tipoSeleccionado = tipoIndicadorService.buscarTipoIndicadorNombre(params.get("n"));
+            if(tipoSeleccionado != null){
+                mensajeVerClasifiaciones = "Clasificaciones de " + tipoSeleccionado.getNombre();                        
+            }else{
+                estadoSeleccionado = "-1";
+                mensajeVerClasifiaciones = "No hay datos sobre el tipo de indicador";                                        
+            }
+            onSeleccionTipoListener();
+            onSeleccionEstadoListener();
+        }
     }
 
     //Filtros
@@ -235,8 +244,8 @@ public class VerClasificacionBean implements Serializable {
 
     public void onSeleccionTipoListener() {
         try {
-            if (tipo != null) {
-                model.setTipo(tipo);
+            if (tipoSeleccionado != null) {
+                model.setTipo(tipoSeleccionado.getNombre());
             } else {
                 model.setTipo(null);
             }

@@ -56,6 +56,14 @@ public class IndicadorTipoDAO extends AbstractDAO<IndicadorTipo> {
                 .getResultList();
     }     
     
+    public IndicadorTipo buscarTipoIndicadorNombre(String nombre){
+        List<IndicadorTipo> ti = getEntityManager()
+                .createNamedQuery("IndicadorTipo.findByNombre", IndicadorTipo.class)
+                .setParameter("nombre", nombre)
+                .getResultList();
+        return ti.isEmpty() ? null : ti.get(0);
+    }    
+    
     public IndicadorTipo buscarTipoIndicadorID(Integer id){
         return find(id);
     }
