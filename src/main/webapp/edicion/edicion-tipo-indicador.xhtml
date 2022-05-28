@@ -7,7 +7,6 @@
     <ui:define name="content">       
         <f:metadata>
             <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.EditarTipoIndicadorBean"/>
-            <f:viewParam name="id" value="#{editarTipoIndicadorBean.id}" />            
             <f:event type="preRenderView" listener="#{editarTipoIndicadorBean.cargarDatos}"/>
         </f:metadata>
         <div class="ui-g-12 ui-g-title align-center">
@@ -56,7 +55,9 @@
                                              action="#{editarTipoIndicadorBean.actualizarDatos}"   
                                              disabled="#{editarTipoIndicadorBean.disabled}"
                                              update="@form" 
-                                             process="@this, @form"/>                                
+                                             process="@this, @form">
+                                <f:param name="i" value="#{param.i}"/>
+                            </p:commandButton>
                         </h:panelGrid>
                     </p:panel>
                 </div>       
