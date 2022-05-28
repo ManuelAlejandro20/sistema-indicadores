@@ -13,6 +13,57 @@
             <h2 class="border-bottom-orange align-center">Tipos de indicadores no vigentes</h2>   
         </div>
         <br></br>       
+        <p:toolbar class="ui-g-toolbar-adm">
+            <p:toolbarGroup>
+                <p:commandButton value="#{verTipoIndicadorBean.mensajeFiltros}" 
+                                 class="btn btn-orange btn-group-align"        
+                                 process="@this" 
+                                 update="@form"
+                                 actionListener="#{verTipoIndicadorBean.eventofiltros}"
+                                 />
+            </p:toolbarGroup>
+
+            <p:toolbarGroup align="right">
+                <p:commandButton value="Limpiar filtros" 
+                                 class="btn btn-orange"
+                                 process="@this" 
+                                 update="@form"
+                                 actionListener="#{verTipoIndicadorBean.limpiarFiltros}"/>                                                                                                 
+            </p:toolbarGroup>
+        </p:toolbar>
+        <div class="ui-g-12" style="display:#{verTipoIndicadorBean.filtros?'none':'block'}">
+            <p:panel class="formulario" header="FILTROS">
+                        <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder">
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="nombreLabel" value="NOMBRE"/>                            
+                            <p:inputText id="nombre"
+                                         value="#{verTipoIndicadorBean.nombreSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"                                        
+                                        listener="#{verTipoIndicadorBean.onSeleccionNombreListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText>            
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="descripcionLabel" value="DESCRIPCIÓN"/>                            
+                            <p:inputText id="descripcion"
+                                         value="#{verTipoIndicadorBean.descripcionSeleccionada}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verTipoIndicadorBean.onSeleccionDescripcionListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText>    
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="fechaCLabel" value="AÑO DE CREACIÓN"/>                            
+                            <p:inputText id="anioCreacion"
+                                         value="#{verTipoIndicadorBean.anioCreacionSeleccionado}">                                         
+                                <p:ajax event="keyup" 
+                                        delay="500"
+                                        listener="#{verTipoIndicadorBean.onSeleccionAnioCreacionListener}"
+                                        process="@this" 
+                                        update="@form:tipo_indicadores" />
+                            </p:inputText>                            
+                        </p:panelGrid>
+            </p:panel>
+        </div>            
         <div class="ui-g-1"></div>
         <div class="ui-g-10">
             <p:dataTable class="ui-g-tabla-adm"                          
