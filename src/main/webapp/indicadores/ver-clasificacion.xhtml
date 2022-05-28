@@ -14,66 +14,171 @@
             <h2 class="border-bottom-orange align-center">Clasificaciones</h2>   
         </div>
         <br></br>       
-        <div class="ui-g-3"></div>
-        <div class="ui-g-6">
-            <p:dataTable class="ui-g-tabla-adm"                          
-                         id="clasificaciones"
-                         var="clasificacionDTO" 
-                         value="#{verClasificacionBean.model}"
-                         widgetVar="tablaClasificacion"                         
-                         lazy="true"
-                         paginator="true"
-                         rows="10"
-                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                         rowsPerPageTemplate="5,10,25,50,100"
-                         currentPageReportTemplate="Mostrando {startRecord} - {endRecord} de {totalRecords}" 
-                         selectionMode="single"
-                         sortMode="single"
-                         sortBy="#{clasificacionDTO.id}"
-                         emptyMessage="No se recuperaron registros"
-                         reflow="true"
-                         selection="#{verClasificacionBean.clasificacionSeleccionadoDTO}"
-                         rowKey="#{clasificacionDTO.id}"                         
-                         >
+        <div class="ui-g-12">
+            <p:toolbar class="ui-g-toolbar-adm">
 
-                <p:column headerText="Nombre"
-                          width="5"
-                          styleClass="align-center">                 
-                    <h:outputText value="#{clasificacionDTO.nombre eq null?'Sin dato':clasificacionDTO.nombre }">
-                        <f:convertNumber integerOnly="true"/>
-                    </h:outputText>                    
-                </p:column>
-                <p:column headerText="Tipo"
-                          width="5"
-                          styleClass="align-center">                 
-                    <h:outputText value="#{clasificacionDTO.tipo eq null?'Sin dato':clasificacionDTO.tipo }">
-                        <f:convertNumber integerOnly="true"/>
-                    </h:outputText>                    
-                </p:column>
-                <p:column headerText="Estado"
-                          width="5"
-                          styleClass="align-center">
-                    <h:outputText value="#{clasificacionDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
-                    </h:outputText>                            
-                </p:column>
-                <p:column headerText="Fecha de creación"
-                          width="30"
-                          styleClass="align-center">                          
-                    <h:outputText value="#{clasificacionDTO.fechaCreacion eq null?'Sin dato':clasificacionDTO.fechaCreacion}">
-                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
-                    </h:outputText>                    
-                </p:column>
-                <p:column headerText="Ver"
-                          width="4"
-                          styleClass="align-center">
-                    <p:button
-                        class="btn btn-view"
-                        icon="fa fa-eye">
-                    </p:button>
+                <p:toolbarGroup>
+                    <p:commandButton value="#{verClasificacionBean.mensajeFiltros}" 
+                                     class="btn btn-orange btn-group-align"
+                                     process="@this" 
+                                     update="@form"
+                                     actionListener="#{verClasificacionBean.eventofiltros}"
+                                     />
+                </p:toolbarGroup>
 
-                </p:column>
-            </p:dataTable>
-        </div>       
-        <div class="ui-g-3"></div>
+                <p:toolbarGroup align="right">
+                    <p:commandButton value="Limpiar filtros" 
+                                     class="btn btn-orange"
+                                     process="@this" 
+                                     update="@form"
+                                     actionListener="#{verClasificacionBean.limpiarFiltros}"/>                                                                                                 
+                </p:toolbarGroup>
+            </p:toolbar>
+            <div class="ui-g-12" style="display:#{verClasificacionBean.filtros?'none':'block'}">
+                <p:panel class="formulario" header="FILTROS">
+                    <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder">
+                        <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="nombreLabel" value="NOMBRE"/>
+                        <p:inputText id="nombre"
+                                     value="#{verClasificacionBean.nombreSeleccionado}">
+                            <p:ajax event="keyup" 
+                                    delay="50"
+                                    listener="#{verClasificacionBean.onSeleccionNombreListener}"
+                                    process="@this" 
+                                    update="@form:clasificaciones" />
+                        </p:inputText>                                         
+                        <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="tipoLabel" value="TIPO"/>
+                        <p:selectOneMenu id="listaTipo"
+                                         value="#{verClasificacionBean.tipoSeleccionado}"
+                                         var="tipo"
+                                         converter="tipoIndicadorConverter"
+                                         filter="true" 
+                                         filterMatchMode="contains" 
+                                         styleClass="manymenu-advanced"                                     
+                                         >
+                            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItems value="#{verClasificacionBean.listaIndicadorTipo}"
+                                           var="indTipo"
+                                           itemLabel="#{indTipo.nombre}"
+                                           itemValue="#{indTipo}"
+                                           itemDescription="#{indTipo.descripcion}"/>
+                            <p:column>
+                                #{tipo.nombre}
+                            </p:column>                              
+                            <p:ajax event="itemSelect" 
+                                    delay="50"
+                                    listener="#{verClasificacionBean.onSeleccionTipoListener}"
+                                    process="@this" 
+                                    update="@form:clasificaciones" />
+                        </p:selectOneMenu>                                           
+                        <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="estadoLabel" value="ESTADO"/>
+                        <p:selectOneMenu id="estado"
+                                         value="#{verClasificacionBean.estadoSeleccionado}"
+                                         >
+                            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItem itemLabel="Vigente" itemValue="1"/>
+                            <f:selectItem itemLabel="No Vigente" itemValue="0"/>
+                            <p:ajax event="itemSelect" 
+                                    delay="50"
+                                    listener="#{verClasificacionBean.onSeleccionEstadoListener}"
+                                    process="@this" 
+                                    update="@form:clasificaciones" />
+                        </p:selectOneMenu>                    
+                        <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="descripcionLabel" value="DESCRIPCIÓN"/>                    
+                        <p:inputText id="descripcion"
+                                     value="#{verClasificacionBean.descripcionSeleccionada}">
+                            <p:ajax event="keyup" 
+                                    delay="50"
+                                    listener="#{verClasificacionBean.onSeleccionDescripcionListener}"
+                                    process="@this" 
+                                    update="@form:clasificaciones" />
+                        </p:inputText>                      
+                        <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="anioCreacionLabel" value="AÑO DE CREACIÓN"/>
+                        <p:inputText id="anioCreacion"
+                                     value="#{verClasificacionBean.anioCreacionSeleccionado}">
+                            <p:ajax event="keyup" 
+                                    delay="500"
+                                    listener="#{verClasificacionBean.onSeleccionAnioCreacionListener}"
+                                    process="@this" 
+                                    update="@form:clasificaciones" />
+                        </p:inputText>                      
+                        <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="anioActualizacionLabel" value="AÑO ÚLTIMA ACTUALIZACIÓN"/>                                 
+                        <p:inputText id="anioActualizacion"
+                                     value="#{verClasificacionBean.anioActualizacionSeleccionado}">
+                            <p:ajax event="keyup" 
+                                    delay="500"
+                                    listener="#{verClasificacionBean.onSeleccionAnioActualizacionListener}"
+                                    process="@this" 
+                                    update="@form:clasificaciones" />                    
+                        </p:inputText>                          
+                    </p:panelGrid>
+                </p:panel>
+            </div>
+            <div class="ui-g-12">
+                <p:dataTable class="ui-g-tabla-adm"                          
+                             id="clasificaciones"
+                             var="clasificacionDTO" 
+                             value="#{verClasificacionBean.model}"
+                             widgetVar="tablaClasificacion"                         
+                             lazy="true"
+                             paginator="true"
+                             rows="10"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,25,50,100"
+                             currentPageReportTemplate="Mostrando {startRecord} - {endRecord} de {totalRecords}" 
+                             selectionMode="single"
+                             sortMode="single"
+                             sortBy="#{clasificacionDTO.id}"
+                             emptyMessage="No se recuperaron registros"
+                             reflow="true"
+                             selection="#{verClasificacionBean.clasificacionSeleccionadoDTO}"
+                             rowKey="#{clasificacionDTO.id}"                         
+                             >
+
+                    <p:column headerText="Nombre"
+                              width="5"
+                              styleClass="align-center">                 
+                        <h:outputText value="#{clasificacionDTO.nombre eq null?'Sin dato':clasificacionDTO.nombre }">
+                            <f:convertNumber integerOnly="true"/>
+                        </h:outputText>                    
+                    </p:column>
+                    <p:column headerText="Tipo"
+                              width="5"
+                              styleClass="align-center">                 
+                        <h:outputText value="#{clasificacionDTO.tipo eq null?'Sin dato':clasificacionDTO.tipo }">
+                            <f:convertNumber integerOnly="true"/>
+                        </h:outputText>                    
+                    </p:column>
+                    <p:column headerText="Descripcion"
+                              width="50"
+                              styleClass="align-center">                 
+                        <h:outputText value="#{clasificacionDTO.descripcion eq null?'Sin dato':clasificacionDTO.descripcion }">
+                            <f:convertNumber integerOnly="true"/>
+                        </h:outputText>                    
+                    </p:column>
+                    <p:column headerText="Estado"
+                              width="5"
+                              styleClass="align-center">
+                        <h:outputText value="#{clasificacionDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
+                        </h:outputText>                            
+                    </p:column>
+                    <p:column headerText="Fecha de creación"
+                              width="30"
+                              styleClass="align-center">                          
+                        <h:outputText value="#{clasificacionDTO.fechaCreacion eq null?'Sin dato':clasificacionDTO.fechaCreacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
+                        </h:outputText>                    
+                    </p:column>
+                    <p:column headerText="Ver"
+                              width="4"
+                              styleClass="align-center">
+                        <p:button
+                            class="btn btn-view"
+                            icon="fa fa-eye">
+                        </p:button>
+
+                    </p:column>
+                </p:dataTable>
+            </div>  
+        </div>
     </ui:define>
 </ui:composition>
