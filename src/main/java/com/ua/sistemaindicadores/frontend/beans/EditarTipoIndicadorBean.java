@@ -5,8 +5,10 @@
  */
 package com.ua.sistemaindicadores.frontend.beans;
 
+import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.exceptions.NotificacionCorreoException;
+import com.ua.sistemaindicadores.backend.services.ClasificacionService;
 import com.ua.sistemaindicadores.backend.services.CorreoService;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
 import java.io.IOException;
@@ -16,6 +18,7 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;  
 import java.util.Map;
 import java.util.TimeZone;
@@ -40,6 +43,8 @@ public class EditarTipoIndicadorBean implements Serializable {
     
     @Inject
     transient private TipoIndicadorService tipoIndicadorService;
+    @Inject
+    transient private ClasificacionService clasificacionService;    
     @Inject
     transient private CorreoService correoService;  
     
@@ -114,6 +119,14 @@ public class EditarTipoIndicadorBean implements Serializable {
                         "El tipo de indicador " + nombreTipoIndicador + " ha sido actualizado correctamente")
                 );
 
+                String mensaje = "";
+                
+                //Si el tipo de indicador tiene clasificaciones asociadas y si se hace un cambio de vigencia...
+                if(it.getClasificacionCollection().size() != 0 && vigenciaAntiguaSh != numVigencia){
+                    ArrayList<String> clasificacionesAfectadas = actualizarClasificaciones(numVigencia);
+                    mensaje = mensajeClasificacionesAfectadas(clasificacionesAfectadas, it.getNombre(), numVigencia);
+                }
+                                                               
                 try {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                     formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
@@ -125,10 +138,11 @@ public class EditarTipoIndicadorBean implements Serializable {
                             + "<li>Fecha creación: " + formatter.format(it.getFechaCreacion()) + ".</li>"
                             + "<li>Fecha actualización: " + formatter.format(it.getFechaActualizacion()) + ".</li>"
                             + "</ul>"
-                            + "<br/><br/>"                                
+                            + "<br/>"
+                            + mensaje
                             + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
-                            + "<br/><br/>"                                
-                            + "<br/><br/>"
+                            + "<br/>"                                
+                            + "<br/>"
                             + "Saludos cordiales. <br/><br/>"
                             + "Sistema de Indicadores."
                     );   
@@ -171,6 +185,32 @@ public class EditarTipoIndicadorBean implements Serializable {
             }          
         }
     }    
+    
+    private ArrayList<String> actualizarClasificaciones(Short numVigencia){
+        ArrayList<String> clasificacionesAfectadas = new ArrayList<String>();
+        Collection<Clasificacion> clasificaciones = it.getClasificacionCollection();
+        for(Clasificacion c : clasificaciones){
+            c.setEstado(numVigencia);
+            clasificacionService.actualizarClasificacion(c);
+            clasificacionesAfectadas.add(c.getNombre());
+        }
+        return clasificacionesAfectadas;
+    }
+    
+    private String mensajeClasificacionesAfectadas(ArrayList<String> clasificacionesAfectadas, String tipoIndicador, Short numVigencia){        
+        String mensaje = "Las siguientes clasificaciones pertenecientes a " + tipoIndicador + " cambiaron su estado a ";
+        if(numVigencia == 1){
+            mensaje += " VIGENTE:";
+        }else{
+            mensaje += " NO VIGENTE:";
+        }
+        mensaje += "<ul>";
+        for(String s : clasificacionesAfectadas){
+            mensaje += "<li>" + s + "</li>";
+        }
+        mensaje += "</ul><br/>";
+        return mensaje;
+    }
     
     public String getNombreTipoIndicador() {
         return nombreTipoIndicador;
