@@ -153,9 +153,10 @@
                           width="4"
                           styleClass="align-center">
                     <p:button
-                        outcome="/edicion/edicion-tipo-indicador.xhtml?id=#{tipoIndicadorDTO.id}"
+                        outcome="/edicion/edicion-tipo-indicador.xhtml"
                         class="btn btn-info"
                         icon="fa fa-edit">
+                        <f:param name="i" value="#{tipoIndicadorDTO.id}" />
                     </p:button>
 
                 </p:column>
