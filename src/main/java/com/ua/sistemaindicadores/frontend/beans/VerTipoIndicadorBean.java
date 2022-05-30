@@ -21,6 +21,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.text.ParseException;
+import java.util.List;
 
 /**
  *
@@ -37,11 +38,15 @@ public class VerTipoIndicadorBean implements Serializable {
     @Inject
     transient private TipoIndicadorService tipoIndicadorService;
         
-    private String nombreSeleccionado;
+    private IndicadorTipo tipoSeleccionado;
     private String estadoSeleccionado;
     private String descripcionSeleccionada;
     private String anioCreacionSeleccionado;
     private String anioActualizacionSeleccionado;
+    
+    private List<IndicadorTipo> listaIndicadorTipo;
+    private List<IndicadorTipo> listaIndicadorTipoVigente;
+    private List<IndicadorTipo> listaIndicadorTipoNoVigente;    
     
     private Boolean filtros;
     private String mensajeFiltros;
@@ -52,6 +57,9 @@ public class VerTipoIndicadorBean implements Serializable {
     @PostConstruct
     public void initalize(){
         System.out.println("Inicio Bean Ver Tipo Indicador");     
+        listaIndicadorTipo = tipoIndicadorService.obtenerIndicadorTipos();
+        listaIndicadorTipoVigente = tipoIndicadorService.obtenerTiposIndicadoresByEstado(Short.valueOf("1"));
+        listaIndicadorTipoNoVigente = tipoIndicadorService.obtenerTiposIndicadoresByEstado(Short.valueOf("0"));
         filtros = true;
         mensajeFiltros = "Mostrar filtros";        
     }
@@ -78,14 +86,38 @@ public class VerTipoIndicadorBean implements Serializable {
         this.tipoIndicadorSeleccionadoDTO = tipoIndicadorSeleccionadoDTO;
     }
 
-    public String getNombreSeleccionado() {
-        return nombreSeleccionado;
+    public IndicadorTipo getTipoSeleccionado() {
+        return tipoSeleccionado;
     }
 
-    public void setNombreSeleccionado(String nombreSeleccionado) {
-        this.nombreSeleccionado = nombreSeleccionado;
+    public void setTipoSeleccionado(IndicadorTipo tipoSeleccionado) {
+        this.tipoSeleccionado = tipoSeleccionado;
     }
 
+    public List<IndicadorTipo> getListaIndicadorTipo() {
+        return listaIndicadorTipo;
+    }
+
+    public void setListaIndicadorTipo(List<IndicadorTipo> listaIndicadorTipo) {
+        this.listaIndicadorTipo = listaIndicadorTipo;
+    }
+
+    public List<IndicadorTipo> getListaIndicadorTipoVigente() {
+        return listaIndicadorTipoVigente;
+    }
+
+    public void setListaIndicadorTipoVigente(List<IndicadorTipo> listaIndicadorTipoVigente) {
+        this.listaIndicadorTipoVigente = listaIndicadorTipoVigente;
+    }
+
+    public List<IndicadorTipo> getListaIndicadorTipoNoVigente() {
+        return listaIndicadorTipoNoVigente;
+    }
+
+    public void setListaIndicadorTipoNoVigente(List<IndicadorTipo> listaIndicadorTipoNoVigente) {
+        this.listaIndicadorTipoNoVigente = listaIndicadorTipoNoVigente;
+    }
+    
     public String getEstadoSeleccionado() {
         return estadoSeleccionado;
     }
@@ -147,7 +179,7 @@ public class VerTipoIndicadorBean implements Serializable {
     
     public void limpiarFiltros() {
         try {
-           nombreSeleccionado = null;
+           tipoSeleccionado = null;
            estadoSeleccionado = null;
            descripcionSeleccionada = null;
            anioCreacionSeleccionado = null;
@@ -182,8 +214,8 @@ public class VerTipoIndicadorBean implements Serializable {
     
     public void onSeleccionNombreListener() {
         try {
-            if (nombreSeleccionado != null) {
-                model.setNombre(nombreSeleccionado);
+            if (tipoSeleccionado != null) {
+                model.setNombre(tipoSeleccionado.getNombre());
             } else {
                 model.setNombre(null);
             }

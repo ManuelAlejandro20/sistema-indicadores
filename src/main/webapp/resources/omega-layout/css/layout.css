@@ -2273,6 +2273,7 @@ h2 {
     font-size: 24px; }
 
 .card-select-indicador {
+    text-align: justify;
     background-color: #FF6600 !important; 
     border-radius: 0.25rem;
     color: white;

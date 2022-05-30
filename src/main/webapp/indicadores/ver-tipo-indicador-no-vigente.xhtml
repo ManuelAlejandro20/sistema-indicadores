@@ -34,15 +34,30 @@
         <div class="ui-g-12" style="display:#{verTipoIndicadorBean.filtros?'none':'block'}">
             <p:panel class="formulario" header="FILTROS">
                         <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder">
-                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="nombreLabel" value="NOMBRE"/>                            
-                            <p:inputText id="nombre"
-                                         value="#{verTipoIndicadorBean.nombreSeleccionado}">
-                                <p:ajax event="keyup" 
-                                        delay="50"                                        
+                            <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="nombreLabel" value="NOMBRE TIPO INDICADOR"/>                            
+                            <p:selectOneMenu id="listaTipo"
+                                             value="#{verTipoIndicadorBean.tipoSeleccionado}"
+                                             var="tipo"
+                                             converter="tipoIndicadorConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"                                     
+                                             >
+                                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{verTipoIndicadorBean.listaIndicadorTipoNoVigente}"
+                                               var="indTipo"
+                                               itemLabel="#{indTipo.nombre}"
+                                               itemValue="#{indTipo}"
+                                               itemDescription="#{indTipo.descripcion}"/>
+                                <p:column>
+                                    #{tipo.nombre}
+                                </p:column>                              
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
                                         listener="#{verTipoIndicadorBean.onSeleccionNombreListener}"
                                         process="@this" 
                                         update="@form:tipo_indicadores" />
-                            </p:inputText>            
+                            </p:selectOneMenu>              
                             <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="descripcionLabel" value="DESCRIPCIÓN"/>                            
                             <p:inputText id="descripcion"
                                          value="#{verTipoIndicadorBean.descripcionSeleccionada}">
