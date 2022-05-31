@@ -177,7 +177,7 @@ public class EditarTipoIndicadorBean implements Serializable {
                 it.setEstado(vigenciaAntiguaSh);
                 it.setDescripcion(descripcionAntigua);
 
-                context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN", 
+                context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
                         "El tipo de indicador " + nombreTipoIndicador + " ya existe en los registros")
                 );            
 

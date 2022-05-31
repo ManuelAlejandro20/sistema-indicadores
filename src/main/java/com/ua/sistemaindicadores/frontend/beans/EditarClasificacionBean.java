@@ -74,7 +74,7 @@ public class EditarClasificacionBean implements Serializable {
                     .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-clasificacion.xhtml");
         } catch (EJBException e) {
 
-            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN",
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
                     "La clasificacion " + nombreClasificacion + " ya existe en los registros")
             );
 
