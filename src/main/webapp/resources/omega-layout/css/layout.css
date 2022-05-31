@@ -13,6 +13,18 @@
 /* UI ICONS */
 /* positioning */
 
+.panelgrid-lefttext{
+    text-align: left !important;
+}
+
+.texto-ver-centrado{
+    vertical-align: -webkit-baseline-middle !important;
+}
+
+.label-verinfo-indicador{
+    font-weight:bold;   
+}
+
 .label-centered{
     font-weight:bold; 
     vertical-align: -webkit-baseline-middle;    

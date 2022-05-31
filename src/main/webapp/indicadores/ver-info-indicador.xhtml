@@ -1,0 +1,129 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">      
+        <div class="ui-g-12 ui-g-title align-center">
+            <h2 class="border-bottom-orange align-center">Información completa de indicador ---</h2>   
+        </div>              
+        <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-2"></div>
+            <div class="ui-g-12 ui-md-8">                   
+                <div class="ui-g-12 ui-md-8">
+                <p:panelGrid class="crear-tipo-indicadores-table" 
+                             styleClass="ui-noborder ui-panelgrid-blank align-left"
+                             columns="2">
+                    <h3>NOMBRE INDICADOR: </h3>
+                    <p:outputLabel id="nombre" value="NOMBRE INDICADOR"/>    
+                    <h3>N° INDICADOR: </h3>
+                    <p:outputLabel id="nInd" value="123456"/>                        
+                </p:panelGrid>                    
+                    
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                <p:panelGrid class="crear-tipo-indicadores-table" 
+                             styleClass="ui-noborder ui-panelgrid-blank align-left"
+                             columns="2">                        
+                    <h3>% LOGRO: </h3>
+                    <p:outputLabel id="porc" value="22%"/>   
+                    <h3>ESTADO: </h3>
+                    <p:outputLabel id="estado" style="color: orangered;" value="NO VIGENTE"/>                       
+                </p:panelGrid>                    
+                </div>
+
+            </div>
+            <div class="ui-g-12 ui-md-2"></div>
+        </div>          
+        <div class="ui-g-12 align-center">
+            <div class="ui-g-12 ui-md-2"></div>
+            <div class="ui-g-12 ui-md-8 ui-g-nopad">
+                <div class="card card-creacion-tipo-indicador">                                              
+                    <p:panel class="formulario" header="INFORMACIÓN INDICADOR">
+                        <p:panelGrid class="crear-tipo-indicadores-table" 
+                                     layout="grid"
+                                     styleClass="ui-noborder align-left"
+                                     columns="2">
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="TIPO INDICADOR:"/>    
+                            <p:outputLabel id="tipoInd" value="PLAN DE MEJORA"/>
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="CLASIFICACIÓN:"/>    
+                            <p:outputLabel id="clas" value="CLASIFICACIÓN"/>    
+                            <!-- -->                            
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="DESCRIPCIÓN INDICADOR:"/>  
+                            <p:inputTextarea disabled="true" id="descripcion" rows="8" cols="18"/>   
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="APLICA LINEAMIENTO:"/>    
+                            <p:outputLabel id="lin" value="LINEAMIENTO"/>    
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="APLICA OBJETIVO:"/>    
+                            <p:outputLabel id="obj" value="OBJETIVO"/>                                
+                            <!-- -->                            
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="DESCRIPCIÓN OBJETIVO:"/>  
+                            <p:inputTextarea disabled="true" id="descripcionObj" rows="8" cols="18"/>       
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="AJUSTE PEDI:"/>    
+                            <p:outputLabel id="ajustepdei" value="AJUSTE PDEI"/>     
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="UNIDAD REPRESENTACIÓN:"/>    
+                            <p:outputLabel id="unidadR" value="UNIDAD REPRESENTACIÓN"/>  
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="GENERACIÓN DE LOS DATOS:"/>    
+                            <p:outputLabel id="genDatos" value="GENERACIÓN DE LOS DATOS"/>       
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="PLAZO:"/>    
+                            <p:outputLabel id="plazo" value="PLAZO"/>      
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="VERSIÓN:"/>    
+                            <p:outputLabel id="version" value="VERSIÓN"/>    
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="LÍNEA BASE:"/>    
+                            <p:outputLabel id="linbase" value="LÍNEA BASE"/>    
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="METAS:"/>    
+                            <p:outputLabel id="metas" value="METAS"/>        
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="AÑO CUMPLIMIENTO:"/>    
+                            <p:outputLabel id="anioCum" value="AÑO CUMPLIMIENTO"/>  
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="FRECUENCIA DE MEDICIÓN:"/>    
+                            <p:outputLabel id="fmedicion" value="FRECUENCIA DE MEDICIÓN"/>   
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="MEDIO DE VERIFICACIÓN:"/>    
+                            <p:outputLabel id="medVer" value="MEDIO DE VERIFICACIÓN"/>     
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="FORMA DE CÁLCULO:"/>    
+                            <p:outputLabel id="fcalculo" value="FORMA DE CÁLCULO"/>  
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="FUENTE DE INFORMACIÓN:"/>    
+                            <p:outputLabel id="finfo" value="FUENTE DE INFORMACIÓN"/>     
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="UNIDAD PROVEEDORA:"/>    
+                            <p:outputLabel id="uprov" value="UNIDAD PROVEEDORA"/>       
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="PROYECTO ASOCIADO:"/>    
+                            <p:outputLabel id="proyAs" value="PROYECTO ASOCIADO"/>    
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="COMENTARIO:"/>    
+                            <p:outputLabel id="comentario" value="COMENTARIO"/> 
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="ACTIVIDAD COMPROMETIDA:"/>    
+                            <p:outputLabel id="actividad" value="ACTIVIDAD COMPROMETIDA"/> 
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="ESTADO ACTIVIDAD:"/>    
+                            <p:outputLabel id="estadoAct" value="ESTADO ACTIVIDAD"/> 
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="FECHA CREACIÓN:"/>    
+                            <p:outputLabel id="fechaCreacion" value="FECHA CREACIÓN"/> 
+                            <!-- -->
+                            <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="FECHA ACTUALIZACIÓN:"/>    
+                            <p:outputLabel id="fechaAct" value="FECHA ACTUALIZACIÓN"/>                             
+                        </p:panelGrid>                                         
+                    </p:panel>
+                </div>       
+            </div>
+            <div class="ui-g-12 ui-md-2"></div>
+        </div>             
+    </ui:define>
+</ui:composition>

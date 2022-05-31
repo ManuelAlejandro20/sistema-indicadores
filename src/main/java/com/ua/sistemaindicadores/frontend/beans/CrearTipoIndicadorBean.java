@@ -121,7 +121,7 @@ public class CrearTipoIndicadorBean implements Serializable {
         }
         catch(EJBException e){
             
-            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN", 
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
                     "El tipo de indicador " + nombreTipoIndicador + " ya existe en los registros")
             );            
             
