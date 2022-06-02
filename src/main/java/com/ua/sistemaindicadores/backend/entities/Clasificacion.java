@@ -17,6 +17,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -42,9 +44,16 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Clasificacion.findByEstado", query = "SELECT c FROM Clasificacion c WHERE c.estado = :estado"),
     @NamedQuery(name = "Clasificacion.findByTipo", query = "SELECT c FROM Clasificacion c WHERE c.tipo = :tipo"),
     @NamedQuery(name = "Clasificacion.findByDescripcion", query = "SELECT c FROM Clasificacion c WHERE c.descripcion = :descripcion"),
-    @NamedQuery(name = "Clasificacion.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO(i.id, r.id, i.nombre, i.estado, i.tipo, i.descripcion, i.fechaCreacion, i.fechaActualizacion) FROM Clasificacion i INNER JOIN i.indicadorTipoId r WHERE i.id = :Id"),       
-    @NamedQuery(name = "Clasificacion.findByFechaCreacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaCreacion = :fechaCreacion"), 
-    @NamedQuery(name = "Clasificacion.findByFechaActualizacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaActualizacion = :fechaActualizacion")})
+    @NamedQuery(name = "Clasificacion.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO(i.id, r.id, i.nombre, i.estado, i.tipo, i.descripcion, i.fechaCreacion, i.fechaActualizacion) FROM Clasificacion i INNER JOIN i.indicadorTipoId r WHERE i.id = :Id"),
+    @NamedQuery(name = "Clasificacion.findByFechaCreacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaCreacion = :fechaCreacion"),
+    @NamedQuery(name = "Clasificacion.findByFechaActualizacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaActualizacion = :fechaActualizacion")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name = "Clasificacion.existeClasificacion", query
+            = "SELECT c.nombre = ?1 \n"
+            + "FROM sistema_indicadores_clasificacion c \n"
+            + "WHERE c.nombre = ?1 \n"),
+})
 public class Clasificacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -81,7 +90,7 @@ public class Clasificacion implements Serializable {
     @NotNull
     @Column(name = "fecha_actualizacion")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaActualizacion;    
+    private Date fechaActualizacion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clasificacionId")
     private Collection<Indicador> indicadorCollection;
     @JoinColumn(name = "indicador_tipo_id", referencedColumnName = "id")
@@ -103,7 +112,7 @@ public class Clasificacion implements Serializable {
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.fechaCreacion = fechaCreacion;
-        this.fechaActualizacion = fechaActualizacion;        
+        this.fechaActualizacion = fechaActualizacion;
     }
 
     public Integer getId() {
@@ -161,7 +170,7 @@ public class Clasificacion implements Serializable {
     public void setFechaActualizacion(Date fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
     }
-    
+
     @XmlTransient
     public Collection<Indicador> getIndicadorCollection() {
         return indicadorCollection;

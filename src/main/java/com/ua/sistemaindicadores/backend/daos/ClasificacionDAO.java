@@ -234,4 +234,10 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
         return q.getResultList();
     }
 
+    public Boolean existeClasificacion(String nombreClasificacion) {
+        return getEntityManager()
+                .createNamedQuery("clasificacion.existeClasificacion")
+                .setParameter(1, nombreClasificacion)
+                .getResultList().size() > 0 ? true : false;
+    }
 }
