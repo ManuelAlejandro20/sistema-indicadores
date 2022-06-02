@@ -236,7 +236,7 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
 
     public Boolean existeClasificacion(String nombreClasificacion) {
         return getEntityManager()
-                .createNamedQuery("clasificacion.existeClasificacion")
+                .createNamedQuery("Clasificacion.existeClasificacion")
                 .setParameter(1, nombreClasificacion)
                 .getResultList().size() > 0 ? true : false;
     }

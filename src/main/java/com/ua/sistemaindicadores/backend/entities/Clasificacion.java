@@ -51,7 +51,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedNativeQueries({
     @NamedNativeQuery(name = "Clasificacion.existeClasificacion", query
             = "SELECT c.nombre = ?1 \n"
-            + "FROM sistema_indicadores_clasificacion c \n"
+            + "FROM Clasificacion c \n"
             + "WHERE c.nombre = ?1 \n"),
 })
 public class Clasificacion implements Serializable {

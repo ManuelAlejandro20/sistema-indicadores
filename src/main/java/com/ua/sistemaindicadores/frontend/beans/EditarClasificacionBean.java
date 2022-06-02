@@ -83,10 +83,14 @@ public class EditarClasificacionBean implements Serializable {
                         "La clasificacion " + nombreClasificacion + " ya existe en los registros")
                 );
             }
-        } catch (EJBException ex) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "ATENCIÓN",
+                    "La clasificacion " + nombreClasificacion + " no existe en los registros")
+            );
+        } catch (Exception ex) {
 
             Logger.getLogger(EditarClasificacionBean.class
-                    .getName()).log(Level.SEVERE, "Ocurrio un error al activar las regiones.", ex);
+                    .getName()).log(Level.SEVERE, "Ocurrio un error al comparar la Clasificacion.", ex);
             FacesContext
                     .getCurrentInstance()
                     .addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Problema al comprobar la clasificacion. Contacte al administrador.")
@@ -110,7 +114,6 @@ public class EditarClasificacionBean implements Serializable {
         String descripcionAntigua = cl.getDescripcion();
 
         FacesContext context = FacesContext.getCurrentInstance();
-
         //Se actualizan los datos de la clasificacion
         cl.setNombre(nombreClasificacion);
         cl.setEstado(numVigencia);
