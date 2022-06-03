@@ -61,7 +61,7 @@
     border-bottom: 1px solid #004AAE !important;    
 }*/
 
-.card-creacion-tipo-indicador {
+.card-creacion-tipo-indicador, .card-creacion-clas{
   background-color: #ffffff;
   padding: 0em !important;
   margin-top: 0px !important; }
@@ -1695,7 +1695,7 @@ html {
   .wrapper .footer{
       transition: padding-left 0.3s;      
   }
-  .wrapper .crear-tipo-indicadores-table{
+  .wrapper .crear-tipo-indicadores-table,.wrapper .crear-clasificaciones-table{
       transition: width 0.3s;
   }
   .wrapper .select-crear-tipo-indicadores{
@@ -2030,7 +2030,7 @@ html {
     margin-left: -250px; }
   .wrapper.sidebar-inactive-l .footer {
     margin-left: 0; } 
-  .wrapper.sidebar-inactive-l .crear-tipo-indicadores-table{
+  .wrapper.sidebar-inactive-l .crear-tipo-indicadores-table,.wrapper.sidebar-inactive-l .crear-clasificaciones-table{
     transition: width 0.3s;
     width: 100%; } 
   .wrapper.sidebar-inactive-l .select-crear-tipo-indicadores{

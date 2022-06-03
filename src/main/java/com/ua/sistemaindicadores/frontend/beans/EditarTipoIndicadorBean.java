@@ -122,9 +122,11 @@ public class EditarTipoIndicadorBean implements Serializable {
                 String mensaje = "";
                 
                 //Si el tipo de indicador tiene clasificaciones asociadas y si se hace un cambio de vigencia...
-                if(it.getClasificacionCollection().size() != 0 && vigenciaAntiguaSh != numVigencia){
-                    ArrayList<String> clasificacionesAfectadas = actualizarClasificaciones(numVigencia);
-                    mensaje = mensajeClasificacionesAfectadas(clasificacionesAfectadas, it.getNombre(), numVigencia);
+                if(it.getClasificacionCollection().size() != 0){
+                    ArrayList<String> clasificacionesAfectadas = actualizarClasificaciones(vigenciaAntiguaSh, numVigencia);
+                    if(clasificacionesAfectadas.size() != 0){
+                        mensaje = mensajeClasificacionesAfectadas(clasificacionesAfectadas, it.getNombre(), numVigencia);
+                    }
                 }
                                                                
                 try {
@@ -148,12 +150,6 @@ public class EditarTipoIndicadorBean implements Serializable {
                     );   
                 } catch (NotificacionCorreoException ex) {
 
-                    //En caso de que ocurra una excepcion el registro en la BD no se actualiza pero el objeto tipo de indicador si
-                    //lo hace, por lo que se tiene que volver a setear los valores a los que tenia antes de actualizar
-                    it.setNombre(nombreAntiguo);
-                    it.setEstado(vigenciaAntiguaSh);
-                    it.setDescripcion(descripcionAntigua);      
-
                     context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
                             "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
                     );                        
@@ -171,12 +167,6 @@ public class EditarTipoIndicadorBean implements Serializable {
             }
             catch(EJBException e){
 
-                //En caso de que ocurra una excepcion el registro en la BD no se actualiza pero el objeto tipo de indicador si
-                //lo hace, por lo que se tiene que volver a setear los valores a los que tenia antes de actualizar            
-                it.setNombre(nombreAntiguo);
-                it.setEstado(vigenciaAntiguaSh);
-                it.setDescripcion(descripcionAntigua);
-
                 context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
                         "El tipo de indicador " + nombreTipoIndicador + " ya existe en los registros")
                 );            
@@ -186,13 +176,20 @@ public class EditarTipoIndicadorBean implements Serializable {
         }
     }    
     
-    private ArrayList<String> actualizarClasificaciones(Short numVigencia){
+    private ArrayList<String> actualizarClasificaciones(Short vigenciaAntiguaSh, Short numVigencia){
         ArrayList<String> clasificacionesAfectadas = new ArrayList<String>();
         Collection<Clasificacion> clasificaciones = it.getClasificacionCollection();
         for(Clasificacion c : clasificaciones){
-            c.setEstado(numVigencia);
+            c.setTipo(it.getNombre());
+            
+            //Se le esta intentando cambiar la vigencia al tipo de indicador por lo tanto seria una clas
+            //afectada
+            if(vigenciaAntiguaSh != numVigencia){
+                c.setEstado(numVigencia);
+                clasificacionesAfectadas.add(c.getNombre());
+            }            
+            
             clasificacionService.actualizarClasificacion(c);
-            clasificacionesAfectadas.add(c.getNombre());
         }
         return clasificacionesAfectadas;
     }

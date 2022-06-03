@@ -184,9 +184,10 @@
                           width="4"
                           styleClass="align-center">
                     <p:button
-                        outcome="/edicion/edicion-clasificacion.xhtml?id=#{clasificacionDTO.id}"
+                        outcome="/edicion/edicion-clasificacion.xhtml"
                         class="btn btn-info"
                         icon="fa fa-edit">
+                        <f:param name="i" value="#{clasificacionDTO.id}"/>
                     </p:button>
 
                 </p:column>
