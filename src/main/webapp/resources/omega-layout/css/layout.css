@@ -1704,6 +1704,14 @@ html {
   .wrapper .text-area-tipo-indicadores{
       transition: width 0.3s;
       width: 80% !important;
+  }    
+  .wrapper .text-area-soporte, .wrapper .text-area-clas{
+      transition: width 0.3s;
+      width: 90% !important;
+  }   
+  .wrapper .text-area-clas{
+      transition: width 0.3s;
+      width: 95% !important;
   }     
   .wrapper .topbar {
     -moz-transition: left 0.3s;
@@ -2041,6 +2049,14 @@ html {
       transition: width 0.3s;
       width: 80% !important;
   }   
+  .wrapper.sidebar-inactive-l .text-area-soporte{
+      transition: width 0.3s;
+      width: 90% !important;
+  }    
+  .wrapper.sidebar-inactive-l .text-area-clas{
+      transition: width 0.3s;
+      width: 95% !important;
+  }      
   .wrapper.sidebar-inactive-l .footer{
       padding-left: 4% !important;
   }     

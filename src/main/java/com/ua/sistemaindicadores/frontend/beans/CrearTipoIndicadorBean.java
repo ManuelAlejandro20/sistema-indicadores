@@ -79,7 +79,7 @@ public class CrearTipoIndicadorBean implements Serializable {
         nuevoIndicadorTipo.setFechaActualizacion(new Date());
         nuevoIndicadorTipo.setClasificacionCollection(new ArrayList<>());
                 
-        try{
+        if(!tipoIndicadorService.checkTipoIndicadorExists(nombreTipoIndicador)){
             tipoIndicadorService.crearTipoIndicador(nuevoIndicadorTipo);          
             context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN", 
                     "El tipo de indicador " + nombreTipoIndicador + " ha sido agregado correctamente")
@@ -119,7 +119,7 @@ public class CrearTipoIndicadorBean implements Serializable {
                     .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-tipo-indicador.xhtml");            
             
         }
-        catch(EJBException e){
+        else{
             
             context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
                     "El tipo de indicador " + nombreTipoIndicador + " ya existe en los registros")

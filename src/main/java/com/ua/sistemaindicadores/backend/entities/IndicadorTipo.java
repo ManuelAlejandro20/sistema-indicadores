@@ -16,6 +16,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -26,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
 
 /**
  *
@@ -43,6 +46,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "IndicadorTipo.findByFechaCreacion", query = "SELECT i FROM IndicadorTipo i WHERE i.fechaCreacion = :fechaCreacion"),
     @NamedQuery(name = "IndicadorTipo.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.TipoIndicadorDTO(i.id, i.nombre, i.descripcion, i.estado, i.fechaCreacion, i.fechaActualizacion) FROM IndicadorTipo i WHERE i.id = :Id"),   
     @NamedQuery(name = "IndicadorTipo.findByFechaActualizacion", query = "SELECT i FROM IndicadorTipo i WHERE i.fechaActualizacion = :fechaActualizacion")})
+@NamedNativeQueries({
+    @NamedNativeQuery(name = "IndicadorTipo.checkTipoIndicadorExists", query = "SELECT * FROM indicadores.indicador_tipo i WHERE i.nombre=:nombre", resultClass=IndicadorTipo.class)})
 public class IndicadorTipo implements Serializable {
 
     private static final long serialVersionUID = 1L;

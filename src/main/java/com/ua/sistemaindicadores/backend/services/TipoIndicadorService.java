@@ -40,7 +40,12 @@ public class TipoIndicadorService {
     @RolesAllowed({"ADMINISTRADOR"})
     public IndicadorTipo buscarTipoIndicadorNombre(String nombre) {
         return indicadorTipoDAO.buscarTipoIndicadorNombre(nombre);
-    }     
+    }    
+    
+    @RolesAllowed({"ADMINISTRADOR"})
+    public boolean checkTipoIndicadorExists(String nombre) {
+        return indicadorTipoDAO.checkTipoIndicadorExists(nombre);
+    }        
         
     @RolesAllowed({"ADMINISTRADOR"})
     public List<IndicadorTipo> obtenerIndicadorTipos()

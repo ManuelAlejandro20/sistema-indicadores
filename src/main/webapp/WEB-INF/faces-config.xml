@@ -29,13 +29,45 @@
         </locale-config>
     </application>
     <protected-views>
+        <url-pattern>administracion/admin-clasificacion.xhtml</url-pattern>
+        <url-pattern>administracion/admin-indicador.xhtml</url-pattern>
+        <url-pattern>administracion/admin-tipo-indicador.xhtml</url-pattern>
+        <url-pattern>ayuda/ayuda.xhtml</url-pattern>
+        <url-pattern>creacion/crear-clasificacion.xhtml</url-pattern>
+        <url-pattern>creacion/crear-indicador.xhtml</url-pattern>
+        <url-pattern>creacion/crear-tipo-indicador.xhtml</url-pattern>   
+        <url-pattern>edicion/edicion-clasificacion.xhtml</url-pattern>
+        <url-pattern>edicion/edicion-tipo-indicador.xhtml</url-pattern>     
+        <url-pattern>indicadores/select_indicadores.xhtml</url-pattern>
+        <url-pattern>indicadores/ver-clasificacion.xhtml</url-pattern>
+        <url-pattern>indicadores/ver-indicador.xhtml</url-pattern>
+        <url-pattern>indicadores/ver-info-indicador.xhtml</url-pattern>
+        <url-pattern>indicadores/ver-tipo-indicador-no-vigente.xhtml</url-pattern>
+        <url-pattern>indicadores/ver-tipo-indicador-vigente.xhtml</url-pattern>                
         <url-pattern>inicio/inicio.xhtml</url-pattern>
+        <url-pattern>soporte/soporte.xhtml</url-pattern>
         <url-pattern>access.xhtml</url-pattern>
         <url-pattern>expired.xhtml</url-pattern>
         <url-pattern>index.html</url-pattern>
         <url-pattern>login.xhtml</url-pattern>
+        <!-- -->
+        <url-pattern>faces/administracion/admin-clasificacion.xhtml</url-pattern>
+        <url-pattern>faces/administracion/admin-indicador.xhtml</url-pattern>
+        <url-pattern>faces/administracion/admin-tipo-indicador.xhtml</url-pattern>
+        <url-pattern>faces/ayuda/ayuda.xhtml</url-pattern>
+        <url-pattern>faces/creacion/crear-clasificacion.xhtml</url-pattern>
+        <url-pattern>faces/creacion/crear-indicador.xhtml</url-pattern>
+        <url-pattern>faces/creacion/crear-tipo-indicador.xhtml</url-pattern>   
+        <url-pattern>faces/edicion/edicion-clasificacion.xhtml</url-pattern>
+        <url-pattern>faces/edicion/edicion-tipo-indicador.xhtml</url-pattern>     
+        <url-pattern>faces/indicadores/select_indicadores.xhtml</url-pattern>
+        <url-pattern>faces/indicadores/ver-clasificacion.xhtml</url-pattern>
+        <url-pattern>faces/indicadores/ver-indicador.xhtml</url-pattern>
+        <url-pattern>faces/indicadores/ver-info-indicador.xhtml</url-pattern>
+        <url-pattern>faces/indicadores/ver-tipo-indicador-no-vigente.xhtml</url-pattern>
+        <url-pattern>faces/indicadores/ver-tipo-indicador-vigente.xhtml</url-pattern>              
         <url-pattern>faces/inicio/inicio.xhtml</url-pattern>
-        <url-pattern>faces/administracion/admin-indicadores.xhtml</url-pattern>
+        <url-pattern>faces/soporte/soporte.xhtml</url-pattern>
         <url-pattern>faces/access.xhtml</url-pattern>
         <url-pattern>faces/expired.xhtml</url-pattern>
         <url-pattern>faces/login.xhtml</url-pattern>

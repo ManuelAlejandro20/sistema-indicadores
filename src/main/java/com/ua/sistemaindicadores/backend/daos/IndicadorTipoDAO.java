@@ -49,6 +49,14 @@ public class IndicadorTipoDAO extends AbstractDAO<IndicadorTipo> {
         super(IndicadorTipo.class);
     }
     
+    public boolean checkTipoIndicadorExists(String nombre) {
+        List<IndicadorTipo> ti = getEntityManager()
+                .createNamedQuery("IndicadorTipo.checkTipoIndicadorExists", IndicadorTipo.class)
+                .setParameter("nombre", nombre)
+                .getResultList();
+        return !ti.isEmpty();
+    }            
+    
     public List<IndicadorTipo> obtenerTiposIndicadoresByEstado(Short estado) {
         return getEntityManager()
                 .createNamedQuery("IndicadorTipo.findByEstado", IndicadorTipo.class)

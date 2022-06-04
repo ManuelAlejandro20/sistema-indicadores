@@ -173,7 +173,49 @@
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
         </user-data-constraint>
-    </security-constraint>                         
+    </security-constraint>      
+    
+    <security-constraint>
+        <display-name>ConstraintSoporte</display-name>
+        <web-resource-collection>
+            <web-resource-name>soporte</web-resource-name>
+            <description></description>
+            <url-pattern>/soporte/*</url-pattern>
+            <url-pattern>/faces/soporte/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description></description>
+            <role-name>ADMINISTRADOR</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
+            <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
+            <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>        
+    
+    <security-constraint>
+        <display-name>ConstraintAyuda</display-name>
+        <web-resource-collection>
+            <web-resource-name>ayuda</web-resource-name>
+            <description></description>
+            <url-pattern>/ayuda/*</url-pattern>
+            <url-pattern>/faces/ayuda/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description></description>
+            <role-name>ADMINISTRADOR</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
+            <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
+            <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>                                                                                                       
     
     <login-config>
         <auth-method>FORM</auth-method>
