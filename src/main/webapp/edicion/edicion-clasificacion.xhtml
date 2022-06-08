@@ -14,18 +14,18 @@
         </div>
         <p:growl id="growl" showDetail="true"/>
         <div class="ui-g-12 align-center">
-            <div class="ui-g-12 ui-md-4"></div>
-            <div class="ui-g-12 ui-md-4 ui-g-nopad">
+            <div class="ui-g-12 ui-md-2"></div>
+            <div class="ui-g-12 ui-md-8 ui-g-nopad">
                 <div class="card card-creacion-clas">                                              
                     <p:panel class="formulario" header="EDITAR CLASIFICACIÓN">
                         <p:panelGrid class="crear-clasificaciones-table" 
                                      layout="grid"
-                                     styleClass="ui-noborder panelgrid-lefttext"
+                                     styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
                                      columns="2">
                             <p:outputLabel class="texto-ver-centrado" id="vigenciaLabel" value="Vigencia: *"/>
                             <p:selectOneMenu 
                                 value="#{editarClasificacionBean.vigencia}" 
-                                class="select-crear-tipo-indicadores" id="vigencia" required="true" style="width: 72%;">
+                                id="vigencia" required="true">
                                 <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
                                 <f:selectItem itemLabel="No Vigente" itemValue="NO VIGENTE"/>
                                 <p:ajax event="itemSelect"
@@ -38,10 +38,8 @@
                             <p:outputLabel class="texto-ver-centrado" id="tipoLabel" value="Tipo: *"/>
 
                             <p:selectOneMenu id="listaTipo"
-                                             class="select-crear-tipo-indicadores"
                                              value="#{editarClasificacionBean.indicadorTipoSeleccionado}"
                                              required="true"
-                                             style="width: 72%;"
                                              var="tipo"
                                              converter="tipoIndicadorConverter"
                                              filter="true" 
@@ -67,7 +65,6 @@
                                 required="true" 
                                 maxlength="20"
                                 requiredMessage="Campo nombre clasificación es requerido."
-                                style="width: 80%;"
                                 tabindex="1"/>
                             <p:message for="nombreLabel"/>       
                             <p:message for="nombre"/>
@@ -75,7 +72,9 @@
                             <p:inputTextarea 
                                 value="#{editarClasificacionBean.descripcion}"
                                 maxlength="240"
-                                required="true" requiredMessage="Campo descripción es requerido." class="text-area-tipo-indicadores" id="descripcion" rows="8" cols="18"/>
+                                required="true" 
+                                requiredMessage="Campo descripción es requerido." 
+                                id="descripcion" rows="8" cols="18"/>
                             <p:message for="descripcionLabel"/>                                     
                             <p:message for="descripcion"/>        
                             <p:commandButton widgetVar="editarButton"
@@ -92,7 +91,7 @@
                     </p:panel>
                 </div>       
             </div>
-            <div class="ui-g-12 ui-md-4"></div>
+            <div class="ui-g-12 ui-md-2"></div>
         </div>              
     </ui:define>
 </ui:composition>

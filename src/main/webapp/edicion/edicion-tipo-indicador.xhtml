@@ -14,38 +14,40 @@
         </div>
         <p:growl id="growl" showDetail="true"/>
         <div class="ui-g-12 align-center">
-            <div class="ui-g-12 ui-md-4"></div>
-            <div class="ui-g-12 ui-md-4 ui-g-nopad">
+            <div class="ui-g-12 ui-md-3"></div>
+            <div class="ui-g-12 ui-md-6 ui-g-nopad">
                 <div class="card card-creacion-tipo-indicador">                                              
                     <p:panel class="formulario" header="EDITAR TIPO DE INDICADOR">
-                        <h:panelGrid class="crear-tipo-indicadores-table" 
-                                     width="100%"
-                                     columns="2" columnClasses="label label-creacion-tipo-indicador, value">
-                            <p:outputLabel id="nombreLabel" value="Nombre tipo de indicador: *"/>
+                        <p:panelGrid class="crear-tipo-indicadores-table" 
+                                     layout="grid"
+                                     styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
+                                     columns="2">
+                            <p:outputLabel class="texto-ver-centrado" id="nombreLabel" value="Nombre tipo de indicador: *"/>
                             <p:inputText 
                                 id="nombre"
                                 value="#{editarTipoIndicadorBean.nombreTipoIndicador}"
                                 required="true" 
                                 maxlength="20"
                                 requiredMessage="Campo nombre tipo de indicador es requerido."
-                                style="width: 80%;"
                                 tabindex="1"/>
                             <p:message for="nombreLabel"/>       
                             <p:message for="nombre"/>       
-                            <p:outputLabel id="vigenciaLabel" value="Vigencia: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="vigenciaLabel" value="Vigencia: *"/>
                             <p:selectOneMenu 
                                 value="#{editarTipoIndicadorBean.vigencia}"
-                                class="select-crear-tipo-indicadores" id="vigencia" required="true" style="width: 72%;">
+                                id="vigencia" required="true">
                                 <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
                                 <f:selectItem itemLabel="No Vigente" itemValue="NO VIGENTE"/>
                             </p:selectOneMenu>
                             <p:message for="vigenciaLabel"/>                                     
                             <p:message for="vigencia"/>                                           
-                            <p:outputLabel id="descripcionLabel" value="Descripción: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="descripcionLabel" value="Descripción: *"/>
                             <p:inputTextarea 
                                 value="#{editarTipoIndicadorBean.descripcion}"
                                 maxlength="240"
-                                required="true" requiredMessage="Campo descripción es requerido." class="text-area-tipo-indicadores" id="descripcion" rows="8" cols="18"/>
+                                required="true" 
+                                requiredMessage="Campo descripción es requerido." 
+                                id="descripcion" rows="8" cols="18"/>
                             <p:message for="descripcionLabel"/>                                     
                             <p:message for="descripcion"/>      
                             <p:commandButton widgetVar="editarButton"
@@ -58,11 +60,11 @@
                                              process="@this, @form">
                                 <f:param name="i" value="#{param.i}"/>
                             </p:commandButton>
-                        </h:panelGrid>
+                        </p:panelGrid>
                     </p:panel>
                 </div>       
             </div>
-            <div class="ui-g-12 ui-md-4"></div>
+            <div class="ui-g-12 ui-md-3"></div>
         </div>              
     </ui:define>
 </ui:composition>

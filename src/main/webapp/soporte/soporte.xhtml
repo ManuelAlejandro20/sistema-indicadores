@@ -16,14 +16,13 @@
                     <p:panel class="formulario" header="MENSAJE DE SOPORTE">
                         <p:panelGrid class="crear-tipo-indicadores-table" 
                                      layout="grid"
-                                     styleClass="ui-noborder panelgrid-lefttext"
+                                     styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
                                      columns="2">
                             <p:outputLabel class="texto-ver-centrado" id="nombreLabel" value="Nombres *"/>
                             <p:inputText 
                                 id="nombre"
                                 required="true" 
                                 requiredMessage="Campo nombres es requerido."
-                                style="width: 90%;"
                                 tabindex="1"/>
                             <p:message for="nombreLabel"/>       
                             <p:message for="nombre"/>       
@@ -32,7 +31,6 @@
                                 id="apellido"
                                 required="true" 
                                 requiredMessage="Campo Apellidos es requerido."
-                                style="width: 90%;"
                                 tabindex="2"/>
                             <p:message for="apellidoLabel"/>       
                             <p:message for="apellido"/>                                         
@@ -41,7 +39,6 @@
                                 id="cargo"
                                 required="true" 
                                 requiredMessage="Campo Cargo es requerido."
-                                style="width: 90%;"
                                 tabindex="3"/>
                             <p:message for="cargoLabel"/>       
                             <p:message for="cargo"/>    
@@ -50,7 +47,6 @@
                                 id="correo"
                                 required="true" 
                                 requiredMessage="Campo Correo es requerido."
-                                style="width: 90%;"
                                 tabindex="5"/>
                             <p:message for="correoLabel"/>       
                             <p:message for="correo"/>        
@@ -59,7 +55,6 @@
                                 id="asunto"
                                 required="true" 
                                 requiredMessage="Campo Asunto es requerido."
-                                style="width: 90%;"
                                 tabindex="6"/>
                             <p:message for="asuntoLabel"/>       
                             <p:message for="asunto"/>                              
@@ -68,7 +63,6 @@
                                 maxlength="250"
                                 required="true" 
                                 requiredMessage="Campo Mensaje es requerido." 
-                                class="text-area-soporte" 
                                 id="mensaje" rows="15" cols="18"/>
                             <p:message for="mensajeLabel"/>                                     
                             <p:message for="mensaje"/>      
