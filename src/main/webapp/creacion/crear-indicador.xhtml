@@ -5,314 +5,471 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">    
+        <f:metadata>
+            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.CrearIndicadorBean"/>
+        </f:metadata>            
         <div class="ui-g-12 ui-g-title align-center">
             <h2 class="border-bottom-orange align-center">Administración de Indicadores</h2>   
         </div>
         <p:growl id="growl" showDetail="true"/>
         <div class="ui-g-12 align-center">
-            <div class="ui-g-12 ui-md-4"></div>
-            <div class="ui-g-12 ui-md-4 ui-g-nopad">
+            <div class="ui-g-12 ui-md-3"></div>
+            <div class="ui-g-12 ui-md-6 ui-g-nopad">
                 <div class="card card-creacion-tipo-indicador">                                              
-                    <p:panel class="formulario" header="CREAR INDICADOR">
-                        <h:panelGrid class="crear-tipo-indicadores-table" 
-                                     width="100%"
-                                     columns="2" columnClasses="label label-creacion-tipo-indicador, value">
+                    <p:panel id="formulario" class="formulario" header="CREAR INDICADOR">
+                        <p:panelGrid class="crear-tipo-indicadores-table" 
+                                     layout="grid"
+                                     styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
+                                     columns="2">
                             <!---->                  
-                            <p:outputLabel id="vigenciaLabel" value="Vigencia: *"/>
-                            <p:selectOneMenu  
-                                class="select-crear-tipo-indicadores" id="vigencia" required="true" style="width: 72%;">
+                            <p:outputLabel class="texto-ver-centrado" id="vigenciaLabel" value="Vigencia: *"/>  
+                            <p:selectOneMenu
+                                value="#{crearIndicadorBean.vigencia}" 
+                                id="vigencia" required="true">
+                                <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
+                                <f:selectItem itemLabel="No Vigente" itemValue="NO VIGENTE"/>
+                                <p:ajax event="itemSelect"
+                                        listener="#{crearIndicadorBean.cambiarEstado}"
+                                        process="@this"
+                                        update="@form:listaTipo, listaClas"/>       
                             </p:selectOneMenu>
                             <p:message for="vigenciaLabel"/>                                     
                             <p:message for="vigencia"/>     
-                            <p:outputLabel id="tipoIndicadorLabel" value="Tipo de indicador: *"/>
-                            <p:selectOneMenu  
-                                class="select-crear-tipo-indicadores" id="tipoIndicador" required="true" style="width: 72%;">
+                            <p:outputLabel class="texto-ver-centrado" id="listaTipoLabel" value="Tipo indicador: *"/>
+                            <p:selectOneMenu id="listaTipo"
+                                             value="#{crearIndicadorBean.indicadorTipoSeleccionado}"
+                                             required="true"
+                                             requiredMessage="Se debe selccionar un tipo de indicador."
+                                             var="tipo"
+                                             converter="tipoIndicadorConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"
+                                             >
+                                <f:selectItems value="#{crearIndicadorBean.listaIndicadorTipo}"
+                                               var="indTipo"
+                                               itemLabel="#{indTipo.nombre}"
+                                               itemValue="#{indTipo}"
+                                               itemDescription="#{indTipo.descripcion}"/>
+                                <p:column>
+                                    #{tipo.nombre}
+                                </p:column>
+                                <p:message for="indTipo"/>                
+                                <p:ajax event="itemSelect"
+                                        listener="#{crearIndicadorBean.cambiarTipoIndicador}"
+                                        process="@this"
+                                        update="@form:listaClas"/>                                  
                             </p:selectOneMenu>
-                            <p:message for="tipoIndicadorLabel"/>                                     
-                            <p:message for="tipoIndicador"/>                              
+                            <p:message for="listaTipoLabel"/>                                     
+                            <p:message for="listaTipo"/>                              
                             <!---->
-                            <p:outputLabel id="clasLabel" value="Clasificación: *"/>
-                            <p:selectOneMenu  
-                                class="select-crear-tipo-indicadores" id="clas" required="true" style="width: 72%;">
+                            <p:outputLabel class="texto-ver-centrado" id="clasLabel" value="Clasificación: *"/>
+                            <p:selectOneMenu id="listaClas"
+                                             value="#{crearIndicadorBean.clasificacionSeleccionada}"
+                                             required="true"
+                                             requiredMessage="Se debe seleccionar una clasificación."
+                                             var="clas"
+                                             converter="clasificacionConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"
+                                             >
+                                <f:selectItems value="#{crearIndicadorBean.listaClasificacion}"
+                                               var="clasificacion"
+                                               itemLabel="#{clasificacion.nombre}"
+                                               itemValue="#{clasificacion}"
+                                               itemDescription="#{clasificacion.descripcion}"/>
+                                <p:column>
+                                    #{clas.nombre}
+                                </p:column>
+                                <p:message for="clasificacion"/>                
                             </p:selectOneMenu>
                             <p:message for="clasLabel"/>                                     
-                            <p:message for="clas"/>     
+                            <p:message for="listaClas"/>     
                             <!---->
-                            <p:outputLabel id="nIndLabel" value="N° de indicador: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="nIndLabel" value="N° de indicador: *"/>
                             <p:inputText 
+                                required="true"
+                                requiredMessage="Campo n° de indicador es requerido."
                                 id="nInd"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="nIndLabel"/>                                     
                             <p:message for="nInd"/>     
                             <!---->     
-                            <p:outputLabel id="nombreLabel" value="Nombre de indicador: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="nombreLabel" value="Nombre de indicador: *"/>
                             <p:inputText 
+                                required="true"
+                                requiredMessage="Campo nombre de indicador es requerido."
                                 id="nombre"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="nombreLabel"/>                                     
                             <p:message for="nombre"/>     
                             <!---->                            
-                            <p:outputLabel id="descripcionIndLabel" value="Descripción de indicador: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="descripcionIndicadorLabel" value="Descripción de indicador: *"/>
                             <p:inputTextarea 
-                                id="descripcionInd"                                 
-                                maxlength="240"
-                                class="text-area-tipo-indicadores" 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo descripción de indicador es requerido."
+                                value="#{crearIndicadorBean.descripcionIndicador}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="descripcionIndicador"                                 
+                                maxlength="240" 
                                 rows="8" cols="18"/>
-                            <p:message for="descripcionIndLabel"/>                                     
-                            <p:message for="descripcionInd"/>     
+                            <p:message for="descripcionIndicadorLabel"/>                                     
+                            <p:message for="descripcionIndicador"/>     
                             <!---->    
-                            <p:outputLabel id="linLabel" value="Aplica lineamiento: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="aplicaLineamientoLabel" value="Aplica lineamiento: *"/>
                             <p:inputText 
-                                id="lin"                                 
-                                style="width: 80%;"
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo aplica lineamiento es requerido."                                
+                                value="#{crearIndicadorBean.aplicaLineamiento}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="aplicaLineamiento"                                 
                                 />
-                            <p:message for="linLabel"/>                                     
-                            <p:message for="lin"/>     
+                            <p:message for="aplicaLineamientoLabel"/>                                     
+                            <p:message for="aplicaLineamiento"/>     
                             <!---->                              
-                            <p:outputLabel id="objetivoLabel" value="Aplica objetivo: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="aplicaObjetivoLabel" value="Aplica objetivo: *"/>
                             <p:inputText 
-                                id="objetivo"                                 
-                                style="width: 80%;"
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo aplica objetivo es requerido."                                
+                                value="#{crearIndicadorBean.aplicaObjetivo}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="aplicaObjetivo"                                 
                                 />
-                            <p:message for="objetivoLabel"/>                                     
-                            <p:message for="objetivo"/>     
+                            <p:message for="aplicaObjetivoLabel"/>                                     
+                            <p:message for="aplicaObjetivo"/>     
                             <!---->                                  
-                            <p:outputLabel id="descripcionObjLabel" value="Descripción de objetivo: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="descripcionObjetivoLabel" value="Descripción de objetivo: *"/>
                             <p:inputTextarea 
-                                id="descripcionObj"                                 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo descripción de objetivo es requerido."                                
+                                value="#{crearIndicadorBean.descripcionObjetivo}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="descripcionObjetivo"                                 
                                 maxlength="240"
-                                class="text-area-tipo-indicadores" 
                                 rows="8" cols="18"/>                            
-                            <p:message for="objetivoLabel"/>                                     
-                            <p:message for="objetivo"/>     
+                            <p:message for="descripcionObjetivoLabel"/>                                     
+                            <p:message for="descripcionObjetivo"/>     
                             <!---->      
-                            <p:outputLabel id="ajustepdeiLabel" value="Ajuste PDEI: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="ajustePDEILabel" value="Ajuste PDEI: *"/>
                             <p:selectOneMenu  
-                                class="select-crear-tipo-indicadores" id="ajustepdei" style="width: 72%;">
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo ajuste PDEI es requerido."                                
+                                value="#{crearIndicadorBean.ajustePDEI}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="ajustePDEI">
                             </p:selectOneMenu>
-                            <p:message for="ajustepdeiLabel"/>                                     
-                            <p:message for="ajustepdei"/>                              
+                            <p:message for="ajustePDEILabel"/>                                     
+                            <p:message for="ajustePDEI"/>                              
                             <!---->  
-                            <p:outputLabel id="unidadLabel" value="Unidad de representación: *"/>
-                            <p:selectOneMenu  
-                                class="select-crear-tipo-indicadores" id="unidad" style="width: 72%;">
+                            <p:outputLabel class="texto-ver-centrado" id="unidadRepresentacionLabel" value="Unidad de representación: *"/>
+                            <p:selectOneMenu 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo unidad de representación es requerido."                                
+                                value="#{crearIndicadorBean.unidadRepresentacion}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="unidadRepresentacion">
                             </p:selectOneMenu>
-                            <p:message for="unidadLabel"/>                                     
-                            <p:message for="unidad"/>                              
+                            <p:message for="unidadRepresentacionLabel"/>                                     
+                            <p:message for="unidadRepresentacion"/>                              
                             <!---->  
-                            <p:outputLabel id="gdatosLabel" value="Generación de los datos: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="generacionDatosLabel" value="Generación de los datos: *"/>
                             <p:selectOneMenu  
-                                class="select-crear-tipo-indicadores" id="gdatos" style="width: 72%;">
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo generación de los datos es requerido."                                
+                                value="#{crearIndicadorBean.generacionDatos}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="generacionDatos">
                             </p:selectOneMenu>
-                            <p:message for="gdatosLabel"/>                                     
-                            <p:message for="gdatos"/>                              
+                            <p:message for="generacionDatosLabel"/>                                     
+                            <p:message for="generacionDatos"/>                              
                             <!---->                              
-                            <p:outputLabel id="plazoLabel" value="Plazo: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="plazoLabel" value="Plazo: *"/>
                             <p:selectOneMenu  
-                                class="select-crear-tipo-indicadores" id="plazo" style="width: 72%;">
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo plazo es requerido."                                
+                                value="#{crearIndicadorBean.plazo}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="plazo">
                             </p:selectOneMenu>
                             <p:message for="plazoLabel"/>                                     
                             <p:message for="plazo"/>                              
                             <!---->                                     
-                            <p:outputLabel id="versionLabel" value="Versión: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="versionLabel" value="Versión: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo versión es requerido."                                
+                                value="#{crearIndicadorBean.version}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="version"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="versionLabel"/>                                     
                             <p:message for="version"/>    
                             <!---->     
-                            <p:outputLabel id="linbaseLabel" value="Línea base: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="lineaBaseLabel" value="Línea base: *"/>
                             <p:inputText 
-                                id="linbase"                                
-                                style="width: 80%;"
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo linea base es requerido."                                
+                                value="#{crearIndicadorBean.lineaBase}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="lineaBase"                                
                                 />
-                            <p:message for="versionLabel"/>                                     
-                            <p:message for="version"/>    
+                            <p:message for="lineaBaseLabel"/>                                     
+                            <p:message for="lineaBase"/>    
                             <!---->                                 
-                            <p:outputLabel id="anio2020Label" value="2020: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2020Label" value="2020: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2020 es requerido."                                
+                                value="#{crearIndicadorBean.anio2020}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2020"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2020Label"/>                                     
                             <p:message for="anio2020"/>   
                             <!---->                                     
-                            <p:outputLabel id="anio2021Label" value="2021: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2021Label" value="2021: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2021 es requerido."                                 
+                                value="#{crearIndicadorBean.anio2021}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2021"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2021Label"/>                                     
                             <p:message for="anio2021"/>   
                             <!---->                                     
-                            <p:outputLabel id="anio2022Label" value="2022: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2022Label" value="2022: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2022 es requerido."                                 
+                                value="#{crearIndicadorBean.anio2022}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2022"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2022Label"/>                                     
                             <p:message for="anio2022"/>   
                             <!---->                                     
-                            <p:outputLabel id="anio2023Label" value="2023: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2023Label" value="2023: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2023 es requerido."                                 
+                                value="#{crearIndicadorBean.anio2023}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2023"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2023Label"/>                                     
                             <p:message for="anio2023"/>   
                             <!---->                                     
-                            <p:outputLabel id="anio2024Label" value="2024: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2024Label" value="2024: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2024 es requerido."                                 
+                                value="#{crearIndicadorBean.anio2024}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2024"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2024Label"/>                                     
                             <p:message for="anio2024"/>   
                             <!---->                                     
-                            <p:outputLabel id="anio2025Label" value="2025: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2025Label" value="2025: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2025 es requerido."                                 
+                                value="#{crearIndicadorBean.anio2025}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2025"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2025Label"/>                                     
                             <p:message for="anio2025"/>   
                             <!---->                                     
-                            <p:outputLabel id="anio2026Label" value="2026: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2026Label" value="2026: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2026 es requerido."                                 
+                                value="#{crearIndicadorBean.anio2026}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2026"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2026Label"/>                                     
                             <p:message for="anio2026"/>   
                             <!---->                                     
-                            <p:outputLabel id="anio2027Label" value="2027: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2027Label" value="2027: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2027 es requerido."                                 
+                                value="#{crearIndicadorBean.anio2027}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2027"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2027Label"/>                                     
                             <p:message for="anio2027"/>   
                             <!---->                                     
-                            <p:outputLabel id="anio2028Label" value="2028: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2028Label" value="2028: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2028 es requerido."                                 
+                                value="#{crearIndicadorBean.anio2028}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2028"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2028Label"/>                                     
                             <p:message for="anio2028"/>   
                             <!---->                                     
-                            <p:outputLabel id="anio2029Label" value="2029: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2029Label" value="2029: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2029 es requerido."                                 
+                                value="#{crearIndicadorBean.anio2029}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2029"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2029Label"/>                                     
                             <p:message for="anio2029"/>   
                             <!---->                                     
-                            <p:outputLabel id="anio2030Label" value="2030: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="anio2030Label" value="2030: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo 2030 es requerido."                                 
+                                value="#{crearIndicadorBean.anio2030}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2030"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="anio2030Label"/>                                     
                             <p:message for="anio2030"/>    
                             <!---->                                     
-                            <p:outputLabel id="metasLabel" value="Metas: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="metasLabel" value="Metas: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo metas es requerido."                                 
+                                value="#{crearIndicadorBean.metas}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="metas"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="metasLabel"/>                                     
                             <p:message for="metas"/>   
                             <!---->                                     
-                            <p:outputLabel id="anioCumplLabel" value="Año cumplimiento: *"/>
-                            <p:selectOneMenu  
-                                class="select-crear-tipo-indicadores" id="anioCumpl" style="width: 72%;">
+                            <p:outputLabel class="texto-ver-centrado" id="anioCumplimientoLabel" value="Año cumplimiento: *"/>
+                            <p:selectOneMenu
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo año cumplimiento es requerido."                                 
+                                value="#{crearIndicadorBean.anioCumplimiento}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="anioCumplimiento">
                             </p:selectOneMenu>
-                            <p:message for="anioCumplLabel"/>                                     
-                            <p:message for="anioCumpl"/>   
+                            <p:message for="anioCumplimientoLabel"/>                                     
+                            <p:message for="anioCumplimiento"/>   
                             <!---->                                     
-                            <p:outputLabel id="logroLabel" value="% Logro: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="logroLabel" value="% Logro: *"/>
                             <p:inputText 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo % logro es requerido."                                 
+                                value="#{crearIndicadorBean.logro}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="logro"                                
-                                style="width: 80%;"
                                 />
                             <p:message for="logroLabel"/>                                     
                             <p:message for="logro"/> 
                             <!---->                                     
-                            <p:outputLabel id="frecuenciaLabel" value="Frecuencia de medición: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="frecuenciaMedicionLabel" value="Frecuencia de medición: *"/>
                             <p:selectOneMenu  
-                                class="select-crear-tipo-indicadores" id="frecuencia" style="width: 72%;">
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo frecuencia de medición es requerido."                                 
+                                value="#{crearIndicadorBean.frecuenciaMedicion}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="frecuenciaMedicion">
                             </p:selectOneMenu>
-                            <p:message for="frecuenciaLabel"/>                                     
-                            <p:message for="frecuencia"/>  
+                            <p:message for="frecuenciaMedicionLabel"/>                                     
+                            <p:message for="frecuenciaMedicion"/>  
                             <!---->                                     
-                            <p:outputLabel id="medioLabel" value="Medio de verificación: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="medioVerificacionLabel" value="Medio de verificación: *"/>
                             <p:inputText 
-                                id="medio"                                
-                                style="width: 80%;"
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo medio de verificación es requerido."                                 
+                                value="#{crearIndicadorBean.medioVerificacion}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="medioVerificacion"                                
                                 />
-                            <p:message for="medioLabel"/>                                     
-                            <p:message for="medio"/>  
+                            <p:message for="medioVerificacionLabel"/>                                     
+                            <p:message for="medioVerificacion"/>  
                             <!---->                                     
-                            <p:outputLabel id="formaCLabel" value="Forma de cálculo: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="formaCalculoLabel" value="Forma de cálculo: *"/>
                             <p:inputText 
-                                id="formaC"                                
-                                style="width: 80%;"
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo forma de cálculo es requerido."                                 
+                                value="#{crearIndicadorBean.formaCalculo}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="formaCalculo"                                
                                 />
-                            <p:message for="formaCLabel"/>                                     
-                            <p:message for="formaC"/>     
+                            <p:message for="formaCalculoLabel"/>                                     
+                            <p:message for="formaCalculo"/>     
                             <!---->                                     
-                            <p:outputLabel id="fuenteILabel" value="Fuente de información: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="fuenteInformacionLabel" value="Fuente de información: *"/>
                             <p:inputText 
-                                id="fuenteI"                                
-                                style="width: 80%;"
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo fuente de información es requerido."                                 
+                                value="#{crearIndicadorBean.fuenteInformacion}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="fuenteInformacion"                                
                                 />
-                            <p:message for="fuenteILabel"/>                                     
-                            <p:message for="fuenteI"/>        
+                            <p:message for="fuenteInformacionLabel"/>                                     
+                            <p:message for="fuenteInformacion"/>        
                             <!---->                                     
-                            <p:outputLabel id="unidadProvLabel" value="Unidad proveedora: *"/>
-                            <p:selectOneMenu  
-                                class="select-crear-tipo-indicadores" id="unidadProv" style="width: 72%;">
+                            <p:outputLabel class="texto-ver-centrado" id="unidadProveedoraLabel" value="Unidad proveedora: *"/>
+                            <p:selectOneMenu 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo unidad proveedora es requerido."                                 
+                                value="#{crearIndicadorBean.unidadProveedora}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="unidadProveedora">
                             </p:selectOneMenu>                            
-                            <p:message for="unidadProvLabel"/>                                     
-                            <p:message for="unidadProv"/>      
+                            <p:message for="unidadProveedoraLabel"/>                                     
+                            <p:message for="unidadProveedora"/>      
                             <!---->                                     
-                            <p:outputLabel id="proyectoLabel" value="Proyecto asociado: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="proyectoAsociadoLabel" value="Proyecto asociado: *"/>
                             <p:inputText 
-                                id="proyecto"                                
-                                style="width: 80%;"
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo proyecto asociado es requerido."                                 
+                                value="#{crearIndicadorBean.proyectoAsociado}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="proyectoAsociado"                                
                                 />
-                            <p:message for="proyectoLabel"/>                                     
-                            <p:message for="proyecto"/>           
+                            <p:message for="proyectoAsociadoLabel"/>                                     
+                            <p:message for="proyectoAsociado"/>           
                             <!---->                                     
-                            <p:outputLabel id="comentarioLabel" value="Comentario: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="comentarioLabel" value="Comentario: *"/>
                             <p:inputTextarea 
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo comentario es requerido."                                 
+                                value="#{crearIndicadorBean.comentario}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="comentario"                                 
-                                maxlength="240"
-                                class="text-area-tipo-indicadores" 
+                                maxlength="240" 
                                 rows="8" cols="18"/>                            
                             <p:message for="comentarioLabel"/>                                     
                             <p:message for="comentario"/>        
                             <!---->                                     
-                            <p:outputLabel id="actividadCompLabel" value="Actividad comprometida: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="actividadComprometidaLabel" value="Actividad comprometida: *"/>
                             <p:inputText 
-                                id="actividadComp"                                
-                                style="width: 80%;"
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo actividad comprometida es requerida."                                 
+                                value="#{crearIndicadorBean.actividadComprometida}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="actividadComprometida"                                
                                 />
-                            <p:message for="actividadCompLabel"/>                                     
-                            <p:message for="actividadComp"/>      
+                            <p:message for="actividadComprometidaLabel"/>                                     
+                            <p:message for="actividadComprometida"/>      
                             <!---->                                     
-                            <p:outputLabel id="estadoActLabel" value="Estado de actividad: *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="estadoActividadLabel" value="Estado de actividad: *"/>
                             <p:inputText 
-                                id="estadoAct"                                
-                                style="width: 80%;"
+                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                requiredMessage="Campo estado de actividad es requerido."                                 
+                                value="#{crearIndicadorBean.estadoActividad}"
+                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                id="estadoActividad"                                
                                 />
-                            <p:message for="estadoActLabel"/>                                     
-                            <p:message for="estadoAct"/>                                  
+                            <p:message for="estadoActividadLabel"/>                                     
+                            <p:message for="estadoActividad"/>                                  
                             <!---->     
                             <!---->     
                             <!---->     
@@ -320,11 +477,11 @@
                                              class="ui-button-formulario"                                                 
                                              update="@form" 
                                              process="@this, @form"/>                                
-                        </h:panelGrid>
+                        </p:panelGrid>
                     </p:panel>
                 </div>       
             </div>
-            <div class="ui-g-12 ui-md-4"></div>
+            <div class="ui-g-12 ui-md-3"></div>
         </div>         
     </ui:define>
 </ui:composition>
