@@ -52,6 +52,8 @@ public class CrearIndicadorBean implements Serializable {
     
     //
     
+    private String n_indicador;
+    private String nombreIndicador;
     private String descripcionIndicador;
     private String aplicaLineamiento;
     private String aplicaObjetivo;
@@ -133,8 +135,9 @@ public class CrearIndicadorBean implements Serializable {
         flagsTipoIndicador = flagImpl.getFlagsTipoIndicador(indicadorTipoSeleccionado.getNombre());      
         listaClasificacion = indicadorTipoSeleccionado.getClasificacionCollection();
                 
+        PrimeFaces.current().resetInputs("form:formulario");        
         setEmptyFields();        
-        PrimeFaces.current().resetInputs("form:formulario");
+        Ajax.update("form:formulario");        
         
     }    
     
@@ -142,9 +145,9 @@ public class CrearIndicadorBean implements Serializable {
         flagsTipoIndicador = flagImpl.getFlagsTipoIndicador(indicadorTipoSeleccionado.getNombre());                              
         listaClasificacion = indicadorTipoSeleccionado.getClasificacionCollection();
 
-        //PrimeFaces.current().resetInputs("form:formulario");
-        //Ajax.update("form:formulario");
+        PrimeFaces.current().resetInputs("form:formulario");       
         setEmptyFields();
+        Ajax.update("form:formulario");
     }        
     
     public void setEmptyFields(){        
@@ -254,8 +257,12 @@ public class CrearIndicadorBean implements Serializable {
                         break;
                 }                
             }
-            Ajax.update("form:" + key);
         }            
+    }
+    
+    public void crearIndicador(){
+        System.out.println("crear");
+        System.out.println(descripcionIndicador);
     }
     
     public List<IndicadorTipo> getListaIndicadorTipo() {
@@ -282,6 +289,22 @@ public class CrearIndicadorBean implements Serializable {
         this.vigencia = vigencia;
     }
 
+    public String getN_indicador() {
+        return n_indicador;
+    }
+
+    public void setN_indicador(String n_indicador) {
+        this.n_indicador = n_indicador;
+    }
+
+    public String getNombreIndicador() {
+        return nombreIndicador;
+    }
+
+    public void setNombreIndicador(String nombreIndicador) {
+        this.nombreIndicador = nombreIndicador;
+    }   
+    
     public String getDescripcionIndicador() {
         return descripcionIndicador;
     }
