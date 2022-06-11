@@ -31,7 +31,7 @@
                                 <p:ajax event="itemSelect"
                                         listener="#{crearIndicadorBean.cambiarEstado}"
                                         process="@this"
-                                        update="@form:listaTipo, listaClas"/>       
+                                        update="@form:listaTipo, @form:listaClas"/>       
                             </p:selectOneMenu>
                             <p:message for="vigenciaLabel"/>                                     
                             <p:message for="vigencia"/>     
@@ -89,19 +89,25 @@
                             <!---->
                             <p:outputLabel class="texto-ver-centrado" id="nIndLabel" value="N° de indicador: *"/>
                             <p:inputText 
+                                value="#{crearIndicadorBean.n_indicador}"
                                 required="true"
                                 requiredMessage="Campo n° de indicador es requerido."
                                 id="nInd"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="nIndLabel"/>                                     
                             <p:message for="nInd"/>     
                             <!---->     
                             <p:outputLabel class="texto-ver-centrado" id="nombreLabel" value="Nombre de indicador: *"/>
                             <p:inputText 
+                                value="#{crearIndicadorBean.nombreIndicador}"
                                 required="true"
                                 requiredMessage="Campo nombre de indicador es requerido."
                                 id="nombre"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="nombreLabel"/>                                     
                             <p:message for="nombre"/>     
                             <!---->                            
@@ -113,7 +119,9 @@
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="descripcionIndicador"                                 
                                 maxlength="240" 
-                                rows="8" cols="18"/>
+                                rows="8" cols="18">
+                                <p:ajax process='@this'/>
+                            </p:inputTextarea>
                             <p:message for="descripcionIndicadorLabel"/>                                     
                             <p:message for="descripcionIndicador"/>     
                             <!---->    
@@ -124,7 +132,9 @@
                                 value="#{crearIndicadorBean.aplicaLineamiento}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="aplicaLineamiento"                                 
-                                />
+                                >
+                                <p:ajax process='@this'/>
+                            </p:inputText>
                             <p:message for="aplicaLineamientoLabel"/>                                     
                             <p:message for="aplicaLineamiento"/>     
                             <!---->                              
@@ -135,7 +145,9 @@
                                 value="#{crearIndicadorBean.aplicaObjetivo}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="aplicaObjetivo"                                 
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="aplicaObjetivoLabel"/>                                     
                             <p:message for="aplicaObjetivo"/>     
                             <!---->                                  
@@ -147,7 +159,9 @@
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="descripcionObjetivo"                                 
                                 maxlength="240"
-                                rows="8" cols="18"/>                            
+                                rows="8" cols="18">
+                                <p:ajax process='@this'/>                                
+                            </p:inputTextarea>
                             <p:message for="descripcionObjetivoLabel"/>                                     
                             <p:message for="descripcionObjetivo"/>     
                             <!---->      
@@ -158,6 +172,7 @@
                                 value="#{crearIndicadorBean.ajustePDEI}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="ajustePDEI">
+                                <p:ajax process='@this'/>                                
                             </p:selectOneMenu>
                             <p:message for="ajustePDEILabel"/>                                     
                             <p:message for="ajustePDEI"/>                              
@@ -169,6 +184,7 @@
                                 value="#{crearIndicadorBean.unidadRepresentacion}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="unidadRepresentacion">
+                                <p:ajax process='@this'/>                                
                             </p:selectOneMenu>
                             <p:message for="unidadRepresentacionLabel"/>                                     
                             <p:message for="unidadRepresentacion"/>                              
@@ -180,6 +196,7 @@
                                 value="#{crearIndicadorBean.generacionDatos}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="generacionDatos">
+                                <p:ajax process='@this'/>                                
                             </p:selectOneMenu>
                             <p:message for="generacionDatosLabel"/>                                     
                             <p:message for="generacionDatos"/>                              
@@ -191,6 +208,7 @@
                                 value="#{crearIndicadorBean.plazo}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="plazo">
+                                <p:ajax process='@this'/>                                
                             </p:selectOneMenu>
                             <p:message for="plazoLabel"/>                                     
                             <p:message for="plazo"/>                              
@@ -202,7 +220,9 @@
                                 value="#{crearIndicadorBean.version}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="version"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="versionLabel"/>                                     
                             <p:message for="version"/>    
                             <!---->     
@@ -213,7 +233,9 @@
                                 value="#{crearIndicadorBean.lineaBase}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="lineaBase"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="lineaBaseLabel"/>                                     
                             <p:message for="lineaBase"/>    
                             <!---->                                 
@@ -224,7 +246,9 @@
                                 value="#{crearIndicadorBean.anio2020}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2020"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2020Label"/>                                     
                             <p:message for="anio2020"/>   
                             <!---->                                     
@@ -235,7 +259,9 @@
                                 value="#{crearIndicadorBean.anio2021}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2021"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2021Label"/>                                     
                             <p:message for="anio2021"/>   
                             <!---->                                     
@@ -246,7 +272,9 @@
                                 value="#{crearIndicadorBean.anio2022}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2022"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2022Label"/>                                     
                             <p:message for="anio2022"/>   
                             <!---->                                     
@@ -257,7 +285,9 @@
                                 value="#{crearIndicadorBean.anio2023}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2023"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2023Label"/>                                     
                             <p:message for="anio2023"/>   
                             <!---->                                     
@@ -268,7 +298,9 @@
                                 value="#{crearIndicadorBean.anio2024}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2024"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2024Label"/>                                     
                             <p:message for="anio2024"/>   
                             <!---->                                     
@@ -279,7 +311,9 @@
                                 value="#{crearIndicadorBean.anio2025}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2025"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2025Label"/>                                     
                             <p:message for="anio2025"/>   
                             <!---->                                     
@@ -290,7 +324,9 @@
                                 value="#{crearIndicadorBean.anio2026}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2026"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2026Label"/>                                     
                             <p:message for="anio2026"/>   
                             <!---->                                     
@@ -301,7 +337,9 @@
                                 value="#{crearIndicadorBean.anio2027}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2027"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2027Label"/>                                     
                             <p:message for="anio2027"/>   
                             <!---->                                     
@@ -312,7 +350,9 @@
                                 value="#{crearIndicadorBean.anio2028}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2028"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2028Label"/>                                     
                             <p:message for="anio2028"/>   
                             <!---->                                     
@@ -323,7 +363,9 @@
                                 value="#{crearIndicadorBean.anio2029}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2029"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2029Label"/>                                     
                             <p:message for="anio2029"/>   
                             <!---->                                     
@@ -334,7 +376,9 @@
                                 value="#{crearIndicadorBean.anio2030}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anio2030"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="anio2030Label"/>                                     
                             <p:message for="anio2030"/>    
                             <!---->                                     
@@ -345,7 +389,9 @@
                                 value="#{crearIndicadorBean.metas}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="metas"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="metasLabel"/>                                     
                             <p:message for="metas"/>   
                             <!---->                                     
@@ -356,6 +402,7 @@
                                 value="#{crearIndicadorBean.anioCumplimiento}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anioCumplimiento">
+                                <p:ajax process='@this'/>                                
                             </p:selectOneMenu>
                             <p:message for="anioCumplimientoLabel"/>                                     
                             <p:message for="anioCumplimiento"/>   
@@ -367,7 +414,9 @@
                                 value="#{crearIndicadorBean.logro}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="logro"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="logroLabel"/>                                     
                             <p:message for="logro"/> 
                             <!---->                                     
@@ -378,6 +427,7 @@
                                 value="#{crearIndicadorBean.frecuenciaMedicion}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="frecuenciaMedicion">
+                                <p:ajax process='@this'/>                                
                             </p:selectOneMenu>
                             <p:message for="frecuenciaMedicionLabel"/>                                     
                             <p:message for="frecuenciaMedicion"/>  
@@ -389,7 +439,9 @@
                                 value="#{crearIndicadorBean.medioVerificacion}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="medioVerificacion"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="medioVerificacionLabel"/>                                     
                             <p:message for="medioVerificacion"/>  
                             <!---->                                     
@@ -400,7 +452,9 @@
                                 value="#{crearIndicadorBean.formaCalculo}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="formaCalculo"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="formaCalculoLabel"/>                                     
                             <p:message for="formaCalculo"/>     
                             <!---->                                     
@@ -411,7 +465,9 @@
                                 value="#{crearIndicadorBean.fuenteInformacion}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="fuenteInformacion"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="fuenteInformacionLabel"/>                                     
                             <p:message for="fuenteInformacion"/>        
                             <!---->                                     
@@ -422,6 +478,7 @@
                                 value="#{crearIndicadorBean.unidadProveedora}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="unidadProveedora">
+                                <p:ajax process='@this'/>
                             </p:selectOneMenu>                            
                             <p:message for="unidadProveedoraLabel"/>                                     
                             <p:message for="unidadProveedora"/>      
@@ -433,7 +490,9 @@
                                 value="#{crearIndicadorBean.proyectoAsociado}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="proyectoAsociado"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="proyectoAsociadoLabel"/>                                     
                             <p:message for="proyectoAsociado"/>           
                             <!---->                                     
@@ -445,7 +504,9 @@
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="comentario"                                 
                                 maxlength="240" 
-                                rows="8" cols="18"/>                            
+                                rows="8" cols="18">
+                                <p:ajax process='@this'/>                                
+                            </p:inputTextarea>
                             <p:message for="comentarioLabel"/>                                     
                             <p:message for="comentario"/>        
                             <!---->                                     
@@ -456,7 +517,9 @@
                                 value="#{crearIndicadorBean.actividadComprometida}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="actividadComprometida"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="actividadComprometidaLabel"/>                                     
                             <p:message for="actividadComprometida"/>      
                             <!---->                                     
@@ -467,14 +530,17 @@
                                 value="#{crearIndicadorBean.estadoActividad}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="estadoActividad"                                
-                                />
+                                >
+                                <p:ajax process='@this'/>                                
+                            </p:inputText>
                             <p:message for="estadoActividadLabel"/>                                     
                             <p:message for="estadoActividad"/>                                  
                             <!---->     
                             <!---->     
                             <!---->     
                             <p:commandButton value="Crear indicador"   
-                                             class="ui-button-formulario"                                                 
+                                             class="ui-button-formulario"     
+                                             action="#{crearIndicadorBean.crearIndicador}"   
                                              update="@form" 
                                              process="@this, @form"/>                                
                         </p:panelGrid>
