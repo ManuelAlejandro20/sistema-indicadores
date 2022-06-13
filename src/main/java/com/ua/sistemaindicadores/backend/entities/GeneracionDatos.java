@@ -8,13 +8,14 @@ package com.ua.sistemaindicadores.backend.entities;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author aleja
  */
 @Entity
-@Table(name = "generacion_datos")
+@Table(name = "generacion_datos", schema = "indicadores")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GeneracionDatos.findAll", query = "SELECT g FROM GeneracionDatos g"),
@@ -45,7 +46,10 @@ public class GeneracionDatos implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "generacion_datos")
     private String generacionDatos;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "generacionDatosId")
+    @JoinTable(name = "generacion_datos_indicador", joinColumns = {
+        @JoinColumn(name = "id_generacion_datos", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_indicador", referencedColumnName = "id")})
+    @ManyToMany
     private Collection<Indicador> indicadorCollection;
 
     public GeneracionDatos() {
