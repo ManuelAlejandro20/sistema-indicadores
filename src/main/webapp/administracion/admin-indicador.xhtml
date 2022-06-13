@@ -178,6 +178,83 @@
                     </p:tab>
                 </p:wizard>                                                
             </p:panel>
-        </div>        
+        </div>   
+        <div class="ui-g-12">
+            <p:dataTable class="ui-g-tabla-adm"                          
+                         id="indicadores"
+                         var="indicadorDTO" 
+                         value="#{verIndicadorBean.model}"
+                         widgetVar="tablaIndicador"                         
+                         lazy="true"
+                         paginator="true"
+                         rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,25,50,100"
+                         currentPageReportTemplate="Mostrando {startRecord} - {endRecord} de {totalRecords}" 
+                         selectionMode="single"
+                         sortMode="single"
+                         sortBy="#{indicadorDTO.id}"
+                         emptyMessage="No se recuperaron registros"
+                         reflow="true"
+                         selection="#{verIndicadorBean.indicadorSeleccionadoDTO}"
+                         rowKey="#{indicadorDTO.id}"                         
+                         >
+
+                <f:facet name="header">
+                    <div style="height: 30px;">
+                        <span>Lista de indicadores</span>
+                    </div>
+                </f:facet>              
+                <p:column headerText="Nombre"
+                          width="5"
+                          styleClass="align-center">                 
+                    <h:outputText value="#{indicadorDTO.nombreIndicador eq null?'Sin dato':indicadorDTO.nombreIndicador }">
+                        <f:convertNumber integerOnly="true"/>
+                    </h:outputText>                    
+                </p:column>
+                <p:column headerText="Clasificación"
+                          width="5"
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.clasificacionId eq null?'Sin dato':indicadorDTO.clasificacionId }">
+                    </h:outputText>                            
+                </p:column>                
+                <p:column headerText="Estado"
+                          width="5"
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
+                    </h:outputText>                            
+                </p:column>
+                <p:column headerText="Descripción"
+                          width="30"
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.descripcionIndicador eq null?'Sin dato':indicadorDTO.descripcionIndicador }">
+                    </h:outputText>                            
+                </p:column>
+                <p:column headerText="Fecha de creación"
+                          width="30"
+                          styleClass="align-center">                          
+                    <h:outputText value="#{indicadorDTO.fechaCreacion eq null?'Sin dato':indicadorDTO.fechaCreacion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
+                    </h:outputText>                    
+                </p:column>
+                <p:column headerText="Última actualización"
+                          width="30"
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.fechaActualizacion eq null?'Sin dato':indicadorDTO.fechaActualizacion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
+                    </h:outputText>                         
+                </p:column>
+                <p:column headerText="Editar"
+                          width="4"
+                          styleClass="align-center">
+                    <p:button
+                        outcome="/inicio/inicio.xhtml"
+                        class="btn btn-info"
+                        icon="fa fa-edit">
+                    </p:button>
+
+                </p:column>
+            </p:dataTable>
+        </div>         
     </ui:define>
 </ui:composition>

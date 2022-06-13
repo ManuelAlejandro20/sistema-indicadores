@@ -6,6 +6,7 @@
 package com.ua.sistemaindicadores.frontend.beans;
 
 import com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO;
+import com.ua.sistemaindicadores.backend.dtos.IndicadorDTO;
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.models.ClasificacionLazyDataModel;
@@ -42,6 +43,8 @@ public class VerClasificacionBean implements Serializable {
     @Inject
     transient private TipoIndicadorService tipoIndicadorService;
 
+    private IndicadorDTO indicadorSeleccionadoDTO;
+    
     private String nombreSeleccionado;
     private String estadoSeleccionado;
     private IndicadorTipo tipoSeleccionado;

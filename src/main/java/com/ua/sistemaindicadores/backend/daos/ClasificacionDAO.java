@@ -155,43 +155,6 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
         return p;
     }
 
-//    public List<ClasificacionDTO> cargar(int first, int pageSize, String sortField, String sortOrder, Map<String, Object> filters) {
-//        mapJoins.clear(); //limpiar map antes de crear la query
-//
-//        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-//        CriteriaQuery<ClasificacionDTO> cq = cb.createQuery(ClasificacionDTO.class);
-//        Root<Clasificacion> rootInformacion = cq.from(Clasificacion.class);
-//
-//        Predicate p = construirPredicado(cb, rootInformacion, filters);
-//
-//        cq.where(p);
-//
-//        if (sortOrder != null && sortField != null) {
-//            switch (sortField) {
-//                case Clasificacion_.ID:
-//                    cq.orderBy(cb.desc(rootInformacion.get(sortField))
-//                    );
-//                default:
-//                    break;
-//            }
-//        }
-//
-//        cq.select(
-//                cb.construct(
-//                        ClasificacionDTO.class,
-//                        rootInformacion.get(Clasificacion_.ID),
-//                        rootInformacion.get(Clasificacion_.INDICADOR_TIPO_ID),
-//                        rootInformacion.get(Clasificacion_.NOMBRE),
-//                        rootInformacion.get(Clasificacion_.TIPO),
-//                        rootInformacion.get(Clasificacion_.ESTADO),
-//                        rootInformacion.get(Clasificacion_.DESCRIPCION)
-//                )).distinct(true);
-//
-//        javax.persistence.Query q = getEntityManager().createQuery(cq);
-//        q.setMaxResults(pageSize);
-//        q.setFirstResult(first);
-//        return q.getResultList();
-//    }
     public List<ClasificacionDTO> cargar(int first, int pageSize, String sortField, String sortOrder, Map<String, Object> filters) {
         mapJoins.clear(); //limpiar map antes de crear la query
 

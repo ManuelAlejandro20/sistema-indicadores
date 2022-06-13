@@ -5,6 +5,8 @@
  */
 package com.ua.sistemaindicadores.frontend.beans;
 
+import com.ua.sistemaindicadores.backend.dtos.IndicadorDTO;
+import com.ua.sistemaindicadores.backend.models.IndicadorLazyDataModel;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +15,7 @@ import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.FlowEvent;
 
@@ -26,6 +29,11 @@ public class VerIndicadorBean implements Serializable{
     
     private static final long serialVersionUID = 1L;
  
+    @Inject
+    private IndicadorLazyDataModel model;    
+    
+    private IndicadorDTO indicadorSeleccionadoDTO;
+    
     private Boolean filtros;
     private boolean siguiente;
     private String mensajeFiltros;    
@@ -99,6 +107,24 @@ public class VerIndicadorBean implements Serializable{
             return event.getNewStep();
         }
     }    
+
+    public IndicadorDTO getIndicadorSeleccionadoDTO() {
+        return indicadorSeleccionadoDTO;
+    }
+
+    public void setIndicadorSeleccionadoDTO(IndicadorDTO indicadorSeleccionadoDTO) {
+        this.indicadorSeleccionadoDTO = indicadorSeleccionadoDTO;
+    }
+
+    public IndicadorLazyDataModel getModel() {
+        return model;
+    }
+
+    public void setModel(IndicadorLazyDataModel model) {
+        this.model = model;
+    }
+    
+    
     
     
 }

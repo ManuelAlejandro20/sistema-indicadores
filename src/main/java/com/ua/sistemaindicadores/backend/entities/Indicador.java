@@ -36,6 +36,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "indicador", schema = "indicadores")
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "Indicador.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.IndicadorDTO(i.id, i.numIndicador, i.nombreIndicador, i.estado, i.descripcionIndicador, "
+                                                            + "i.aplicaLineamiento, i.aplicaObjetivo, i.descripcionObjetivo, i.version, i.lineaBase, i.metas, i.porcLogro, i.medioVerificacion, "
+                                                            + "i.formaCalculo, i.fuenteInformacion, i.proyectoAsociado, i.comentario, i.actividadComprometida, i.estadoActividad, i.fechaCreacion, i.fechaActualizacion, "
+                                                            + "a.ajustePdei, ac.anioCumplimiento, c.nombre, f.frecuenciaMedicion, g.generacionDatos, p.plazo, up.unidadProveedora, ur.unidadRepresentacion) "
+                                                     + "FROM Indicador i INNER JOIN i.ajustePdeiId a INNER JOIN i.anioCumplimientoId ac INNER JOIN "
+                                                            + "i.clasificacionId c INNER JOIN i.frecuenciaMedicionId f INNER JOIN i.generacionDatosId g INNER JOIN i.plazoId p INNER JOIN i.unidadProveedoraId up INNER JOIN i.unidadRepresentacionId ur "
+                                                     + "WHERE i.id = :Id"),           
     @NamedQuery(name = "Indicador.findAll", query = "SELECT i FROM Indicador i"),
     @NamedQuery(name = "Indicador.findById", query = "SELECT i FROM Indicador i WHERE i.id = :id"),
     @NamedQuery(name = "Indicador.findByNumIndicador", query = "SELECT i FROM Indicador i WHERE i.numIndicador = :numIndicador"),
@@ -69,7 +76,7 @@ public class Indicador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "num_indicador")
-    private int numIndicador;
+    private Integer numIndicador;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -78,7 +85,7 @@ public class Indicador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "estado")
-    private short estado;
+    private Short estado;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -198,7 +205,7 @@ public class Indicador implements Serializable {
         this.id = id;
     }
 
-    public Indicador(Integer id, int numIndicador, String nombreIndicador, short estado, String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, Date fechaActualizacion) {
+    public Indicador(Integer id, Integer numIndicador, String nombreIndicador, Short estado, String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, Date fechaActualizacion) {
         this.id = id;
         this.numIndicador = numIndicador;
         this.nombreIndicador = nombreIndicador;
@@ -230,11 +237,11 @@ public class Indicador implements Serializable {
         this.id = id;
     }
 
-    public int getNumIndicador() {
+    public Integer getNumIndicador() {
         return numIndicador;
     }
 
-    public void setNumIndicador(int numIndicador) {
+    public void setNumIndicador(Integer numIndicador) {
         this.numIndicador = numIndicador;
     }
 
@@ -246,11 +253,11 @@ public class Indicador implements Serializable {
         this.nombreIndicador = nombreIndicador;
     }
 
-    public short getEstado() {
+    public Short getEstado() {
         return estado;
     }
 
-    public void setEstado(short estado) {
+    public void setEstado(Short estado) {
         this.estado = estado;
     }
 
