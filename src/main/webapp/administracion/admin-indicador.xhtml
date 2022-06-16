@@ -31,7 +31,8 @@
                 <p:commandButton value="Limpiar filtros" 
                                  class="btn btn-orange"
                                  process="@this" 
-                                 update="@form"/>                                   
+                                 update="@form"
+                                 actionListener="#{verIndicadorBean.limpiarFiltros}"/>                                        
             </p:toolbarGroup>
         </p:toolbar>   
         <div class="ui-g-12" style="display:#{verIndicadorBean.filtros?'none':'block'}">
@@ -42,138 +43,463 @@
                           backLabel="Anterior"
                           >        
                     <p:tab id="pag1" title="1">
-                        <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder">
+                        <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">
                             <p:outputLabel class="label-centered" id="tipoIndicadorLabel" value="TIPO"/>
-                            <p:selectOneMenu id="tipoIndicador">
+                            <p:selectOneMenu id="listaTipo"
+                                             value="#{verIndicadorBean.indicadorTipoSeleccionado}"
+                                             var="tipo"
+                                             converter="tipoIndicadorConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"                                     
+                                             >
                                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            </p:selectOneMenu>                      
+                                <f:selectItems value="#{verIndicadorBean.listaIndicadorTipo}"
+                                               var="indTipo"
+                                               itemLabel="#{indTipo.nombre}"
+                                               itemValue="#{indTipo}"
+                                               itemDescription="#{indTipo.descripcion}"/>
+                                <p:column>
+                                    #{tipo.nombre}
+                                </p:column>                              
+                                <p:ajax event="itemSelect" 
+                                        delay="50"       
+                                        listener="#{verIndicadorBean.onSeleccionTipoIndicadorListener}"
+                                        process="@this" 
+                                        update="@form:indicadores, @form:clasLista" />
+                            </p:selectOneMenu>                       
                             <p:outputLabel class="label-centered" id="clasLabel" value="CLASIFICACIÓN"/>
-                            <p:selectOneMenu id="clas">
+                            <p:selectOneMenu id="clasLista"
+                                             value="#{verIndicadorBean.clasSeleccionada}"
+                                             var="clas"
+                                             converter="clasificacionConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"                                     
+                                             >
                                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            </p:selectOneMenu>                                                                          
+                                <f:selectItems value="#{verIndicadorBean.listaClasificaciones}"
+                                               var="clasVar"
+                                               itemLabel="#{clasVar.id}-#{clasVar.nombre}"
+                                               itemValue="#{clasVar}"/>
+                                <p:column>
+                                    #{clas.id}
+                                </p:column>                                
+                                <p:column>
+                                    #{clas.nombre}
+                                </p:column>                              
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionClasificacionListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />
+                            </p:selectOneMenu>                                                                     
                             <!---->
                             <!---->
                             <p:outputLabel class="label-centered" id="nIndicadorLabel" value="N° INDICADOR"/>
-                            <p:inputText id="nIndicador">
-                            </p:inputText>                              
+                            <p:inputText id="nIndicador"
+                                         value="#{verIndicadorBean.numIndicadorSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionNumIndicadorListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />
+                            </p:inputText>                               
                             <p:outputLabel class="label-centered" id="nombreIndLabel" value="NOMBRE DE INDICADOR"/>
-                            <p:inputText id="nombreInd">
+                            <p:inputText id="nombreInd"
+                                         value="#{verIndicadorBean.nombreSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionNombreListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                         
                             </p:inputText>            
                             <!---->
                             <!---->          
                             <p:outputLabel class="label-centered" id="estadoLabel" value="ESTADO"/>
-                            <p:selectOneMenu id="estado">
+                            <p:selectOneMenu id="estado"
+                                             value="#{verIndicadorBean.estadoSeleccionado}"
+                                             >
                                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            </p:selectOneMenu>                              
+                                <f:selectItem itemLabel="Vigente" itemValue="1"/>
+                                <f:selectItem itemLabel="No Vigente" itemValue="0"/>
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionEstadoListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />
+                            </p:selectOneMenu>                               
                             <p:outputLabel class="label-centered" id="descripcionLabel" title="DESCRIPCIÓN DE INDICADOR" value="DESCRIPCIÓN DE INDICADOR"/>                                                                            
-                            <p:inputText id="descripcion">
+                            <p:inputText id="descripcion"
+                                         value="#{verIndicadorBean.descripcionIndicadorSeleccionada}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionDescripcionIndicadorListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                            
                             </p:inputText>                                                                   
                             <!---->
                             <!---->      
                             <p:outputLabel class="label-centered" id="aLineamientosLabel" value="APLICA LINEAMIENTO"/>                               
-                            <p:inputText id="aLineamientos">
+                            <p:inputText id="aLineamientos"
+                                         value="#{verIndicadorBean.lineamientoSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionLineamientoListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                              
                             </p:inputText>                               
                             <p:outputLabel class="label-centered" id="aObjetivoLabel" value="APLICA OBJETIVO"/>
-                            <p:inputText id="aObjetivo">
+                            <p:inputText id="aObjetivo"
+                                         value="#{verIndicadorBean.objetivoSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionObjetivoListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                                
                             </p:inputText>                                                                                                                         
                         </p:panelGrid>
                     </p:tab>
                     <p:tab id="pag2" title="2">
-                        <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder"> 
+                        <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"> 
                             <p:outputLabel class="label-centered" id="descripcionObjLabel" title="DESCRIPCIÓN DE OBJETIVO" value="DESCRIPCIÓN DE OBJETIVO"/>                                                                            
-                            <p:inputText id="descripcionObj">
+                            <p:inputText id="descripcionObj"
+                                         value="#{verIndicadorBean.descripcionObjetivoSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionDescripcionObjetivoListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                            
                             </p:inputText>                              
                             <p:outputLabel class="label-centered" id="ajustepdeiLabel" value="AJUSTE PDEI"/>                               
-                            <p:selectOneMenu id="ajustepdei">
+                            <p:selectOneMenu id="ajustePDEILista"
+                                             value="#{verIndicadorBean.ajusteSeleccionado}"
+                                             var="ajustePDEI"
+                                             converter="ajusteConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"                                     
+                                             >
                                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            </p:selectOneMenu>                                        
+                                <f:selectItems value="#{verIndicadorBean.listaAjustes}"
+                                               var="APDEIVar"
+                                               itemLabel="#{APDEIVar.ajustePdei}"
+                                               itemValue="#{APDEIVar}"/>                             
+                                <p:column>
+                                    #{ajustePDEI.ajustePdei}
+                                </p:column>                              
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionAjustePdeiListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />
+                            </p:selectOneMenu>                                          
                             <!---->
                             <!---->            
                             <p:outputLabel class="label-centered" id="uReprLabel" title="UNIDAD DE REPRESENTACIÓN" value="UNIDAD DE REPRESENTACIÓN"/>
-                            <p:selectOneMenu id="uRepr">
+                            <p:selectOneMenu id="uReprLista"
+                                             value="#{verIndicadorBean.unidadRSeleccionada}"
+                                             var="uRepr"
+                                             converter="unidadRConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"                                     
+                                             >
                                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            </p:selectOneMenu>                             
+                                <f:selectItems value="#{verIndicadorBean.listaUnidadR}"
+                                               var="uReprVar"
+                                               itemLabel="#{uReprVar.unidadRepresentacion}"
+                                               itemValue="#{uReprVar}"/>                             
+                                <p:column>
+                                    #{uRepr.unidadRepresentacion}
+                                </p:column>                              
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionUnidadRepresentacionListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />
+                            </p:selectOneMenu>                         
                             <p:outputLabel class="label-centered" id="gendatosLabel" title="GENERACIÓN DE LOS DATOS" value="GENERACIÓN DE LOS DATOS"/>                                                                            
-                            <p:selectOneMenu id="gendatos">
+                            <p:selectOneMenu id="genLista"
+                                             value="#{verIndicadorBean.genSeleccionada}"
+                                             var="gen"
+                                             converter="genConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"                                     
+                                             >
                                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            </p:selectOneMenu>                                      
+                                <f:selectItems value="#{verIndicadorBean.listaGen}"
+                                               var="genVar"
+                                               itemLabel="#{genVar.generacionDatos}"
+                                               itemValue="#{genVar}"/>                             
+                                <p:column>
+                                    #{gen.generacionDatos}
+                                </p:column>                              
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionGenDatosListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />
+                            </p:selectOneMenu>                               
                             <!---->
                             <!---->  
                             <p:outputLabel class="label-centered" id="plazoLabel" value="PLAZO"/>                               
-                            <p:selectOneMenu id="plazo">
+                            <p:selectOneMenu id="plazoLista"
+                                             value="#{verIndicadorBean.plazoSeleccionado}"
+                                             var="plazo"
+                                             converter="plazoConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"                                     
+                                             >
                                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            </p:selectOneMenu>                             
+                                <f:selectItems value="#{verIndicadorBean.listaPlazos}"
+                                               var="plazoVar"
+                                               itemLabel="#{plazoVar.plazo}"
+                                               itemValue="#{plazoVar}"/>                             
+                                <p:column>
+                                    #{plazo.plazo}
+                                </p:column>                              
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionPlazoListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />
+                            </p:selectOneMenu>                        
                             <p:outputLabel class="label-centered" id="versionLabel" value="VERSIÓN"/>
-                            <p:inputText id="version">
+                            <p:inputText id="version"
+                                         value="#{verIndicadorBean.versionSeleccionada}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionVersionListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                          
                             </p:inputText>                                     
                             <!---->
                             <!---->   
                             <p:outputLabel class="label-centered" id="lbaseLabel" value="LÍNEA BASE"/>
-                            <p:inputText id="lbase">
+                            <p:inputText id="lbase"
+                                         value="#{verIndicadorBean.lineaBaseSeleccionada}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionLineaBaseListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                              
                             </p:inputText>                              
                             <p:outputLabel class="label-centered" id="metasLabel" value="METAS"/>
-                            <p:inputText id="metas">
+                            <p:inputText id="metas"
+                                         value="#{verIndicadorBean.metaSeleccionada}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionMetaListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                           
                             </p:inputText>                                                                                                                    
                         </p:panelGrid>                                                                         
                     </p:tab>                           
                     <p:tab id="pag3" title="3">
-                        <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder">
+                        <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">
                             <p:outputLabel class="label-centered" id="aniocumLabel" value="AÑO CUMPLIMIENTO"/>                               
-                            <p:selectOneMenu id="aniocum">
+                            <p:selectOneMenu id="anioCumplimientoLista"
+                                             value="#{verIndicadorBean.anioCumplimientoSeleccionado}"
+                                             var="anioCum"
+                                             converter="anioCumplimientoConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"                                     
+                                             >
                                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            </p:selectOneMenu>                             
+                                <f:selectItems value="#{verIndicadorBean.listaAnioCumplimiento}"
+                                               var="anioCumVar"
+                                               itemLabel="#{anioCumVar.anioCumplimiento}"
+                                               itemValue="#{anioCumVar}"/>                             
+                                <p:column>
+                                    #{anioCum.anioCumplimiento}
+                                </p:column>                              
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionAnioCumplimientoListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />
+                            </p:selectOneMenu>                                 
                             <p:outputLabel class="label-centered" id="porcLogroLabel" value="% LOGRO"/>
-                            <p:inputText id="porcLogro">
-                            </p:inputText>       
+                            <p:inputNumber id="porcLogro" 
+                                         value="#{verIndicadorBean.porcLogroSeleccionado}"
+                                         minValue="0"
+                                         maxValue="100"
+                                         decimalPlaces="0"
+                                         symbol="%"
+                                         symbolPosition="s">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionPorcLogroListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                                                   
+                            </p:inputNumber>       
                             <!---->
                             <!---->            
                             <p:outputLabel class="label-centered" id="frecuenciaLabel" value="FRECUENCIA MEDICIÓN"/>                                                           
-                            <p:selectOneMenu id="frecuencia">
+                            <p:selectOneMenu id="frecuenciaLista"
+                                             value="#{verIndicadorBean.frecuenciaSeleccionada}"
+                                             var="frecuencia"
+                                             converter="frecuenciaConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"                                     
+                                             >
                                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            </p:selectOneMenu>                               
+                                <f:selectItems value="#{verIndicadorBean.listaFrecuencia}"
+                                               var="frecuenciaVar"
+                                               itemLabel="#{frecuenciaVar.frecuenciaMedicion}"
+                                               itemValue="#{frecuenciaVar}"/>                             
+                                <p:column>
+                                    #{frecuencia.frecuenciaMedicion}
+                                </p:column>                              
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionFrecuenciaMedicionListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />
+                            </p:selectOneMenu>                             
                             <p:outputLabel class="label-centered" id="medioVerLabel" value="MEDIO DE VERIFICACIÓN"/>
-                            <p:inputText id="medioVer">
+                            <p:inputText id="medioVer"
+                                         value="#{verIndicadorBean.medioVerificacionSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionMedioVerificacionListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                                
                             </p:inputText>       
                             <!---->
                             <!---->      
                             <p:outputLabel class="label-centered" id="FCalculoLabel" value="FORMA DE CÁLCULO"/>
-                            <p:inputText id="FCalculo">
+                            <p:inputText id="FCalculo"
+                                         value="#{verIndicadorBean.formaCalculoSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionFormaCalculoListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                                 
                             </p:inputText>                             
                             <p:outputLabel class="label-centered" id="fuenteInfoLabel" value="FUENTE DE INFORMACIÓN"/>
-                            <p:inputText id="fuenteInfo">
+                            <p:inputText id="fuenteInfo"
+                                         value="#{verIndicadorBean.fuenteInformacionSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionFuenteInformacionListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                              
                             </p:inputText>               
                             <!---->
                             <!---->    
                             <p:outputLabel class="label-centered" id="unidadProLabel" value="UNIDAD PROVEEDORA"/>                                                           
-                            <p:selectOneMenu id="unidadPro">
+                            <p:selectOneMenu id="unidadProveedoraLista"
+                                             value="#{verIndicadorBean.unidadProvSeleccionada}"
+                                             var="unidadProv"
+                                             converter="unidadProveedoraConverter"
+                                             filter="true" 
+                                             filterMatchMode="contains" 
+                                             styleClass="manymenu-advanced"                                     
+                                             >
                                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                            </p:selectOneMenu>                              
+                                <f:selectItems value="#{verIndicadorBean.listaUnidadProveedora}"
+                                               var="unidadProvVar"
+                                               itemLabel="#{unidadProvVar.unidadProveedora}"
+                                               itemValue="#{unidadProvVar}"/>                             
+                                <p:column>
+                                    #{unidadProv.unidadProveedora}
+                                </p:column>                              
+                                <p:ajax event="itemSelect" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionUnidadProveedoraListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />
+                            </p:selectOneMenu>                                
                             <p:outputLabel class="label-centered" id="proyectoAsLabel" value="PROYECTO ASOCIADO"/>
-                            <p:inputText id="proyectoAs">
+                            <p:inputText id="proyectoAs"
+                                         value="#{verIndicadorBean.proyectoAsociadoSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionProyectoAsociadoListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                            
                             </p:inputText>  
                         </p:panelGrid>
                     </p:tab>             
                     <p:tab id="pag4" title="4">
-                        <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder">
+                        <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">
                             <p:outputLabel class="label-centered" id="comentarioLabel" value="COMENTARIO"/>
-                            <p:inputText id="comentario">
+                            <p:inputText id="comentario"
+                                         value="#{verIndicadorBean.comentarioSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionComentarioListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                              
                             </p:inputText>                            
                             <p:outputLabel class="label-centered" id="actividadCLabel" value="ACTIVIDAD COMPROMETIDA"/>
-                            <p:inputText id="actividadC">
+                            <p:inputText id="actividadC"
+                                         value="#{verIndicadorBean.actividadSeleccionada}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionActividadListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                           
                             </p:inputText> 
                             <!---->
                             <!---->        
                             <p:outputLabel class="label-centered" id="estadoActividadLabel" value="ESTADO DE ACTIVIDAD"/>
-                            <p:inputText id="estadoActividad">
+                            <p:inputText id="estadoActividad"
+                                         value="#{verIndicadorBean.estadoActividadSeleccionada}">
+                                <p:ajax event="keyup" 
+                                        delay="50"
+                                        listener="#{verIndicadorBean.onSeleccionEstadoActividadListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                                  
                             </p:inputText>                              
                             <p:outputLabel class="label-centered" id="anioCreacionLabel" value="AÑO DE CREACIÓN"/>
-                            <p:inputText id="anioCreacion">
+                            <p:inputText id="anioCreacion"
+                                         value="#{verIndicadorBean.anioCreacionSeleccionado}">                                         
+                                <p:ajax event="keyup" 
+                                        delay="500"
+                                        listener="#{verIndicadorBean.onSeleccionAnioCreacionListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                         
                             </p:inputText> 
                             <!---->
                             <!---->                               
                             <p:outputLabel class="label-centered" id="anioActualizacionLabel" value="AÑO ÚLTIMA ACTUALIZACIÓN"/>
-                            <p:inputText id="anioActualizacion">
-                            </p:inputText>       
+                            <p:inputText id="anioActualizacion"
+                                         value="#{verIndicadorBean.anioActualizacionSeleccionado}">
+                                <p:ajax event="keyup" 
+                                        delay="500"
+                                        listener="#{verIndicadorBean.onSeleccionAnioActualizacionListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                         
+                            </p:inputText>   
+                            <p:outputLabel class="label-centered" id="fechaCreacionRangoLabel" value="FECHA CREACIÓN RANGO"/>
+                            <p:datePicker id="fechaCreacionRango" 
+                                          selectionMode="range" 
+                                          value="#{verIndicadorBean.fechaCreacionRango}" 
+                                          readonlyInput="true">   
+                                <p:ajax event="dateSelect" 
+                                        delay="500"
+                                        listener="#{verIndicadorBean.onSeleccionFechaCreacionListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />   
+                            </p:datePicker>
+                            <p:outputLabel class="label-centered" id="fechaActualizacionRangoLabel" value="FECHA ACTUALIZACIÓN RANGO"/>
+                            <p:datePicker id="fechaActualizacionRango" 
+                                          selectionMode="range" 
+                                          value="#{verIndicadorBean.fechaActualizacionRango}" 
+                                          readonlyInput="true">                
+                                <p:ajax event="dateSelect" 
+                                        delay="500"
+                                        listener="#{verIndicadorBean.onSeleccionFechaActualizacionListener}"
+                                        process="@this" 
+                                        update="@form:indicadores" />                                   
+                            </p:datePicker>                           
                         </p:panelGrid>
                     </p:tab>
                 </p:wizard>                                                
@@ -197,21 +523,33 @@
                          emptyMessage="No se recuperaron registros"
                          reflow="true"
                          selection="#{verIndicadorBean.indicadorSeleccionadoDTO}"
-                         rowKey="#{indicadorDTO.id}"                         
+                         rowKey="#{indicadorDTO.id}"   
                          >
 
                 <f:facet name="header">
                     <div style="height: 30px;">
                         <span>Lista de indicadores</span>
                     </div>
-                </f:facet>              
-                <p:column headerText="Nombre"
+                </f:facet> 
+                <p:column headerText="N° de indicador"
                           width="5"
                           styleClass="align-center">                 
-                    <h:outputText value="#{indicadorDTO.nombreIndicador eq null?'Sin dato':indicadorDTO.nombreIndicador }">
+                    <h:outputText value="#{indicadorDTO.numIndicador eq null?'Sin dato':indicadorDTO.numIndicador }">
                         <f:convertNumber integerOnly="true"/>
                     </h:outputText>                    
+                </p:column>                
+                <p:column headerText="Nombre de indicador"
+                          width="20"
+                          styleClass="align-center">                 
+                    <h:outputText value="#{indicadorDTO.nombreIndicador eq null?'Sin dato':indicadorDTO.nombreIndicador }">
+                    </h:outputText>                    
                 </p:column>
+                <p:column headerText="Tipo de indicador"
+                          width="5"
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.nombreTipoIndicador eq null?'Sin dato':indicadorDTO.nombreTipoIndicador}">
+                    </h:outputText>                            
+                </p:column>                
                 <p:column headerText="Clasificación"
                           width="5"
                           styleClass="align-center">
@@ -224,26 +562,29 @@
                     <h:outputText value="#{indicadorDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
                     </h:outputText>                            
                 </p:column>
-                <p:column headerText="Descripción"
-                          width="30"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.descripcionIndicador eq null?'Sin dato':indicadorDTO.descripcionIndicador }">
-                    </h:outputText>                            
-                </p:column>
                 <p:column headerText="Fecha de creación"
-                          width="30"
+                          width="20"
                           styleClass="align-center">                          
                     <h:outputText value="#{indicadorDTO.fechaCreacion eq null?'Sin dato':indicadorDTO.fechaCreacion}">
                         <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
                     </h:outputText>                    
                 </p:column>
                 <p:column headerText="Última actualización"
-                          width="30"
+                          width="20"
                           styleClass="align-center">
                     <h:outputText value="#{indicadorDTO.fechaActualizacion eq null?'Sin dato':indicadorDTO.fechaActualizacion}">
                         <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
                     </h:outputText>                         
-                </p:column>
+                </p:column>              
+                <p:column headerText="Ver"
+                          width="4"
+                          styleClass="align-center">
+                    <p:button
+                        class="btn btn-view"
+                        icon="fa fa-eye">
+                    </p:button>
+
+                </p:column>                
                 <p:column headerText="Editar"
                           width="4"
                           styleClass="align-center">

@@ -1053,9 +1053,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-indent: 0px !important;
+  margin-top: -5px !important;
   text-align: center; }
   .ui-icon-close:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f00d";
+    font-weight: 600;}
 
 .ui-icon-closethick {
   background-image: none !important;
@@ -1256,7 +1259,9 @@
   text-indent: 0px !important;
   text-align: center; }
   .ui-icon-check:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f00c";
+    font-weight: 600; }
 
 .ui-icon-bullet {
   background-image: none !important;
@@ -2861,7 +2866,9 @@ h2 {
   text-indent: 0px !important;
   text-align: center; }
   .ui-selectcheckboxmenu-panel .ui-icon.ui-icon-circle-close:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f00d";
+    font-weight: 600; }
 
 .ui-fluid .ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger .ui-icon {
   padding-left: 5px; }

@@ -16,6 +16,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,10 +41,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Indicador.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.IndicadorDTO(i.id, i.numIndicador, i.nombreIndicador, i.estado, i.descripcionIndicador, "
                                                             + "i.aplicaLineamiento, i.aplicaObjetivo, i.descripcionObjetivo, i.version, i.lineaBase, i.metas, i.porcLogro, i.medioVerificacion, "
                                                             + "i.formaCalculo, i.fuenteInformacion, i.proyectoAsociado, i.comentario, i.actividadComprometida, i.estadoActividad, i.fechaCreacion, i.fechaActualizacion, "
-                                                            + "a.ajustePdei, ac.anioCumplimiento, c.nombre, f.frecuenciaMedicion, g.generacionDatos, p.plazo, up.unidadProveedora, ur.unidadRepresentacion) "
+                                                            + "a.ajustePdei, c.tipo, ac.anioCumplimiento, c.nombre, f.frecuenciaMedicion, p.plazo, ur.unidadRepresentacion) "
                                                      + "FROM Indicador i INNER JOIN i.ajustePdeiId a INNER JOIN i.anioCumplimientoId ac INNER JOIN "
-                                                            + "i.clasificacionId c INNER JOIN i.frecuenciaMedicionId f INNER JOIN i.generacionDatosId g INNER JOIN i.plazoId p INNER JOIN i.unidadProveedoraId up INNER JOIN i.unidadRepresentacionId ur "
-                                                     + "WHERE i.id = :Id"),           
+                                                            + "i.clasificacionId c INNER JOIN i.frecuenciaMedicionId f INNER JOIN i.plazoId p INNER JOIN i.unidadRepresentacionId ur "
+                                                     + "WHERE i.id = :Id"),      
     @NamedQuery(name = "Indicador.findAll", query = "SELECT i FROM Indicador i"),
     @NamedQuery(name = "Indicador.findById", query = "SELECT i FROM Indicador i WHERE i.id = :id"),
     @NamedQuery(name = "Indicador.findByNumIndicador", query = "SELECT i FROM Indicador i WHERE i.numIndicador = :numIndicador"),
@@ -171,6 +173,13 @@ public class Indicador implements Serializable {
     @Column(name = "fecha_actualizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaActualizacion;
+    @ManyToMany(mappedBy = "indicadorCollection")
+    private Collection<GeneracionDatos> generacionDatosCollection;
+    @JoinTable(name = "unidad_proveedora_indicador", schema="indicadores", joinColumns = {
+        @JoinColumn(name = "id_indicador", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_unidad_proveedora", referencedColumnName = "id")})
+    @ManyToMany
+    private Collection<UnidadProveedora> unidadProveedoraCollection;
     @JoinColumn(name = "ajuste_pdei_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private AjustePdei ajustePdeiId;
@@ -183,15 +192,9 @@ public class Indicador implements Serializable {
     @JoinColumn(name = "frecuencia_medicion_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private FrecuenciaMedicion frecuenciaMedicionId;
-    @JoinColumn(name = "generacion_datos_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private GeneracionDatos generacionDatosId;
     @JoinColumn(name = "plazo_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Plazo plazoId;
-    @JoinColumn(name = "unidad_proveedora_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private UnidadProveedora unidadProveedoraId;
     @JoinColumn(name = "unidad_representacion_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private UnidadRepresentacion unidadRepresentacionId;
@@ -397,6 +400,24 @@ public class Indicador implements Serializable {
         this.fechaActualizacion = fechaActualizacion;
     }
 
+    @XmlTransient
+    public Collection<GeneracionDatos> getGeneracionDatosCollection() {
+        return generacionDatosCollection;
+    }
+
+    public void setGeneracionDatosCollection(Collection<GeneracionDatos> generacionDatosCollection) {
+        this.generacionDatosCollection = generacionDatosCollection;
+    }
+
+    @XmlTransient
+    public Collection<UnidadProveedora> getUnidadProveedoraCollection() {
+        return unidadProveedoraCollection;
+    }
+
+    public void setUnidadProveedoraCollection(Collection<UnidadProveedora> unidadProveedoraCollection) {
+        this.unidadProveedoraCollection = unidadProveedoraCollection;
+    }
+
     public AjustePdei getAjustePdeiId() {
         return ajustePdeiId;
     }
@@ -429,28 +450,12 @@ public class Indicador implements Serializable {
         this.frecuenciaMedicionId = frecuenciaMedicionId;
     }
 
-    public GeneracionDatos getGeneracionDatosId() {
-        return generacionDatosId;
-    }
-
-    public void setGeneracionDatosId(GeneracionDatos generacionDatosId) {
-        this.generacionDatosId = generacionDatosId;
-    }
-
     public Plazo getPlazoId() {
         return plazoId;
     }
 
     public void setPlazoId(Plazo plazoId) {
         this.plazoId = plazoId;
-    }
-
-    public UnidadProveedora getUnidadProveedoraId() {
-        return unidadProveedoraId;
-    }
-
-    public void setUnidadProveedoraId(UnidadProveedora unidadProveedoraId) {
-        this.unidadProveedoraId = unidadProveedoraId;
     }
 
     public UnidadRepresentacion getUnidadRepresentacionId() {

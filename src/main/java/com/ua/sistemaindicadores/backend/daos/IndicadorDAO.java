@@ -29,6 +29,7 @@ import com.ua.sistemaindicadores.backend.entities.UnidadProveedora_;
 import com.ua.sistemaindicadores.backend.entities.UnidadRepresentacion;
 import com.ua.sistemaindicadores.backend.entities.UnidadRepresentacion_;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +80,8 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
     public static final String PLAZO_ID = "PLAZO_ID";
     public static final String UNIDAD_PROVEEDORA_ID = "UNIDAD_PROVEEDORA_ID";
     public static final String UNIDAD_REPRESENTACION_ID = "UNIDAD_REPRESENTACION_ID";
+    public static final String FECHA_CREACION_RANGE = "FECHA_CREACION_RANGE";
+    public static final String FECHA_ACTUALIZACION_RANGE = "FECHA_ACTUALIZACION_RANGE";
 
     @Inject
     private EntityManagerProvider entityManagerProvider;
@@ -94,6 +97,76 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
         super(Indicador.class);
     }
 
+    public AjustePdei buscarAjustePdeiID(Integer id) {
+        return getEntityManager().find(AjustePdei.class, id);
+    }    
+    
+    public List<AjustePdei> obtenerAjustePdei(){
+        return getEntityManager()
+                .createNamedQuery("AjustePdei.findAll", AjustePdei.class)
+                .getResultList();    
+    }
+    
+    public UnidadRepresentacion buscarUnidadRepresentacionID(Integer id) {
+        return getEntityManager().find(UnidadRepresentacion.class, id);
+    }        
+    
+    public List<UnidadRepresentacion> obtenerUnidadRepresentacion(){
+        return getEntityManager()
+                .createNamedQuery("UnidadRepresentacion.findAll", UnidadRepresentacion.class)
+                .getResultList();    
+    }
+    
+    public Plazo buscarPlazoID(Integer id) {
+        return getEntityManager().find(Plazo.class, id);
+    }            
+
+    public List<Plazo> obtenerPlazo(){
+        return getEntityManager()
+                .createNamedQuery("Plazo.findAll", Plazo.class)
+                .getResultList();    
+    }
+    
+    public AnioCumplimiento buscarAnioCumplimientoID(Integer id) {
+        return getEntityManager().find(AnioCumplimiento.class, id);
+    }            
+
+    public List<AnioCumplimiento> obtenerAnioCumplimiento(){
+        return getEntityManager()
+                .createNamedQuery("AnioCumplimiento.findAll", AnioCumplimiento.class)
+                .getResultList();    
+    }    
+    
+    public FrecuenciaMedicion buscarFrecuenciaMedicionID(Integer id) {
+        return getEntityManager().find(FrecuenciaMedicion.class, id);
+    }            
+
+    public List<FrecuenciaMedicion> obtenerFrecuenciaMedicion(){
+        return getEntityManager()
+                .createNamedQuery("FrecuenciaMedicion.findAll", FrecuenciaMedicion.class)
+                .getResultList();    
+    }     
+    
+    public GeneracionDatos buscarGeneracionDatosID(Integer id) {
+        return getEntityManager().find(GeneracionDatos.class, id);
+    }            
+
+    public List<GeneracionDatos> obtenerGeneracionDatos(){
+        return getEntityManager()
+                .createNamedQuery("GeneracionDatos.findAll", GeneracionDatos.class)
+                .getResultList();    
+    } 
+    
+    public UnidadProveedora buscarUnidadProveedoraID(Integer id) {
+        return getEntityManager().find(UnidadProveedora.class, id);
+    }            
+
+    public List<UnidadProveedora> obtenerUnidadProveedora(){
+        return getEntityManager()
+                .createNamedQuery("UnidadProveedora.findAll", UnidadProveedora.class)
+                .getResultList();    
+    }     
+    
     public IndicadorDTO obtenerIndicadorDTO(Integer indicadorId) {
         List<IndicadorDTO> dtos = getEntityManager()
                 .createNamedQuery("Indicador.obtenerDTO", IndicadorDTO.class)
@@ -109,11 +182,13 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<Indicador> root = cq.from(Indicador.class);
         cq.select(getEntityManager().getCriteriaBuilder().countDistinct(root));
-
+        
+        System.out.println("ANTes predicado");
+        
         Predicate p = construirPredicado(cb, root, filters);
-
+        
         cq.where(p);
-
+        
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
@@ -148,7 +223,7 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
                     break;   
                 case GENERACION_DATOS_ID:
                     mapJoins.put(
-                            key, (root.join(Indicador_.GENERACION_DATOS_ID, JoinType.INNER))
+                            key, (root.join(Indicador_.GENERACION_DATOS_COLLECTION, JoinType.INNER))
                     );
                     break;   
                 case PLAZO_ID:
@@ -158,9 +233,9 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
                     break;   
                 case UNIDAD_PROVEEDORA_ID:
                     mapJoins.put(
-                            key, (root.join(Indicador_.UNIDAD_PROVEEDORA_ID, JoinType.INNER))
+                            key, root.join(Indicador_.UNIDAD_PROVEEDORA_COLLECTION, JoinType.INNER)
                     );
-                    break;   
+                    break;
                 case UNIDAD_REPRESENTACION_ID:
                     mapJoins.put(
                             key, (root.join(Indicador_.UNIDAD_REPRESENTACION_ID, JoinType.INNER))
@@ -226,6 +301,22 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
                                 )
                         );
                         break;
+                    case FECHA_CREACION_RANGE:
+                        List<Date> fechasCreacion = (List<Date>)filters.get(key);   
+                          p = cb.between(
+                                root.get(Indicador_.FECHA_CREACION),
+                                fechasCreacion.get(0),
+                                fechasCreacion.get(1)
+                          );
+                        break;        
+                    case FECHA_ACTUALIZACION_RANGE:
+                        List<Date> fechasAct = (List<Date>)filters.get(key);   
+                          p = cb.between(
+                                root.get(Indicador_.FECHA_ACTUALIZACION),
+                                fechasAct.get(0),
+                                fechasAct.get(1)
+                          );
+                        break;                             
                     case INDICADOR_TIPO_ID:
                         p = cb.and(
                                 p,
@@ -289,7 +380,7 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
                                         (Integer) filters.get(key)
                                 )
                         );
-                        break;    
+                        break;  
                     case UNIDAD_REPRESENTACION_ID:
                         p = cb.and(
                                 p,
@@ -317,29 +408,19 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
         Join<Indicador, AnioCumplimiento> joinAnioCumplimiento = rootIndicador.join(Indicador_.ANIO_CUMPLIMIENTO_ID, JoinType.INNER);
         Join<Indicador, Clasificacion> joinClas = rootIndicador.join(Indicador_.CLASIFICACION_ID, JoinType.INNER);
         Join<Indicador, FrecuenciaMedicion> joinFrecuencia = rootIndicador.join(Indicador_.FRECUENCIA_MEDICION_ID, JoinType.INNER);
-        Join<Indicador, GeneracionDatos> joinGeneracion = rootIndicador.join(Indicador_.GENERACION_DATOS_ID, JoinType.INNER);
         Join<Indicador, Plazo> joinPlazo = rootIndicador.join(Indicador_.PLAZO_ID, JoinType.INNER);
-        Join<Indicador, UnidadProveedora> joinUnidadProveedora = rootIndicador.join(Indicador_.UNIDAD_PROVEEDORA_ID, JoinType.INNER);
-        Join<Indicador, UnidadRepresentacion> joinUnidadRepresentacion = rootIndicador.join(Indicador_.UNIDAD_REPRESENTACION_ID, JoinType.INNER);     
-        Join<Indicador, IndicadorTipo> joinIndicadorTipo = null;        
-                
-        if(filters != null && (filters.containsKey(Clasificacion_.NOMBRE) && filters.containsKey(IndicadorTipo_.NOMBRE)))
+        Join<Indicador, UnidadRepresentacion> joinUnidadRepresentacion = rootIndicador.join(Indicador_.UNIDAD_REPRESENTACION_ID, JoinType.INNER);                                             
+        Join<Indicador, UnidadProveedora> joinUnidadProveedora = null;
+        Join<Indicador, GeneracionDatos> joinGenDatos = null;
+
+        if(filters != null && filters.containsKey(UnidadProveedora_.UNIDAD_PROVEEDORA))
         {
-            joinIndicadorTipo = rootIndicador.join(Indicador_.CLASIFICACION_ID, JoinType.INNER).join(Clasificacion_.INDICADOR_TIPO_ID, JoinType.INNER);
-        }else
+            joinUnidadProveedora = rootIndicador.join(Indicador_.UNIDAD_PROVEEDORA_COLLECTION, JoinType.INNER).join(UnidadProveedora_.UNIDAD_PROVEEDORA, JoinType.INNER);
+        }  
+        if(filters != null && filters.containsKey(GeneracionDatos_.GENERACION_DATOS))
         {
-            if(filters != null && filters.containsKey(Clasificacion_.NOMBRE))
-            {
-                joinClas = rootIndicador.join(Indicador_.CLASIFICACION_ID, JoinType.INNER);
-            }else
-            {
-                if(filters != null && filters.containsKey(IndicadorTipo_.NOMBRE))
-                {
-                     joinIndicadorTipo = rootIndicador.join(Indicador_.CLASIFICACION_ID, JoinType.INNER).join(Clasificacion_.INDICADOR_TIPO_ID, JoinType.INNER);
-                }
-            }
-        }
-        
+            joinGenDatos = rootIndicador.join(Indicador_.GENERACION_DATOS_COLLECTION, JoinType.INNER).join(GeneracionDatos_.GENERACION_DATOS, JoinType.INNER);
+        }          
         
         Predicate p = construirPredicado(cb, rootIndicador, filters);
 
@@ -380,12 +461,11 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
                         rootIndicador.get(Indicador_.FECHA_CREACION),
                         rootIndicador.get(Indicador_.FECHA_ACTUALIZACION),
                         joinAjustePdei.get(AjustePdei_.AJUSTE_PDEI),
+                        joinClas.get(Clasificacion_.TIPO),
                         joinAnioCumplimiento.get(AnioCumplimiento_.ANIO_CUMPLIMIENTO),
                         joinClas.get(Clasificacion_.NOMBRE),
                         joinFrecuencia.get(FrecuenciaMedicion_.FRECUENCIA_MEDICION),
-                        joinGeneracion.get(GeneracionDatos_.GENERACION_DATOS),
                         joinPlazo.get(Plazo_.PLAZO),
-                        joinUnidadProveedora.get(UnidadProveedora_.UNIDAD_PROVEEDORA),
                         joinUnidadRepresentacion.get(UnidadRepresentacion_.UNIDAD_REPRESENTACION)
                 )).distinct(true);
 

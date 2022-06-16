@@ -41,6 +41,9 @@ public class IndicadorLazyDataModel extends LazyDataModel<IndicadorDTO> {
 
     private static final long serialVersionUID = 1L;
 
+    //Columnas excluidas: 
+    //id: no filtraremos por id
+    
     @Inject
     transient private IndicadorService indicadorService;
     private Integer numIndicador;
@@ -68,12 +71,13 @@ public class IndicadorLazyDataModel extends LazyDataModel<IndicadorDTO> {
     private AnioCumplimiento anioCumplimientoId;
     private Clasificacion clasificacionId;
     private FrecuenciaMedicion frecuenciaMedicionId;
-    private GeneracionDatos generacionDatosId;
     private Plazo plazoId;
-    private UnidadProveedora unidadProveedoraId;
     private UnidadRepresentacion unidadRepresentacionId;    
+    private UnidadProveedora unidadProveedora;
+    private GeneracionDatos generacionDatosId;
+    private List<Date> fechaCreacionRange;
+    private List<Date> fechaActualizacionRange;
     
-
     @Override
     public Object getRowKey(IndicadorDTO object) {
         return object.getId();
@@ -199,7 +203,7 @@ public class IndicadorLazyDataModel extends LazyDataModel<IndicadorDTO> {
             }else{
                 filters.remove(IndicadorDAO.FECHA_ACTUALIZACION);
             }    
-            //
+            
             if (indicadorTipo != null) {
                 filters.put(IndicadorDAO.INDICADOR_TIPO_ID, indicadorTipo.getId());
             } else {
@@ -235,8 +239,8 @@ public class IndicadorLazyDataModel extends LazyDataModel<IndicadorDTO> {
             } else {
                 filters.remove(IndicadorDAO.PLAZO_ID);
             }     
-            if (unidadProveedoraId != null) {
-                filters.put(IndicadorDAO.UNIDAD_PROVEEDORA_ID, unidadProveedoraId.getId());
+            if (unidadProveedora != null) {
+                filters.put(IndicadorDAO.UNIDAD_PROVEEDORA_ID, unidadProveedora.getId());
             } else {
                 filters.remove(IndicadorDAO.UNIDAD_PROVEEDORA_ID);
             }     
@@ -244,7 +248,17 @@ public class IndicadorLazyDataModel extends LazyDataModel<IndicadorDTO> {
                 filters.put(IndicadorDAO.UNIDAD_REPRESENTACION_ID, unidadRepresentacionId.getId());
             } else {
                 filters.remove(IndicadorDAO.UNIDAD_REPRESENTACION_ID);
-            }                 
+            } 
+            if (fechaCreacionRange != null) {
+                filters.put(IndicadorDAO.FECHA_CREACION_RANGE, fechaCreacionRange);
+            } else {
+                filters.remove(IndicadorDAO.FECHA_CREACION_RANGE);
+            }  
+            if (fechaActualizacionRange != null) {
+                filters.put(IndicadorDAO.FECHA_ACTUALIZACION_RANGE, fechaActualizacionRange);
+            } else {
+                filters.remove(IndicadorDAO.FECHA_ACTUALIZACION_RANGE);
+            }              
             
             String order = null;
             if (sortOrder != null) {
@@ -500,15 +514,7 @@ public class IndicadorLazyDataModel extends LazyDataModel<IndicadorDTO> {
     public void setPlazoId(Plazo plazoId) {
         this.plazoId = plazoId;
     }
-
-    public UnidadProveedora getUnidadProveedoraId() {
-        return unidadProveedoraId;
-    }
-
-    public void setUnidadProveedoraId(UnidadProveedora unidadProveedoraId) {
-        this.unidadProveedoraId = unidadProveedoraId;
-    }
-
+    
     public UnidadRepresentacion getUnidadRepresentacionId() {
         return unidadRepresentacionId;
     }
@@ -517,7 +523,31 @@ public class IndicadorLazyDataModel extends LazyDataModel<IndicadorDTO> {
         this.unidadRepresentacionId = unidadRepresentacionId;
     }
 
+    public UnidadProveedora getUnidadProveedora() {
+        return unidadProveedora;
+    }
 
+    public void setUnidadProveedora(UnidadProveedora unidadProveedora) {
+        this.unidadProveedora = unidadProveedora;
+    }
+
+    public List<Date> getFechaCreacionRange() {
+        return fechaCreacionRange;
+    }
+
+    public void setFechaCreacionRange(List<Date> fechaCreacionRange) {
+        this.fechaCreacionRange = fechaCreacionRange;
+    }
+
+    public List<Date> getFechaActualizacionRange() {
+        return fechaActualizacionRange;
+    }
+
+    public void setFechaActualizacionRange(List<Date> fechaActualizacionRange) {
+        this.fechaActualizacionRange = fechaActualizacionRange;
+    }
+
+    
     
 
 }

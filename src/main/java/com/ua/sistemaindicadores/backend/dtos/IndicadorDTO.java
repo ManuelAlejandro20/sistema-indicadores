@@ -34,15 +34,14 @@ public class IndicadorDTO {
     private Date fechaCreacion;
     private Date fechaActualizacion;
     private String ajustePdeiId;
+    private String nombreTipoIndicador;
     private Integer anioCumplimientoId;
     private String clasificacionId;
     private String frecuenciaMedicionId;
-    private String generacionDatosId;
     private String plazoId;
-    private String unidadProveedoraId;
     private String unidadRepresentacionId;    
 
-    public IndicadorDTO(Integer id, Integer numIndicador, String nombreIndicador, Short estado, String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, Date fechaActualizacion, String ajustePdeiId, Integer anioCumplimientoId, String clasificacionId, String frecuenciaMedicionId, String generacionDatosId, String plazoId, String unidadProveedoraId, String unidadRepresentacionId) {
+    public IndicadorDTO(Integer id, Integer numIndicador, String nombreIndicador, Short estado, String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, Date fechaActualizacion, String ajustePdeiId, String nombreTipoIndicador, Integer anioCumplimientoId, String clasificacionId, String frecuenciaMedicionId, String plazoId, String unidadRepresentacionId) {
         this.id = id;
         this.numIndicador = numIndicador;
         this.nombreIndicador = nombreIndicador;
@@ -65,12 +64,11 @@ public class IndicadorDTO {
         this.fechaCreacion = fechaCreacion;
         this.fechaActualizacion = fechaActualizacion;
         this.ajustePdeiId = ajustePdeiId;
+        this.nombreTipoIndicador = nombreTipoIndicador;
         this.anioCumplimientoId = anioCumplimientoId;
         this.clasificacionId = clasificacionId;
         this.frecuenciaMedicionId = frecuenciaMedicionId;
-        this.generacionDatosId = generacionDatosId;
         this.plazoId = plazoId;
-        this.unidadProveedoraId = unidadProveedoraId;
         this.unidadRepresentacionId = unidadRepresentacionId;
     }
 
@@ -258,6 +256,14 @@ public class IndicadorDTO {
         this.anioCumplimientoId = anioCumplimientoId;
     }
 
+    public String getNombreTipoIndicador() {
+        return nombreTipoIndicador;
+    }
+
+    public void setNombreTipoIndicador(String nombreTipoIndicador) {
+        this.nombreTipoIndicador = nombreTipoIndicador;
+    }   
+    
     public String getClasificacionId() {
         return clasificacionId;
     }
@@ -274,28 +280,12 @@ public class IndicadorDTO {
         this.frecuenciaMedicionId = frecuenciaMedicionId;
     }
 
-    public String getGeneracionDatosId() {
-        return generacionDatosId;
-    }
-
-    public void setGeneracionDatosId(String generacionDatosId) {
-        this.generacionDatosId = generacionDatosId;
-    }
-
     public String getPlazoId() {
         return plazoId;
     }
 
     public void setPlazoId(String plazoId) {
         this.plazoId = plazoId;
-    }
-
-    public String getUnidadProveedoraId() {
-        return unidadProveedoraId;
-    }
-
-    public void setUnidadProveedoraId(String unidadProveedoraId) {
-        this.unidadProveedoraId = unidadProveedoraId;
     }
 
     public String getUnidadRepresentacionId() {

@@ -42,8 +42,6 @@ public class VerClasificacionBean implements Serializable {
     private ClasificacionLazyDataModel model;
     @Inject
     transient private TipoIndicadorService tipoIndicadorService;
-
-    private IndicadorDTO indicadorSeleccionadoDTO;
     
     private String nombreSeleccionado;
     private String estadoSeleccionado;
