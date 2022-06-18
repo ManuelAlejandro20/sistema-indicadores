@@ -6,7 +6,11 @@
 package com.ua.sistemaindicadores.frontend.beans;
 
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
+import com.ua.sistemaindicadores.backend.entities.GeneracionDatos;
+import com.ua.sistemaindicadores.backend.entities.Indicador;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
+import com.ua.sistemaindicadores.backend.services.IndicadorService;
+import com.ua.sistemaindicadores.backend.entities.UnidadProveedora;
 import com.ua.sistemaindicadores.backend.exceptions.NotificacionCorreoException;
 import com.ua.sistemaindicadores.backend.flags.Flag;
 import com.ua.sistemaindicadores.backend.flags.FlagImpl;
@@ -42,16 +46,17 @@ public class CrearIndicadorBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final String direccionSI = "http://localhost:8080/SistemaIndicadores-1.0-SNAPSHOT/faces/inicio/inicio.xhtml";
-    
+
     @Inject
     transient private ClasificacionService clasificacionService;
     @Inject
-    transient private TipoIndicadorService tipoIndicadorService;    
-    
+    transient private TipoIndicadorService tipoIndicadorService;
+    @Inject
+    transient private IndicadorService indicadorService;
+
     private String vigencia;
-    
+
     //
-    
     private String n_indicador;
     private String nombreIndicador;
     private String descripcionIndicador;
@@ -86,74 +91,79 @@ public class CrearIndicadorBean implements Serializable {
     private String proyectoAsociado;
     private String comentario;
     private String actividadComprometida;
-    private String estadoActividad;    
-    
+    private String estadoActividad;
+
     private FlagImpl flagImpl;
     private Flag flagsTipoIndicador;
-    
+
     private List<IndicadorTipo> listaIndicadorTipo;
     private List<IndicadorTipo> listaIndicadorTipoVigente;
     private List<IndicadorTipo> listaIndicadorTipoNoVigente;
-    private IndicadorTipo indicadorTipoSeleccionado;    
-    
+    private List<UnidadProveedora> listaUnidadProveedora;
+    private List<GeneracionDatos> listaGeneracionDatos;
+    private List<String> listaUnidadesSeleccionadas;
+    private List<String> listaGeneracionesSeleccionadas;
+    private IndicadorTipo indicadorTipoSeleccionado;
+
     private Collection<Clasificacion> listaClasificacion;
-    private Clasificacion clasificacionSeleccionada;        
-    
+    private Clasificacion clasificacionSeleccionada;
+
     @PostConstruct
-    public void initalize(){
-        System.out.println("Inicio Bean Crear Indicador");     
+    public void initalize() {
+        System.out.println("Inicio Bean Crear Indicador");
         flagImpl = new FlagImpl();
         listaIndicadorTipoVigente = tipoIndicadorService.obtenerTiposIndicadoresByEstado(Short.valueOf("1"));
         listaIndicadorTipoNoVigente = tipoIndicadorService.obtenerTiposIndicadoresByEstado(Short.valueOf("0"));
-        listaIndicadorTipo = listaIndicadorTipoVigente;     
-        if(listaIndicadorTipo != null){            
+        listaIndicadorTipo = listaIndicadorTipoVigente;
+        if (listaIndicadorTipo != null) {
             indicadorTipoSeleccionado = listaIndicadorTipo.get(0);
-            flagsTipoIndicador = flagImpl.getFlagsTipoIndicador(indicadorTipoSeleccionado.getNombre());            
+            flagsTipoIndicador = flagImpl.getFlagsTipoIndicador(indicadorTipoSeleccionado.getNombre());
 //            for (String key : flagsTipoIndicador.getHiddenFlags().keySet()) {
 //                System.out.println(key + "=" + flagsTipoIndicador.getHiddenFlags().get(key));
 //            }            
- 
+
             listaClasificacion = indicadorTipoSeleccionado.getClasificacionCollection();
             clasificacionSeleccionada = listaClasificacion.iterator().next();
 
         }
+        listaUnidadProveedora = indicadorService.obtenerUnidadProveedora();
     }
-    
+
     /**
      * Creates a new instance of convenioBean
      */
     public CrearIndicadorBean() {
     }
 
-    public void cambiarEstado(){
-        if(vigencia.equals("VIGENTE")){
-            listaIndicadorTipo = listaIndicadorTipoVigente;            
-        }else{
+    public void cambiarEstado() {
+        if (vigencia.equals("VIGENTE")) {
+            listaIndicadorTipo = listaIndicadorTipoVigente;
+        } else {
             listaIndicadorTipo = listaIndicadorTipoNoVigente;
         }
         indicadorTipoSeleccionado = listaIndicadorTipo.get(0);
-        flagsTipoIndicador = flagImpl.getFlagsTipoIndicador(indicadorTipoSeleccionado.getNombre());      
-        listaClasificacion = indicadorTipoSeleccionado.getClasificacionCollection();
-                
-        PrimeFaces.current().resetInputs("form:formulario");        
-        setEmptyFields();        
-        Ajax.update("form:formulario");        
-        
-    }    
-    
-    public void cambiarTipoIndicador(){
-        flagsTipoIndicador = flagImpl.getFlagsTipoIndicador(indicadorTipoSeleccionado.getNombre());                              
+        flagsTipoIndicador = flagImpl.getFlagsTipoIndicador(indicadorTipoSeleccionado.getNombre());
         listaClasificacion = indicadorTipoSeleccionado.getClasificacionCollection();
 
-        PrimeFaces.current().resetInputs("form:formulario");       
+        PrimeFaces.current().resetInputs("form:formulario");
         setEmptyFields();
         Ajax.update("form:formulario");
-    }        
-    
-    public void setEmptyFields(){        
+
+    }
+
+    public void cambiarTipoIndicador() {
+        flagsTipoIndicador = flagImpl.getFlagsTipoIndicador(indicadorTipoSeleccionado.getNombre());
+        listaClasificacion = indicadorTipoSeleccionado.getClasificacionCollection();
+
+        PrimeFaces.current().resetInputs("form:formulario");
+        setEmptyFields();
+        Ajax.update("form:formulario");
+    }
+
+    public void setEmptyFields() {
         for (String key : flagsTipoIndicador.getHiddenFlags().keySet()) {
-            if(flagsTipoIndicador.getHiddenFlags().get(key)){
-                switch(key){
+            if (flagsTipoIndicador.getHiddenFlags().get(key)) {
+                switch (key) {
                     case "descripcionIndicador":
                         descripcionIndicador = null;
                         break;
@@ -255,16 +265,16 @@ public class CrearIndicadorBean implements Serializable {
                         break;
                     default:
                         break;
-                }                
+                }
             }
-        }            
+        }
     }
-    
-    public void crearIndicador(){
+
+    public void crearIndicador() {
         System.out.println("crear");
         System.out.println(descripcionIndicador);
     }
-    
+
     public List<IndicadorTipo> getListaIndicadorTipo() {
         return listaIndicadorTipo;
     }
@@ -275,6 +285,38 @@ public class CrearIndicadorBean implements Serializable {
 
     public List<IndicadorTipo> getListaIndicadorTipoNoVigente() {
         return listaIndicadorTipoNoVigente;
+    }
+
+    public List<GeneracionDatos> getListaGeneracionDatos() {
+        return listaGeneracionDatos;
+    }
+
+    public void setListaGeneracionDatos(List<GeneracionDatos> listaGeneracionDatos) {
+        this.listaGeneracionDatos = listaGeneracionDatos;
+    }
+
+    public List<String> getListaGeneracionesSeleccionadas() {
+        return listaGeneracionesSeleccionadas;
+    }
+
+    public List<UnidadProveedora> getListaUnidadProveedora() {
+        return listaUnidadProveedora;
+    }
+
+    public void setListaUnidadProveedora(List<UnidadProveedora> listaUnidadProveedora) {
+        this.listaUnidadProveedora = listaUnidadProveedora;
+    }
+
+    public List<String> getListaUnidadesSeleccionadas() {
+        return listaUnidadesSeleccionadas;
+    }
+
+    public void setListaUnidadesSeleccionadas(List<String> listaUnidadesSeleccionadas) {
+        this.listaUnidadesSeleccionadas = listaUnidadesSeleccionadas;
+    }
+
+    public void setListaGeneracionesSeleccionadas(List<String> listaGeneracionesSeleccionadas) {
+        this.listaGeneracionesSeleccionadas = listaGeneracionesSeleccionadas;
     }
 
     public IndicadorTipo getIndicadorTipoSeleccionado() {
@@ -303,8 +345,8 @@ public class CrearIndicadorBean implements Serializable {
 
     public void setNombreIndicador(String nombreIndicador) {
         this.nombreIndicador = nombreIndicador;
-    }   
-    
+    }
+
     public String getDescripcionIndicador() {
         return descripcionIndicador;
     }
@@ -577,8 +619,6 @@ public class CrearIndicadorBean implements Serializable {
         this.flagImpl = flagImpl;
     }
 
-    
-    
     public Collection<Clasificacion> getListaClasificacion() {
         return listaClasificacion;
     }
@@ -618,9 +658,5 @@ public class CrearIndicadorBean implements Serializable {
     public void setFlagsTipoIndicador(Flag flagsTipoIndicador) {
         this.flagsTipoIndicador = flagsTipoIndicador;
     }
-    
-    
-    
-    
-                  
+
 }

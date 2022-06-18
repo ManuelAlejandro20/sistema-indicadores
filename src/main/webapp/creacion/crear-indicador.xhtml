@@ -190,14 +190,15 @@
                             <p:message for="unidadRepresentacion"/>                              
                             <!---->  
                             <p:outputLabel class="texto-ver-centrado" id="generacionDatosLabel" value="Generación de los datos: *"/>
-                            <p:selectOneMenu  
+                            <p:selectCheckboxMenu 
                                 required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 requiredMessage="Campo generación de los datos es requerido."                                
                                 value="#{crearIndicadorBean.generacionDatos}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="generacionDatos">
+                                id="generacionDatos"
+                                multiple = "true">
                                 <p:ajax process='@this'/>                                
-                            </p:selectOneMenu>
+                            </p:selectCheckboxMenu>
                             <p:message for="generacionDatosLabel"/>                                     
                             <p:message for="generacionDatos"/>                              
                             <!---->                              
@@ -472,14 +473,19 @@
                             <p:message for="fuenteInformacion"/>        
                             <!---->                                     
                             <p:outputLabel class="texto-ver-centrado" id="unidadProveedoraLabel" value="Unidad proveedora: *"/>
-                            <p:selectOneMenu 
+                            <p:selectCheckboxMenu 
                                 required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 requiredMessage="Campo unidad proveedora es requerido."                                 
                                 value="#{crearIndicadorBean.unidadProveedora}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="unidadProveedora">
+                                id="unidadProveedora"
+                                multiple = "true">
                                 <p:ajax process='@this'/>
-                            </p:selectOneMenu>                            
+                                <f:selectItems value="#{crearIndicadorBean.listaUnidadProveedora}"
+                                               var="unidadProv"
+                                               itemLabel="#{unidadProv.unidadProveedora}"
+                                               itemValue="#{unidadProv}"/>
+                            </p:selectCheckboxMenu>                            
                             <p:message for="unidadProveedoraLabel"/>                                     
                             <p:message for="unidadProveedora"/>      
                             <!---->                                     
