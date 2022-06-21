@@ -5,6 +5,10 @@
  */
 package com.ua.sistemaindicadores.backend.dtos;
 
+import com.ua.sistemaindicadores.backend.entities.GeneracionDatos;
+import com.ua.sistemaindicadores.backend.entities.Indicador;
+import com.ua.sistemaindicadores.backend.entities.UnidadProveedora;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -39,9 +43,16 @@ public class IndicadorDTO {
     private String clasificacionId;
     private String frecuenciaMedicionId;
     private String plazoId;
-    private String unidadRepresentacionId;    
+    private String unidadRepresentacionId; 
 
-    public IndicadorDTO(Integer id, Integer numIndicador, String nombreIndicador, Short estado, String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, Date fechaActualizacion, String ajustePdeiId, String nombreTipoIndicador, Integer anioCumplimientoId, String clasificacionId, String frecuenciaMedicionId, String plazoId, String unidadRepresentacionId) {
+    public IndicadorDTO(Integer id, Integer numIndicador, String nombreIndicador, Short estado, 
+            String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, 
+            String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, 
+            String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, 
+            String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, 
+            Date fechaActualizacion, String ajustePdeiId, String nombreTipoIndicador, 
+            Integer anioCumplimientoId, String clasificacionId, String frecuenciaMedicionId, String plazoId, 
+            String unidadRepresentacionId) {
         this.id = id;
         this.numIndicador = numIndicador;
         this.nombreIndicador = nombreIndicador;
@@ -70,6 +81,8 @@ public class IndicadorDTO {
         this.frecuenciaMedicionId = frecuenciaMedicionId;
         this.plazoId = plazoId;
         this.unidadRepresentacionId = unidadRepresentacionId;
+        
+        
     }
 
     public Integer getId() {
@@ -295,6 +308,7 @@ public class IndicadorDTO {
     public void setUnidadRepresentacionId(String unidadRepresentacionId) {
         this.unidadRepresentacionId = unidadRepresentacionId;
     }
+
 
 
     

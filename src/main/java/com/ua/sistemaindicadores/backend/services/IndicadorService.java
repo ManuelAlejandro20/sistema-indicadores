@@ -11,6 +11,7 @@ import com.ua.sistemaindicadores.backend.entities.AjustePdei;
 import com.ua.sistemaindicadores.backend.entities.AnioCumplimiento;
 import com.ua.sistemaindicadores.backend.entities.FrecuenciaMedicion;
 import com.ua.sistemaindicadores.backend.entities.GeneracionDatos;
+import com.ua.sistemaindicadores.backend.entities.Indicador;
 import com.ua.sistemaindicadores.backend.entities.Plazo;
 import com.ua.sistemaindicadores.backend.entities.UnidadProveedora;
 import com.ua.sistemaindicadores.backend.entities.UnidadRepresentacion;
@@ -33,6 +34,11 @@ public class IndicadorService {
     @Inject
     private IndicadorDAO indicadorDAO;
 
+    @RolesAllowed({"ADMINISTRADOR"})
+    public Indicador buscarIndicadorID(Integer indicadorId) {
+        return indicadorDAO.buscarIndicadorID(indicadorId);
+    }        
+    
     @RolesAllowed({"ADMINISTRADOR"})
     public AjustePdei buscarAjustePdeiID(Integer id) {
         return indicadorDAO.buscarAjustePdeiID(id);
@@ -121,4 +127,6 @@ public class IndicadorService {
         return indicadorDAO.contar(filters);
     }    
 
+    
+    
 }

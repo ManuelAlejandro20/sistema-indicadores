@@ -13,6 +13,14 @@
 /* UI ICONS */
 /* positioning */
 
+.textbox-disabled {
+    opacity: 100% !important; 
+}
+
+.without-selectall .ui-selectcheckboxmenu-header .ui-chkbox {
+    display: none; 
+}
+
 .panelgrid-lefttext{
     text-align: left !important;
 }
@@ -50,6 +58,20 @@
 }
 
 .ui-button-formulario:hover {
+    border: 1px solid #ff6600 !important;
+    color: black !important;
+    background: white !important;
+}
+
+.ui-button-convert {
+    margin-left : 10px;
+    border: 1px solid #ff6600 !important;
+    color: #fff;
+    background: #ff6600 !important;
+    transition: all .4s ease !important;
+}
+
+.ui-button-convert:hover {
     border: 1px solid #ff6600 !important;
     color: black !important;
     background: white !important;

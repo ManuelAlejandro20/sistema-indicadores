@@ -5,11 +5,9 @@
  */
 package com.ua.sistemaindicadores.backend.daos;
 
-import com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO;
 import com.ua.sistemaindicadores.backend.dtos.IndicadorDTO;
 import com.ua.sistemaindicadores.backend.entities.AjustePdei;
 import com.ua.sistemaindicadores.backend.entities.AjustePdei_;
-import com.ua.sistemaindicadores.backend.entities.Anio;
 import com.ua.sistemaindicadores.backend.entities.AnioCumplimiento;
 import com.ua.sistemaindicadores.backend.entities.AnioCumplimiento_;
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
@@ -19,7 +17,6 @@ import com.ua.sistemaindicadores.backend.entities.FrecuenciaMedicion_;
 import com.ua.sistemaindicadores.backend.entities.GeneracionDatos;
 import com.ua.sistemaindicadores.backend.entities.GeneracionDatos_;
 import com.ua.sistemaindicadores.backend.entities.Indicador;
-import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo_;
 import com.ua.sistemaindicadores.backend.entities.Indicador_;
 import com.ua.sistemaindicadores.backend.entities.Plazo;
@@ -29,7 +26,6 @@ import com.ua.sistemaindicadores.backend.entities.UnidadProveedora_;
 import com.ua.sistemaindicadores.backend.entities.UnidadRepresentacion;
 import com.ua.sistemaindicadores.backend.entities.UnidadRepresentacion_;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -96,6 +92,10 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
     public IndicadorDAO() {
         super(Indicador.class);
     }
+    
+    public Indicador buscarIndicadorID(Integer indicadorId) {
+        return find(indicadorId);
+    }        
 
     public AjustePdei buscarAjustePdeiID(Integer id) {
         return getEntityManager().find(AjustePdei.class, id);
@@ -174,7 +174,7 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
                 .getResultList();
         return dtos.isEmpty() ? null : dtos.get(0);
     }
-
+    
     public int contar(Map<String, Object> filters) {
         mapJoins.clear(); //limpiar map antes de crear la query
 
@@ -182,8 +182,6 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<Indicador> root = cq.from(Indicador.class);
         cq.select(getEntityManager().getCriteriaBuilder().countDistinct(root));
-        
-        System.out.println("ANTes predicado");
         
         Predicate p = construirPredicado(cb, root, filters);
         
@@ -411,7 +409,7 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
         Join<Indicador, Plazo> joinPlazo = rootIndicador.join(Indicador_.PLAZO_ID, JoinType.INNER);
         Join<Indicador, UnidadRepresentacion> joinUnidadRepresentacion = rootIndicador.join(Indicador_.UNIDAD_REPRESENTACION_ID, JoinType.INNER);                                             
         Join<Indicador, UnidadProveedora> joinUnidadProveedora = null;
-        Join<Indicador, GeneracionDatos> joinGenDatos = null;
+        Join<Indicador, GeneracionDatos> joinGenDatos = null;       
 
         if(filters != null && filters.containsKey(UnidadProveedora_.UNIDAD_PROVEEDORA))
         {
@@ -436,6 +434,8 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
             }
         }
                 
+        System.out.println(Indicador_.ID);
+        
         iq.select(
                 cb.construct(
                         IndicadorDTO.class,

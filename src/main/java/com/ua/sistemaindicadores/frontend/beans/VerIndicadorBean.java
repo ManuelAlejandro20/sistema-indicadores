@@ -24,8 +24,12 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -35,6 +39,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.omnifaces.util.Ajax;
 import org.primefaces.event.FlowEvent;
 
 /**
@@ -112,11 +117,18 @@ public class VerIndicadorBean implements Serializable{
     private List<Date> fechaCreacionRango;
     private List<Date> fechaActualizacionRango;
     
+    private List<String> selectedColumns = new ArrayList<>();
+    private Map<String, String> columnMap = new LinkedHashMap<>();
+    
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     
+    private Indicador indicadorSeleccionado;
+    private String mensajeVerInfoIndicador;
+    
     @PostConstruct
-    public void initalize(){
+    public void initalize(){        
         System.out.println("Inicio Bean Ver Indicador");     
+        initColumnProperties();
         listaIndicadorTipo = tipoIndicadorService.obtenerIndicadorTipos();
         listaClasificaciones = clasificacionService.obtenerClasificaciones();
         listaAjustes = indicadorService.obtenerAjustePdei();
@@ -132,6 +144,25 @@ public class VerIndicadorBean implements Serializable{
     
     public VerIndicadorBean() {
     }
+    
+    public void desplegarIndicador() {
+        //Si el tipoSeleccionado es nulo (ya se porque la página carga por primera vez o porque se borran los filtros)
+        //capturara el parametro de la url, si no es nulo significa que ya cargo el parametro tipo y el filtro tipo
+        //fue fijado
+        if(indicadorSeleccionado == null){
+            Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            try{
+                indicadorSeleccionado = indicadorService.buscarIndicadorID(Integer.valueOf(params.get("i")));
+            }catch(NumberFormatException e){
+                indicadorSeleccionado = null;
+            }
+            if(indicadorSeleccionado != null){
+                mensajeVerInfoIndicador = "Información completa de indicador " + indicadorSeleccionado.getNombreIndicador();                        
+            }else{
+                mensajeVerInfoIndicador = "No hay datos sobre este indicador";                                        
+            }
+        }
+    }    
 
     public Boolean getFiltros() {
         return filtros;
@@ -156,7 +187,46 @@ public class VerIndicadorBean implements Serializable{
     public void setSiguiente(boolean siguiente) {
         this.siguiente = siguiente;
     }
-    
+   
+    private void initColumnProperties(){
+        columnMap.put("numIndicador","N° de Indicador");
+        columnMap.put("nombreIndicador","Nombre de Indicador");
+        columnMap.put("clasificacionId","Clasificación");
+        columnMap.put("nombreTipoIndicador","Tipo");        
+        columnMap.put("estado","Estado");
+        columnMap.put("porcLogro","% Logro");        
+        columnMap.put("descripcionIndicador","Descripción de Indicador");
+        columnMap.put("aplicaLineamiento","Aplica Lineamiento");
+        columnMap.put("aplicaObjetivo","Aplica Objetivo");
+        columnMap.put("descripcionObjetivo","Descripción de Objetivo");
+        columnMap.put("version","Versión");
+        columnMap.put("lineaBase","Linea Base");
+        columnMap.put("metas","Metas");
+        columnMap.put("medioVerificacion","Medio de Verificación");
+        columnMap.put("formaCalculo","Forma de Cálculo");
+        columnMap.put("fuenteInformacion","Fuente de Información");
+        columnMap.put("proyectoAsociado","Proyecto Asociado");
+        columnMap.put("comentario","Comentario");
+        columnMap.put("actividadComprometida","Actividad Comprometida");
+        columnMap.put("estadoActividad","Estado de Actividad");
+        columnMap.put("fechaCreacion","Fecha de Creación");
+        columnMap.put("fechaActualizacion","Fecha de Actualización");
+        columnMap.put("ajustePdeiId","Ajuste PDEI");
+        columnMap.put("nombreTipoIndicador","Tipo de Indicador");
+        columnMap.put("anioCumplimientoId","Año Cumplimiento");
+        columnMap.put("frecuenciaMedicionId","Frecuencia de Medición");
+        columnMap.put("plazoId","Plazo");
+        columnMap.put("unidadRepresentacionId","Unidad de Representación");
+        columnMap.put("unidadProveedoraString","Unidad Proveedora");
+        columnMap.put("generacionDatosString","Generación de Datos");
+
+        selectedColumns.add("numIndicador");
+        selectedColumns.add("nombreIndicador");
+        selectedColumns.add("clasificacionId");
+        selectedColumns.add("nombreTipoIndicador");        
+        selectedColumns.add("estado");
+        selectedColumns.add("porcLogro");          
+    }
     
     
     public void eventofiltros() {
@@ -412,11 +482,7 @@ public class VerIndicadorBean implements Serializable{
 
     public void setGenSeleccionada(GeneracionDatos GenSeleccionada) {
         this.GenSeleccionada = GenSeleccionada;
-    }
-
-    
-    
-    
+    }           
     
     public String getNumIndicadorSeleccionado() {
         return numIndicadorSeleccionado;
@@ -601,9 +667,70 @@ public class VerIndicadorBean implements Serializable{
     public void setFechaActualizacionRango(List<Date> fechaActualizacionRango) {
         this.fechaActualizacionRango = fechaActualizacionRango;
     }       
-                    
+
+    public List<String> getSelectedColumns() {
+        return selectedColumns;
+    }
+
+    public void setSelectedColumns(List<String> selectedColumns) {
+        this.selectedColumns = selectedColumns;
+    }
+
+    public Map<String, String> getColumnMap() {
+        return columnMap;
+    }
+
+    public void setColumnMap(Map<String, String> columnMap) {
+        this.columnMap = columnMap;
+    }                        
+    
+    public String getUnidadesProveedoras(Integer indicadorId){
+        Indicador indicador = indicadorService.buscarIndicadorID(indicadorId);
+        Collection<UnidadProveedora> listaUP = indicador.getUnidadProveedoraCollection();
+        String unidadesProveedoras = "Sin datos";
+        
+        if(listaUP != null){
+            if(listaUP.size() != 0){
+                unidadesProveedoras = "";
+                for(UnidadProveedora up : listaUP){
+                    unidadesProveedoras += up.getUnidadProveedora() + ",\n";
+                }
+                unidadesProveedoras = unidadesProveedoras.substring(0, unidadesProveedoras.length() - 2);  
+            }
+        }
+        return unidadesProveedoras;
+    }    
+    
+    public String getGeneracionesDatos(Integer indicadorId){
+        Indicador indicador = indicadorService.buscarIndicadorID(indicadorId);
+        Collection<GeneracionDatos> listaGD = indicador.getGeneracionDatosCollection();
+        String generacionDatos = "Sin datos";
+        
+        if(listaGD != null){
+            if(listaGD.size() != 0){
+                generacionDatos = "";
+                for(GeneracionDatos gd : listaGD){
+                    generacionDatos += gd.getGeneracionDatos() + ",\n";
+                }
+                generacionDatos = generacionDatos.substring(0, generacionDatos.length() - 2);  
+            }
+        }
+        return generacionDatos;
+    }        
+    
     //Filtros
     
+    public void onChangeListener(){
+        System.out.println("Antes");
+        System.out.println(this.selectedColumns);
+        if(selectedColumns.size() > 6){
+            selectedColumns.remove(6);
+        }
+        System.out.println("Despues");
+        System.out.println(this.selectedColumns);     
+        Ajax.update("form:tableCheckBox");          
+    }
+   
     public void onSeleccionTipoIndicadorListener(){
         try {
             if (indicadorTipoSeleccionado != null) {
@@ -1151,4 +1278,25 @@ public class VerIndicadorBean implements Serializable{
                     );
         }         
     }     
+    
+    //Metodos que se utilizan en la vista desplegar la info de un indicador
+
+    public Indicador getIndicadorSeleccionado() {
+        return indicadorSeleccionado;
+    }
+
+    public void setIndicadorSeleccionado(Indicador indicadorSeleccionado) {
+        this.indicadorSeleccionado = indicadorSeleccionado;
+    }
+
+    public String getMensajeVerInfoIndicador() {
+        return mensajeVerInfoIndicador;
+    }
+
+    public void setMensajeVerInfoIndicador(String mensajeVerInfoIndicador) {
+        this.mensajeVerInfoIndicador = mensajeVerInfoIndicador;
+    }
+    
+    
+    
 }

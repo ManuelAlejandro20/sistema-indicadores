@@ -66,6 +66,15 @@
     </welcome-file-list>
     
     <error-page>
+        <error-code>404</error-code>
+        <location>/faces/404.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/faces/403.xhtml</location>
+    </error-page>    
+    
+    <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/faces/expired.xhtml</location>
     </error-page>
