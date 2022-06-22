@@ -172,7 +172,11 @@
                                 value="#{crearIndicadorBean.ajustePDEI}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="ajustePDEI">
-                                <p:ajax process='@this'/>                                
+                                <p:ajax process='@this'/>
+                                <f:selectItems value="#{crearIndicadorBean.listaAjustePdei}"
+                                               var="ajustePdei"
+                                               itemLabel="#{ajustePdei.ajustePdei}"
+                                               itemValue="#{ajustePdei}"/>                                
                             </p:selectOneMenu>
                             <p:message for="ajustePDEILabel"/>                                     
                             <p:message for="ajustePDEI"/>                              
@@ -184,7 +188,11 @@
                                 value="#{crearIndicadorBean.unidadRepresentacion}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="unidadRepresentacion">
-                                <p:ajax process='@this'/>                                
+                                <p:ajax process='@this'/>  
+                                <f:selectItems value="#{crearIndicadorBean.listaUnidadRepresentacion}"
+                                               var="unidadRepresentacion"
+                                               itemLabel="#{unidadRepresentacion.unidadRepresentacion}"
+                                               itemValue="#{unidadRepresentacion}"/>
                             </p:selectOneMenu>
                             <p:message for="unidadRepresentacionLabel"/>                                     
                             <p:message for="unidadRepresentacion"/>                              
@@ -197,7 +205,11 @@
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="generacionDatos"
                                 multiple = "true">
-                                <p:ajax process='@this'/>                                
+                                <p:ajax process='@this'/>      
+                                <f:selectItems value="#{crearIndicadorBean.listaGeneracionDatos}"
+                                               var="genDatos"
+                                               itemLabel="#{genDatos.generacionDatos}"
+                                               itemValue="#{genDatos}"/>
                             </p:selectCheckboxMenu>
                             <p:message for="generacionDatosLabel"/>                                     
                             <p:message for="generacionDatos"/>                              
@@ -209,7 +221,11 @@
                                 value="#{crearIndicadorBean.plazo}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="plazo">
-                                <p:ajax process='@this'/>                                
+                                <p:ajax process='@this'/>     
+                                <f:selectItems value="#{crearIndicadorBean.listaPlazo}"
+                                               var="plazo"
+                                               itemLabel="#{plazo.plazo}"
+                                               itemValue="#{plazo}"/>
                             </p:selectOneMenu>
                             <p:message for="plazoLabel"/>                                     
                             <p:message for="plazo"/>                              
@@ -403,7 +419,11 @@
                                 value="#{crearIndicadorBean.anioCumplimiento}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="anioCumplimiento">
-                                <p:ajax process='@this'/>                                
+                                <p:ajax process='@this'/>   
+                                <f:selectItems value="#{crearIndicadorBean.listaAnioCumplimiento}"
+                                               var="anioCumplimiento"
+                                               itemLabel="#{anioCumplimiento.anioCumplimiento}"
+                                               itemValue="#{anioCumplimiento}"/>
                             </p:selectOneMenu>
                             <p:message for="anioCumplimientoLabel"/>                                     
                             <p:message for="anioCumplimiento"/>   
@@ -428,7 +448,11 @@
                                 value="#{crearIndicadorBean.frecuenciaMedicion}"
                                 disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                 id="frecuenciaMedicion">
-                                <p:ajax process='@this'/>                                
+                                <p:ajax process='@this'/>   
+                                <f:selectItems value="#{crearIndicadorBean.listaFrecuenciaMedicion}"
+                                               var="frecuenciaMedicion"
+                                               itemLabel="#{frecuenciaMedicion.frecuenciaMedicion}"
+                                               itemValue="#{frecuenciaMedicion}"/>
                             </p:selectOneMenu>
                             <p:message for="frecuenciaMedicionLabel"/>                                     
                             <p:message for="frecuenciaMedicion"/>  

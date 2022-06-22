@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 package com.ua.sistemaindicadores.backend.dtos;
-
-import com.ua.sistemaindicadores.backend.entities.Indicador;
 import java.util.Date;
 
 /**
