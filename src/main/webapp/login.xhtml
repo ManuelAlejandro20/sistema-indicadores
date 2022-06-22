@@ -55,19 +55,21 @@
                         </div>
                         <div class="ui-g-12">
                             <p:commandButton id="submit" 
+                                             widgetVar="submitButton"
                                              class="bg-login"
                                              icon="fa fa-check" 
                                              ajax="false" 
                                              validateClient="true" 
                                              value="Ingresar" 
+                                             onclick="setTimeout('buttonDisable()', 50);"
                                              tabindex="3" />
                         </div>
                         <div class="ui-g-12 ui-md-6">
-                            <a href="#">
+                            <a href="https://socaire.uantof.cl/credenciales/comun/bienvenida.xhtml">
                                 <span class="text-blue">Cambiar mi clave</span></a>
                         </div>
                         <div class="ui-g-12 ui-md-6">
-                            <a href="#">
+                            <a href="https://socaire.uantof.cl/credenciales/solicitud.xhtml">
                                 <span class="text-blue">Olvidé mi clave</span></a>
                         </div>
                     </div>
@@ -81,8 +83,10 @@
 
         <h:outputStylesheet name="css/layout.css" library="omega-layout" />
         <h:outputStylesheet library="css" name="credenciales.min.css" />
+        <h:outputStylesheet library="css" name="dvcme.css"/>
         <h:outputScript library="javascript" name="validarRUT.min.js" /> 
-        <h:outputScript library="javascript" name="credenciales.min.js" /> 
+        <h:outputScript library="javascript" name="credenciales.min.js" />
+        <h:outputScript library="javascript" name="buttonDisable.js" />
         
         <h:outputStylesheet library="webjars" name="font-awesome/5.15.1/css/all.min-jsf.css" />
         <h:outputStylesheet library="webjars" name="font-awesome/5.15.1/css/v4-shims.min-jsf.css" />        
@@ -92,7 +96,7 @@
     <script>                
         window.setInterval("refresh()", 60000 * 29);        
         function refresh(){
-            document.getElementById('submit').disabled = "true";
+            PF('submitButton').disable();
             window.location.reload();
         }
     </script>    

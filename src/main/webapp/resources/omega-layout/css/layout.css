@@ -13,6 +13,10 @@
 /* UI ICONS */
 /* positioning */
 
+.ui-selectonemenu-panel .ui-selectonemenu-filter-container .ui-icon {
+    right: 10% !important;
+}
+
 .textbox-disabled {
     opacity: 100% !important; 
 }
@@ -2224,8 +2228,13 @@ html {
   #login-wrapper .login-footer {
     color: #ffffff;
     font-size: 14px;
-    margin-top: 50px; }
+    margin-top: 20px; }
 
+.footer-page{
+    margin-top: 30px !important;
+}
+  
+  
 @media (max-width: 40em) {
   .login-body {
     padding-top: 50px; }

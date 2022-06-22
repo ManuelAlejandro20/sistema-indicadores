@@ -28,93 +28,93 @@ import java.util.Map;
  */
 @Stateless
 @SecurityDomain("DvcmeCredencialesDomain")
-@RolesAllowed({"ADMINISTRADOR"})
+@RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
 public class IndicadorService {
 
     @Inject
     private IndicadorDAO indicadorDAO;
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public Indicador buscarIndicadorID(Integer indicadorId) {
         return indicadorDAO.buscarIndicadorID(indicadorId);
     }        
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public AjustePdei buscarAjustePdeiID(Integer id) {
         return indicadorDAO.buscarAjustePdeiID(id);
     }
         
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<AjustePdei> obtenerAjustePdei() {
         return indicadorDAO.obtenerAjustePdei();
     }
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public UnidadRepresentacion buscarUnidadRepresentacionID(Integer id) {
         return indicadorDAO.buscarUnidadRepresentacionID(id);
     }    
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<UnidadRepresentacion> obtenerUnidadRepresentacion() {
         return indicadorDAO.obtenerUnidadRepresentacion();
     }
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public Plazo buscarPlazoID(Integer id) {
         return indicadorDAO.buscarPlazoID(id);
     }    
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<Plazo> obtenerPlazo() {
         return indicadorDAO.obtenerPlazo();
     }    
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public AnioCumplimiento buscarAnioCumplimientoID(Integer id) {
         return indicadorDAO.buscarAnioCumplimientoID(id);
     }    
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<AnioCumplimiento> obtenerAnioCumplimiento() {
         return indicadorDAO.obtenerAnioCumplimiento();
     }  
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public FrecuenciaMedicion buscarFrecuenciaMedicionID(Integer id) {
         return indicadorDAO.buscarFrecuenciaMedicionID(id);
     }    
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<FrecuenciaMedicion> obtenerFrecuenciaMedicion() {
         return indicadorDAO.obtenerFrecuenciaMedicion();
     }      
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public GeneracionDatos buscarGeneracionDatosID(Integer id) {
         return indicadorDAO.buscarGeneracionDatosID(id);
     }    
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<GeneracionDatos> obtenerGeneracionDatos() {
         return indicadorDAO.obtenerGeneracionDatos();
     }          
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public UnidadProveedora buscarUnidadProveedoraID(Integer id) {
         return indicadorDAO.buscarUnidadProveedoraID(id);
     }    
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<UnidadProveedora> obtenerUnidadProveedora() {
         return indicadorDAO.obtenerUnidadProveedora();
     }       
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public IndicadorDTO obtenerIndicadorDTO(Integer indicadorId) {
         return indicadorDAO.obtenerIndicadorDTO(indicadorId);
     }
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<IndicadorDTO> cargarIndicadores(int first, int pageSize,
             String sortField,
             String sortOrder,
@@ -122,7 +122,7 @@ public class IndicadorService {
         return indicadorDAO.cargar(first, pageSize, sortField, sortOrder, filters);
     }
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public int contarIndicadores(Map<String, Object> filters) {
         return indicadorDAO.contar(filters);
     }    

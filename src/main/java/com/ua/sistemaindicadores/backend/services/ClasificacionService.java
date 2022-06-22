@@ -21,38 +21,38 @@ import java.util.Map;
  */
 @Stateless
 @SecurityDomain("DvcmeCredencialesDomain")
-@RolesAllowed({"ADMINISTRADOR"})
+@RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
 public class ClasificacionService {
 
     @Inject
     private ClasificacionDAO clasificacionDAO;
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public void crearClasificacion(Clasificacion clasificacion) {
         clasificacionDAO.create(clasificacion);
     }
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public void actualizarClasificacion(Clasificacion clasificacion) {
         clasificacionDAO.edit(clasificacion);
     }
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<Clasificacion> obtenerClasificaciones() {
         return clasificacionDAO.obtenerClasificaciones();
     }
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public int contarClasificaciones(Map<String, Object> filters) {
         return clasificacionDAO.contar(filters);
     }
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public ClasificacionDTO obtenerClasificacionDTO(Integer clasificacionId) {
         return clasificacionDAO.obtenerClasificacionDTO(clasificacionId);
     }
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public List<ClasificacionDTO> cargarClasificaciones(int first, int pageSize,
             String sortField,
             String sortOrder,
@@ -60,12 +60,12 @@ public class ClasificacionService {
         return clasificacionDAO.cargar(first, pageSize, sortField, sortOrder, filters);
     }
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public Clasificacion buscarClasificacionID(Integer id) {
         return clasificacionDAO.buscarClasificacionID(id);
     }
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public Clasificacion buscarClasificacionTipo(String tipo) {
         return clasificacionDAO.buscarClasificacionTipo(tipo);
     }

@@ -21,55 +21,55 @@ import org.jboss.ejb3.annotation.SecurityDomain;
  */
 @Stateless
 @SecurityDomain("DvcmeCredencialesDomain")
-@RolesAllowed({"ADMINISTRADOR"})
+@RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
 public class TipoIndicadorService {
 
     @Inject
     private IndicadorTipoDAO indicadorTipoDAO;
 
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public void crearTipoIndicador(IndicadorTipo indicadorTipo) {
         indicadorTipoDAO.create(indicadorTipo);
     }
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public void actualizarTipoIndicador(IndicadorTipo indicadorTipo) {
         indicadorTipoDAO.edit(indicadorTipo);
     } 
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public IndicadorTipo buscarTipoIndicadorNombre(String nombre) {
         return indicadorTipoDAO.buscarTipoIndicadorNombre(nombre);
     }    
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public boolean checkTipoIndicadorExists(String nombre) {
         return indicadorTipoDAO.checkTipoIndicadorExists(nombre);
     }        
         
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<IndicadorTipo> obtenerIndicadorTipos()
     {
         return indicadorTipoDAO.obtenerIndicadorTipos();
     }  
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<IndicadorTipo> obtenerTiposIndicadoresByEstado(Short estado)
     {
         return indicadorTipoDAO.obtenerTiposIndicadoresByEstado(estado);
     }      
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public int contarTipoIndicadores(Map<String, Object> filters) {
         return indicadorTipoDAO.contar(filters);
     }    
     
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public TipoIndicadorDTO obtenerTipoIndicadorDTO(Integer tipoIndicadorId) {
         return indicadorTipoDAO.obtenerTipoIndicadorDTO(tipoIndicadorId);
     }    
    
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public List<TipoIndicadorDTO> cargarTipoIndicadores(int first, int pageSize,
             String sortField,
             String sortOrder,
@@ -77,7 +77,7 @@ public class TipoIndicadorService {
         return indicadorTipoDAO.cargar(first, pageSize, sortField, sortOrder, filters);
     }    
  
-    @RolesAllowed({"ADMINISTRADOR"})
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public IndicadorTipo buscarTipoIndicadorID(Integer id){
         return indicadorTipoDAO.buscarTipoIndicadorID(id);
     }
