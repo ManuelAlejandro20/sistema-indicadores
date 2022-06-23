@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.util.Ajax;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.FlowEvent;
 
 /**
  *
@@ -49,6 +50,8 @@ public class CrearIndicadorBean implements Serializable {
 
     private String vigencia;
 
+    private boolean siguiente;
+
     //
     private String n_indicador;
     private String nombreIndicador;
@@ -58,7 +61,7 @@ public class CrearIndicadorBean implements Serializable {
     private String descripcionObjetivo;
     private String ajustePDEI;
     private String unidadRepresentacion;
-    private String generacionDatos;
+    private String[] generacionDatos;
     private String plazo;
     private String version;
     private String lineaBase;
@@ -80,7 +83,7 @@ public class CrearIndicadorBean implements Serializable {
     private String medioVerificacion;
     private String formaCalculo;
     private String fuenteInformacion;
-    private String unidadProveedora;
+    private String[] unidadProveedora;
     private String proyectoAsociado;
     private String comentario;
     private String actividadComprometida;
@@ -89,6 +92,8 @@ public class CrearIndicadorBean implements Serializable {
     private FlagImpl flagImpl;
     private Flag flagsTipoIndicador;
 
+    //SELECTS
+    private Collection<Clasificacion> listaClasificacion;
     private List<IndicadorTipo> listaIndicadorTipo;
     private List<IndicadorTipo> listaIndicadorTipoVigente;
     private List<IndicadorTipo> listaIndicadorTipoNoVigente;
@@ -99,11 +104,11 @@ public class CrearIndicadorBean implements Serializable {
     private List<Plazo> listaPlazo;
     private List<FrecuenciaMedicion> listaFrecuenciaMedicion;
     private List<UnidadRepresentacion> listaUnidadRepresentacion;
+
+    //SELECT seleccionados
     private List<String> listaUnidadesSeleccionadas;
     private List<String> listaGeneracionesSeleccionadas;
     private IndicadorTipo indicadorTipoSeleccionado;
-
-    private Collection<Clasificacion> listaClasificacion;
     private Clasificacion clasificacionSeleccionada;
 
     @PostConstruct
@@ -276,6 +281,15 @@ public class CrearIndicadorBean implements Serializable {
         System.out.println(descripcionIndicador);
     }
 
+    public String flujoProceso(FlowEvent event) {
+        if (siguiente) {
+            siguiente = false; //reset in case user goes back
+            return "confirm";
+        } else {
+            return event.getNewStep();
+        }
+    }
+
     public ClasificacionService getClasificacionService() {
         return clasificacionService;
     }
@@ -372,11 +386,11 @@ public class CrearIndicadorBean implements Serializable {
         this.unidadRepresentacion = unidadRepresentacion;
     }
 
-    public String getGeneracionDatos() {
+    public String[] getGeneracionDatos() {
         return generacionDatos;
     }
 
-    public void setGeneracionDatos(String generacionDatos) {
+    public void setGeneracionDatos(String[] generacionDatos) {
         this.generacionDatos = generacionDatos;
     }
 
@@ -548,11 +562,11 @@ public class CrearIndicadorBean implements Serializable {
         this.fuenteInformacion = fuenteInformacion;
     }
 
-    public String getUnidadProveedora() {
+    public String[] getUnidadProveedora() {
         return unidadProveedora;
     }
 
-    public void setUnidadProveedora(String unidadProveedora) {
+    public void setUnidadProveedora(String[] unidadProveedora) {
         this.unidadProveedora = unidadProveedora;
     }
 
@@ -723,6 +737,5 @@ public class CrearIndicadorBean implements Serializable {
     public void setClasificacionSeleccionada(Clasificacion clasificacionSeleccionada) {
         this.clasificacionSeleccionada = clasificacionSeleccionada;
     }
-
 
 }
