@@ -29,7 +29,7 @@
                                         value="Indicadores" 
                                         icon="fa fa-chart-line"
                                         outcome="/indicadores/ver-indicador"/>
-                            <p:submenu id="admin" label="Administración" icon="fa fa-project-diagram">
+                            <p:submenu id="admin" label="Administración" icon="fa fa-project-diagram" rendered="#{usuarioBean.rolAdministrador || usuarioBean.rolUsuarioAdministradorSeguimiento}">
                                 <p:menuitem class="submenu" id="tipo_ind" value="Tipos de Indicadores" icon="fa fa-file-contract" outcome="/administracion/admin-tipo-indicador"/>
                                 <p:menuitem class="submenu" id="clas" value="Clasificaciones" icon="fa fa-sort-numeric-up" outcome="/administracion/admin-clasificacion"/>
                                 <p:menuitem class="submenu" id="ind" value="Indicadores" icon="fa fa-table" outcome="/administracion/admin-indicador"/>
@@ -42,15 +42,6 @@
                                         value="Ayuda" 
                                         icon="fa fa-medkit" 
                                         outcome="/ayuda/ayuda"/>
-                            <p:menuitem id="salir"
-                                        value="Cerrar Sesión"
-                                        immediate="true"
-                                        ajax="false"
-                                        icon="fa fa-fw fa-sign-out"
-                                        title="Cerrar la sesión en el sistema"
-                                        action="/login.xhtml?faces-redirect=true"
-                                        actionListener="#{usuarioBean.cerrarSesion}"                                    
-                                        />
                         </po:menu>
                     </div>
                 </div>

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -40,6 +39,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.util.Ajax;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
 
 /**
@@ -718,19 +718,12 @@ public class VerIndicadorBean implements Serializable{
         return generacionDatos;
     }        
     
+    public void checkColumns(){       
+        PrimeFaces.current().executeScript("checkColumns("+ selectedColumns.size() +");");
+    }
+    
     //Filtros
     
-    public void onChangeListener(){
-        System.out.println("Antes");
-        System.out.println(this.selectedColumns);
-        if(selectedColumns.size() > 6){
-            selectedColumns.remove(6);
-        }
-        System.out.println("Despues");
-        System.out.println(this.selectedColumns);     
-        Ajax.update("form:tableCheckBox");          
-    }
-   
     public void onSeleccionTipoIndicadorListener(){
         try {
             if (indicadorTipoSeleccionado != null) {

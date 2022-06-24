@@ -506,11 +506,18 @@
             </p:panel>
         </div>         
         <div class="ui-g-12">
+            <h4>Columnas desplegadas
+                <p:commandButton value="Convertir tabla a archivo .XLSX" class="ui-button-convert" ajax="false">                
+                    <p:dataExporter type="xlsx" target="_indicadores_" fileName="indicadores"/>                    
+                </p:commandButton>  
+            </h4>             
             <p:selectCheckboxMenu id="tableCheckBox" value="#{verIndicadorBean.selectedColumns}" label="Columnas desplegadas" 
                                     widgetVar="columns"
+                                    onShow="checkColumns(#{verIndicadorBean.selectedColumns.size()})"
                                     panelStyleClass="without-selectall"
                                     filter="true" 
-                                    filterMatchMode="startsWith"                                
+                                    filterMatchMode="startsWith"
+                                    multiple="true"
                                     dynamic="true">
                 <f:selectItems value="#{verIndicadorBean.columnMap.entrySet()}" 
                               var="entry"
@@ -519,13 +526,11 @@
                               />
                 <p:ajax event="change" 
                         update="@form:indicadores, @form:tableCheckBox" 
-                        oncomplete="fun()"
-                        />                       
+                        oncomplete="#{verIndicadorBean.checkColumns()}"
+                        />              
             </p:selectCheckboxMenu>  
-            <p:commandButton value="Convertir a archivo .XLSX"  
-                             class="ui-button-convert" ajax="false">                
-                    <p:dataExporter type="xlsx" target="_indicadores_" fileName="indicadores"/>                    
-            </p:commandButton>                     
+            <p:remoteCommand name="updateTableCheckBox" update="tableCheckBox" />
+            <p:remoteCommand name="updateIndicadores" update="indicadores" /> 
         </div>
         <div class="ui-g-12">
             <p:dataTable                           
@@ -549,14 +554,16 @@
                          >
                 <f:facet name="header">
                     <div style="height: 20px;">
-                        <span>Lista de indicadores</span>
-                    </div>
-                </f:facet>                 
-                <p:columns value="#{verIndicadorBean.selectedColumns}" var="colKey">
+                        <span>Lista de indicadores</span>              
+                              
+                    </div>                            
+                </f:facet>              
+                <p:columns value="#{verIndicadorBean.selectedColumns}" var="colKey" styleClass="align-center">
                     <f:facet name="header">
                         <h:outputText value="#{verIndicadorBean.columnMap[colKey]}"/>                        
                     </f:facet>
                     <h:outputText rendered="#{colKey != 'fechaCreacion' and colKey != 'fechaActualizacion'}" 
+                                  styleClass="align-center"
                                   value="#{colKey eq 'estado' ? 
                                            indicadorDTO[colKey] == 1 ? 'VIGENTE' : 'NO VIGENTE'
                                           :colKey eq 'porcLogro' ?
@@ -568,6 +575,7 @@
                                           :indicadorDTO[colKey]}" >                        
                     </h:outputText>
                     <h:outputText rendered="#{colKey == 'fechaCreacion' or colKey == 'fechaActualizacion'}" 
+                                  styleClass="align-center"
                                   value="#{indicadorDTO[colKey]}" >
                         <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
                     </h:outputText>                    
@@ -779,53 +787,6 @@
                     </h:outputText>                         
                 </p:column>                  
             </p:dataTable>
-        </div>      
-        
-        <script>                
-            function fun(){
-                var cnt = 0;
-                var elemento = document.getElementById("form:tableCheckBox").getElementsByTagName('input');
-                for ( var i in elemento ) {
-                    if ( elemento[i].type==='checkbox' ) {
-                        console.log(elemento[i].value);
-                        if ( elemento[i].checked ) {
-                            cnt++;
-                        }
-                    }
-                }                        
-                console.log(cnt);
-                if(cnt === 6){                    
-                    var tableCheckBox = PF('columns');   
-                    for ( var i in elemento ) {
-                        if ( elemento[i].type==='checkbox' ) {
-                            if ( !elemento[i].checked ) {
-                                elemento[i].disabled = false;
-                            }
-                        }
-                    }              
-                    tableCheckBox.hide();                      
-                }                
-                if(cnt === 7){                    
-                    var tableCheckBox = PF('columns');   
-                    for ( var i in elemento ) {
-                        if ( elemento[i].type==='checkbox' ) {
-                            if ( !elemento[i].checked ) {
-                                elemento[i].disabled = true;
-                            }
-                        }
-                    }              
-                    tableCheckBox.hide();                      
-                }
-                
-                
-
-//                console.log(tableCheckBox);
-//                tableCheckBox.inputs.each(function(index){
-//                        $(tableCheckBox.inputs[index]).prop('checked', false);
-//                });	       
-//                //document.getElementById('form:btnHidden').click();
-            }          
-        </script>            
-        
+        </div>                  
     </ui:define>
 </ui:composition>

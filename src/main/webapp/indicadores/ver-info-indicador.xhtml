@@ -74,7 +74,7 @@
                             <p:outputLabel id="unidadR" value="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion}"/>  
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="GENERACIÓN DE LOS DATOS:"/>    
-                            <p:outputLabel id="genDatos" value="#{verIndicadorBean.getGeneracionesDatos(verIndicadorBean.indicadorSeleccionado.id)}"/>       
+                            <p:outputLabel id="genDatos" value="#{verIndicadorBean.indicadorSeleccionado eq null ? 'Sin datos' : verIndicadorBean.getGeneracionesDatos(verIndicadorBean.indicadorSeleccionado.id)}"/>       
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="PLAZO:"/>    
                             <p:outputLabel id="plazo" value="#{verIndicadorBean.indicadorSeleccionado.plazoId.plazo}"/>      
@@ -104,7 +104,7 @@
                             <p:outputLabel id="finfo" value="#{verIndicadorBean.indicadorSeleccionado.fuenteInformacion}"/>     
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="UNIDAD PROVEEDORA:"/>    
-                            <p:outputLabel id="uprov" value="#{verIndicadorBean.getUnidadesProveedoras(verIndicadorBean.indicadorSeleccionado.id)}"/>       
+                            <p:outputLabel id="uprov" value="#{verIndicadorBean.indicadorSeleccionado eq null ?  'Sin datos' : verIndicadorBean.getUnidadesProveedoras(verIndicadorBean.indicadorSeleccionado.id)}"/>       
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="PROYECTO ASOCIADO:"/>    
                             <p:outputLabel id="proyAs" value="#{verIndicadorBean.indicadorSeleccionado.proyectoAsociado}"/>    

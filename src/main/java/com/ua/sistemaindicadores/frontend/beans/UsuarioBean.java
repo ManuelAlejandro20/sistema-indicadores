@@ -52,6 +52,9 @@ public class UsuarioBean implements Serializable {
     private boolean rolUsuarioInternoOtlConvenio;
     private boolean rolUsuarioInternoRectoriaConvenio;
     private boolean rolSecretariaGeneral;
+    private boolean rolUsuarioAdministradorSeguimiento;
+    private boolean rolUsuarioInternoSeguimiento;
+    private boolean rolUsuarioExternoSeguimiento;
     private Usuario usuario;
     /**
      * Creates a new instance of UsuarioBean
@@ -76,6 +79,9 @@ public class UsuarioBean implements Serializable {
             rolUsuarioInternoOtlConvenio = FacesContext.getCurrentInstance().getExternalContext().isUserInRole("USUARIO_INTERNO_OTL_CONVENIO");
             rolUsuarioInternoRectoriaConvenio = FacesContext.getCurrentInstance().getExternalContext().isUserInRole("USUARIO_INTERNO_RECTORIA_CONVENIO");
             rolSecretariaGeneral = FacesContext.getCurrentInstance().getExternalContext().isUserInRole("SECRETARIA_GENERAL_CONVENIO");
+            rolUsuarioAdministradorSeguimiento = FacesContext.getCurrentInstance().getExternalContext().isUserInRole("USUARIO_ADMINISTRADOR_SEGUIMIENTO");;
+            rolUsuarioInternoSeguimiento = FacesContext.getCurrentInstance().getExternalContext().isUserInRole("USUARIO_INTERNO_SEGUIMIENTO");;
+            rolUsuarioExternoSeguimiento = FacesContext.getCurrentInstance().getExternalContext().isUserInRole("USUARIO_EXTERNO_SEGUIMIENTO");;            
             Integer rut;
             try
             {
@@ -219,5 +225,31 @@ public class UsuarioBean implements Serializable {
     public void setRolSecretariaGeneral(boolean rolSecretariaGeneral) {
         this.rolSecretariaGeneral = rolSecretariaGeneral;
     }
+
+    public boolean isRolUsuarioAdministradorSeguimiento() {
+        return rolUsuarioAdministradorSeguimiento;
+    }
+
+    public void setRolUsuarioAdministradorSeguimiento(boolean rolUsuarioAdministradorSeguimiento) {
+        this.rolUsuarioAdministradorSeguimiento = rolUsuarioAdministradorSeguimiento;
+    }
+
+    public boolean isRolUsuarioInternoSeguimiento() {
+        return rolUsuarioInternoSeguimiento;
+    }
+
+    public void setRolUsuarioInternoSeguimiento(boolean rolUsuarioInternoSeguimiento) {
+        this.rolUsuarioInternoSeguimiento = rolUsuarioInternoSeguimiento;
+    }
+
+    public boolean isRolUsuarioExternoSeguimiento() {
+        return rolUsuarioExternoSeguimiento;
+    }
+
+    public void setRolUsuarioExternoSeguimiento(boolean rolUsuarioExternoSeguimiento) {
+        this.rolUsuarioExternoSeguimiento = rolUsuarioExternoSeguimiento;
+    }
+    
+    
     
 }
