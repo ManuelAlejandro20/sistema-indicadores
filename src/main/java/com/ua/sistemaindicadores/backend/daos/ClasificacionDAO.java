@@ -67,6 +67,15 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
     public Clasificacion buscarClasificacionTipo(String tipo) {
         return find(tipo);
     }
+    
+    public boolean checkClasificacionExists(String nombre, String tipo) {
+        List<Clasificacion> ti = getEntityManager()
+                .createNamedQuery("Clasificacion.checkClasificacionExists", Clasificacion.class)
+                .setParameter("nombre", nombre)
+                .setParameter("tipo", tipo)
+                .getResultList();
+        return !ti.isEmpty();
+    }           
 
     public ClasificacionDTO obtenerClasificacionDTO(Integer clasificacionId) {
         List<ClasificacionDTO> dtos = getEntityManager()

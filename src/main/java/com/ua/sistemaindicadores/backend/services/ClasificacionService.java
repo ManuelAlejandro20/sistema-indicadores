@@ -69,4 +69,9 @@ public class ClasificacionService {
     public Clasificacion buscarClasificacionTipo(String tipo) {
         return clasificacionDAO.buscarClasificacionTipo(tipo);
     }
+    
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public boolean checkClasificacionExists(String nombre, String tipo) {
+        return clasificacionDAO.checkClasificacionExists(nombre, tipo);
+    }            
 }

@@ -25,6 +25,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,8 +43,12 @@ public class VerClasificacionBean implements Serializable {
     private ClasificacionLazyDataModel model;
     @Inject
     transient private TipoIndicadorService tipoIndicadorService;
+    @Inject
+    transient private ClasificacionService clasificacionService;    
     
-    private String nombreSeleccionado;
+    private List<Clasificacion> listaClasificaciones;
+    private Clasificacion clasSeleccionada;    
+    
     private String estadoSeleccionado;
     private IndicadorTipo tipoSeleccionado;
     private String descripcionSeleccionada;
@@ -65,6 +70,7 @@ public class VerClasificacionBean implements Serializable {
     public void initalize() {
         System.out.println("Inicio Bean Ver Tipo Indicador");
         listaIndicadorTipo = tipoIndicadorService.obtenerIndicadorTipos();
+        listaClasificaciones = clasificacionService.obtenerClasificaciones();
         filtros = true;
         mensajeFiltros = "Mostrar filtros";
     }
@@ -91,13 +97,13 @@ public class VerClasificacionBean implements Serializable {
         this.clasificacionSeleccionadoDTO = clasificacionSeleccionadoDTO;
     }
 
-    public String getNombreSeleccionado() {
-        return nombreSeleccionado;
+    public Clasificacion getClasSeleccionada() {
+        return clasSeleccionada;
     }
 
-    public void setNombreSeleccionado(String nombreSeleccionado) {
-        this.nombreSeleccionado = nombreSeleccionado;
-    }
+    public void setClasSeleccionada(Clasificacion clasSeleccionada) {
+        this.clasSeleccionada = clasSeleccionada;
+    }   
 
     public String getEstadoSeleccionado() {
         return estadoSeleccionado;
@@ -163,6 +169,14 @@ public class VerClasificacionBean implements Serializable {
         this.listaIndicadorTipo = listaIndicadorTipo;
     }
 
+    public List<Clasificacion> getListaClasificaciones() {
+        return listaClasificaciones;
+    }
+
+    public void setListaClasificaciones(List<Clasificacion> listaClasificaciones) {
+        this.listaClasificaciones = listaClasificaciones;
+    }        
+
     public String getMensajeVerClasifiaciones() {
         return mensajeVerClasifiaciones;
     }
@@ -184,13 +198,13 @@ public class VerClasificacionBean implements Serializable {
 
     public void limpiarFiltros() {
         try {
-            nombreSeleccionado = null;
+            clasSeleccionada = null;
             tipoSeleccionado = null;
             estadoSeleccionado = null;            
             descripcionSeleccionada = null;
             anioCreacionSeleccionado = null;
             anioActualizacionSeleccionado = null;                       
-            onSeleccionNombreListener();
+            onSeleccionClasificacionListener();
             onSeleccionTipoListener();
             onSeleccionEstadoListener();             
             onSeleccionDescripcionListener();
@@ -206,7 +220,7 @@ public class VerClasificacionBean implements Serializable {
                     );
         }
     }
-
+    
     public void desplegarTipoIndicador() {
         //Si el tipoSeleccionado es nulo (ya se porque la página carga por primera vez o porque se borran los filtros)
         //capturara el parametro de la url, si no es nulo significa que ya cargo el parametro tipo y el filtro tipo
@@ -224,12 +238,13 @@ public class VerClasificacionBean implements Serializable {
             onSeleccionEstadoListener();
         }
     }
+   
 
     //Filtros
-    public void onSeleccionNombreListener() {
+    public void onSeleccionClasificacionListener() {
         try {
-            if (nombreSeleccionado != null) {
-                model.setNombre(nombreSeleccionado);
+            if (clasSeleccionada != null) {
+                model.setNombre(clasSeleccionada.getNombre());
             } else {
                 model.setNombre(null);
             }
@@ -247,9 +262,13 @@ public class VerClasificacionBean implements Serializable {
         try {
             if (tipoSeleccionado != null) {
                 model.setTipo(tipoSeleccionado.getNombre());
+                listaClasificaciones = new ArrayList<>(tipoSeleccionado.getClasificacionCollection());                
             } else {
                 model.setTipo(null);
+                listaClasificaciones = clasificacionService.obtenerClasificaciones();                
             }
+            clasSeleccionada = null;
+            onSeleccionClasificacionListener();            
         } catch (EJBException ex) {
             Logger.getLogger(Clasificacion.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance()
