@@ -122,35 +122,12 @@ public class VerIndicadorBean implements Serializable{
     private List<Date> fechaActualizacionRango;
     
     private List<Boolean> visibleColumns;
-    private List<String> nameColumns;
-    private List<String> selectedColumns;    
-    private Integer ultimaColumnaIndex = -1;
+    private List<Integer> selectedColumns;    
     
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     
     private Indicador indicadorSeleccionado;
     private String mensajeVerInfoIndicador;
-
-    public List<String> getNameColumns() {
-        return nameColumns;
-    }
-
-    public void setNameColumns(List<String> nameColumns) {
-        this.nameColumns = nameColumns;
-    }
-
-    public Integer getUltimaColumnaIndex() {
-        return ultimaColumnaIndex;
-    }
-
-    public void setUltimaColumnaIndex(Integer ultimaColumnaIndex) {
-        this.ultimaColumnaIndex = ultimaColumnaIndex;
-    }
-
-
-    
-    
-    
     
     @PostConstruct
     public void initalize(){        
@@ -201,43 +178,8 @@ public class VerIndicadorBean implements Serializable{
                 false,//Estado actividad               
                 false,//Fecha de creacion 
                 false);//Fecha de actualizacion      
-        
-        nameColumns = Arrays.asList(
-                "Tipo de indicador",
-                "Clasificación",
-                "Estado",
-                "Descripción indicador",
-                "Aplica lineamiento",
-                "Aplica objetivo",
-                "Descripción objetivo", 
-                "Ajuste PDEI", 
-                "Unidad de representación", 
-                "Generación de datos",                 
-                "Plazo", 
-                "Versión", 
-                "Linea base", 
-                "Metas", 
-                "Año Cumplimiento", 
-                "% Logro", 
-                "Frecuencia medición",
-                "Medio verificación",
-                "Forma de cálculo",
-                "Fuente de información", 
-                "Unidad proveedora",                   
-                "Proyecto asociado", 
-                "Comentario", 
-                "Actividad comprometida", 
-                "Estado actividad",               
-                "Fecha de creacion", 
-                "Fecha de actualizacion");          
-        
-        selectedColumns = new LinkedList<String>(Arrays.asList(
-                "Tipo de indicador",
-                "Clasificación",
-                "Estado",
-                "% Logro", 
-                "Frecuencia medición"                
-        ));
+                       
+        selectedColumns = new LinkedList<Integer>(Arrays.asList(0,1,2,15,16));
             
     }
     
@@ -340,14 +282,14 @@ public class VerIndicadorBean implements Serializable{
     public void toggleProceso(ToggleEvent e){
         Integer indexElemento = (Integer) e.getData() - 2;
 
-        if(selectedColumns.contains(nameColumns.get(indexElemento))){
-            selectedColumns.remove(nameColumns.get(indexElemento));
+        if(selectedColumns.contains(indexElemento)){
+            selectedColumns.remove(indexElemento);
         }else{
-            selectedColumns.add(nameColumns.get(indexElemento));
+            selectedColumns.add(indexElemento);
         }        
                             
         if(selectedColumns.size() == 7){   
-            selectedColumns.remove(nameColumns.get(indexElemento));
+            selectedColumns.remove(indexElemento);
             PrimeFaces.current().executeScript("handleCheckBox("+ indexElemento +");");
             FacesContext.getCurrentInstance().addMessage("mensaje", 
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN", 
@@ -787,11 +729,11 @@ public class VerIndicadorBean implements Serializable{
         this.visibleColumns = visibleColumns;
     }
 
-    public List<String> getSelectedColumns() {
+    public List<Integer> getSelectedColumns() {
         return selectedColumns;
     }
 
-    public void setSelectedColumns(List<String> selectedColumns) {
+    public void setSelectedColumns(List<Integer> selectedColumns) {
         this.selectedColumns = selectedColumns;
     }
                

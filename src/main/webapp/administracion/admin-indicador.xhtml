@@ -528,16 +528,16 @@
                          reflow="true"                         
                          selection="#{verIndicadorBean.indicadorSeleccionadoDTO}" 
                          rowKey="#{indicadorDTO.id}"   
-                         >                                
+                         >                  
                 <f:facet name="header">
-                    <div>
-                        Lista de indicadores
-                        <p:commandButton id="toggler" widgetVar="buttonToggler" type="button" class="ui-button-formulario" value="Columnas desplegadas" icon="fa fa-bars"/>
+                    <div style="height: 22px;">
+                        <span class="texto-ver-centrado">Lista de indicadores</span>
+                        <p:commandButton id="toggler" widgetVar="buttonToggler" style="float:right" type="button" class="ui-button-formulario" value="Columnas desplegadas" icon="fa fa-bars"/>
                          <p:columnToggler id="columnToggler" widgetVar="cToggler" datasource="indicadores" trigger="toggler" >
                              <p:ajax event="toggle" update="@form:growl" listener="#{verIndicadorBean.toggleProceso}"></p:ajax>                         
-                         </p:columnToggler>         
+                         </p:columnToggler>                               
                     </div>
-                </f:facet> 
+                </f:facet>                       
                 <p:column headerText="N° de indicador"  
                           toggleable="false"
                           styleClass="align-center">                 

@@ -13,6 +13,10 @@
 /* UI ICONS */
 /* positioning */
 
+.ui-columntoggler .ui-columntoggler-close{
+    margin-top: 10px !important;
+}
+
 .ui-selectonemenu-panel .ui-selectonemenu-filter-container .ui-icon {
     right: 10% !important;
 }
