@@ -505,39 +505,16 @@
                 </p:wizard>                                                
             </p:panel>
         </div>         
-        <div class="ui-g-12">
-            <h4>Columnas desplegadas
-                <p:commandButton value="Convertir tabla a archivo .XLSX" class="ui-button-convert" ajax="false">                
-                    <p:dataExporter type="xlsx" target="_indicadores_" fileName="indicadores"/>                    
-                </p:commandButton>  
-            </h4>             
-            <p:selectCheckboxMenu id="tableCheckBox" value="#{verIndicadorBean.selectedColumns}" label="Columnas desplegadas" 
-                                    widgetVar="columns"
-                                    onShow="checkColumns(#{verIndicadorBean.selectedColumns.size()})"
-                                    panelStyleClass="without-selectall"
-                                    filter="true" 
-                                    filterMatchMode="startsWith"
-                                    multiple="true"
-                                    dynamic="true">
-                <f:selectItems value="#{verIndicadorBean.columnMap.entrySet()}" 
-                              var="entry"
-                              itemValue="#{entry.key}"
-                              itemLabel="#{entry.value}"
-                              />
-                <p:ajax event="change" 
-                        update="@form:indicadores, @form:tableCheckBox" 
-                        oncomplete="#{verIndicadorBean.checkColumns()}"
-                        />              
-            </p:selectCheckboxMenu>  
-            <p:remoteCommand name="updateTableCheckBox" update="tableCheckBox" />
-            <p:remoteCommand name="updateIndicadores" update="indicadores" /> 
-        </div>
+        <div class="ui-g-12">          
+            <p:commandButton value="Convertir tabla a archivo .XLSX" class="ui-button-formulario" ajax="false">                
+                <p:dataExporter type="xlsx" target="indicadores" fileName="indicadores"/>                    
+            </p:commandButton>                                       
+        </div>    
         <div class="ui-g-12">
             <p:dataTable                           
                          id="indicadores"
                          var="indicadorDTO" 
-                         value="#{verIndicadorBean.model}"
-                         widgetVar="tablaIndicador"                         
+                         value="#{verIndicadorBean.model}"                         
                          lazy="true"
                          paginator="true"
                          rows="10"
@@ -548,39 +525,203 @@
                          sortMode="single"
                          sortBy="#{indicadorDTO.id}"
                          emptyMessage="No se recuperaron registros"
-                         reflow="true"
-                         selection="#{verIndicadorBean.indicadorSeleccionadoDTO}"
+                         reflow="true"                         
+                         selection="#{verIndicadorBean.indicadorSeleccionadoDTO}" 
                          rowKey="#{indicadorDTO.id}"   
-                         >
+                         >                                
                 <f:facet name="header">
-                    <div style="height: 20px;">
-                        <span>Lista de indicadores</span>              
-                              
-                    </div>                            
-                </f:facet>              
-                <p:columns value="#{verIndicadorBean.selectedColumns}" var="colKey" styleClass="align-center">
-                    <f:facet name="header">
-                        <h:outputText value="#{verIndicadorBean.columnMap[colKey]}"/>                        
-                    </f:facet>
-                    <h:outputText rendered="#{colKey != 'fechaCreacion' and colKey != 'fechaActualizacion'}" 
-                                  styleClass="align-center"
-                                  value="#{colKey eq 'estado' ? 
-                                           indicadorDTO[colKey] == 1 ? 'VIGENTE' : 'NO VIGENTE'
-                                          :colKey eq 'porcLogro' ?
-                                           indicadorDTO[colKey].concat('%')
-                                          :colKey eq 'unidadProveedoraString' ?
-                                          verIndicadorBean.getUnidadesProveedoras(indicadorDTO.id)                                          
-                                          :colKey eq 'generacionDatosString' ?
-                                          verIndicadorBean.getGeneracionesDatos(indicadorDTO.id)
-                                          :indicadorDTO[colKey]}" >                        
-                    </h:outputText>
-                    <h:outputText rendered="#{colKey == 'fechaCreacion' or colKey == 'fechaActualizacion'}" 
-                                  styleClass="align-center"
-                                  value="#{indicadorDTO[colKey]}" >
+                    <div>
+                        Lista de indicadores
+                        <p:commandButton id="toggler" widgetVar="buttonToggler" type="button" class="ui-button-formulario" value="Columnas desplegadas" icon="fa fa-bars"/>
+                         <p:columnToggler id="columnToggler" widgetVar="cToggler" datasource="indicadores" trigger="toggler" >
+                             <p:ajax event="toggle" update="@form:growl" listener="#{verIndicadorBean.toggleProceso}"></p:ajax>                         
+                         </p:columnToggler>         
+                    </div>
+                </f:facet> 
+                <p:column headerText="N° de indicador"  
+                          toggleable="false"
+                          styleClass="align-center">                 
+                    <h:outputText value="#{indicadorDTO.numIndicador eq null?'Sin dato':indicadorDTO.numIndicador }">
+                        <f:convertNumber integerOnly="true"/>
+                    </h:outputText>                    
+                </p:column>                
+                <p:column headerText="Nombre de indicador"
+                          toggleable="false"                          
+                          styleClass="align-center">                 
+                    <h:outputText value="#{indicadorDTO.nombreIndicador eq null?'Sin dato':indicadorDTO.nombreIndicador }">
+                    </h:outputText>                    
+                </p:column>
+                <p:column headerText="Tipo de indicador"
+                          visible="#{verIndicadorBean.visibleColumns[0]}"
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.nombreTipoIndicador eq null?'Sin dato':indicadorDTO.nombreTipoIndicador}">
+                    </h:outputText>                            
+                </p:column>                
+                <p:column headerText="Clasificación"
+                          visible="#{verIndicadorBean.visibleColumns[1]}"
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.clasificacionId eq null?'Sin dato':indicadorDTO.clasificacionId }">
+                    </h:outputText>                            
+                </p:column>                
+                <p:column headerText="Estado"
+                          width="80"
+                          visible="#{verIndicadorBean.visibleColumns[2]}"
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
+                    </h:outputText>                            
+                </p:column>    
+                <p:column headerText="Descripción indicador"
+                          visible="#{verIndicadorBean.visibleColumns[3]}"
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.descripcionIndicador eq null?'Sin dato':indicadorDTO.descripcionIndicador }">
+                    </h:outputText>                            
+                </p:column>  
+                <p:column headerText="Aplica lineamiento"
+                          visible="#{verIndicadorBean.visibleColumns[4]}"
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.aplicaLineamiento eq null?'Sin dato':indicadorDTO.aplicaLineamiento }">
+                    </h:outputText>                            
+                </p:column>    
+                <p:column headerText="Aplica objetivo"
+                          visible="#{verIndicadorBean.visibleColumns[5]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.aplicaObjetivo eq null?'Sin dato':indicadorDTO.aplicaObjetivo }">
+                    </h:outputText>                            
+                </p:column>      
+                <p:column headerText="Descripción objetivo"
+                          visible="#{verIndicadorBean.visibleColumns[6]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.descripcionObjetivo eq null?'Sin dato':indicadorDTO.descripcionObjetivo }">
+                    </h:outputText>                            
+                </p:column>        
+                <p:column headerText="Ajuste PDEI"
+                          visible="#{verIndicadorBean.visibleColumns[7]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.ajustePdeiId eq null?'Sin dato':indicadorDTO.ajustePdeiId }">
+                    </h:outputText>                            
+                </p:column>    
+                <p:column headerText="Unidad de representación"
+                          visible="#{verIndicadorBean.visibleColumns[8]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.unidadRepresentacionId eq null?'Sin dato':indicadorDTO.unidadRepresentacionId }">
+                    </h:outputText>                            
+                </p:column>  
+                <p:column headerText="Generación de datos"
+                          visible="#{verIndicadorBean.visibleColumns[9]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{verIndicadorBean.getGeneracionesDatos(indicadorDTO.id)}">
+                    </h:outputText>                            
+                </p:column>                   
+                <p:column headerText="Plazo"
+                          visible="#{verIndicadorBean.visibleColumns[10]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.plazoId eq null?'Sin dato':indicadorDTO.plazoId }">
+                    </h:outputText>                            
+                </p:column>  
+                <p:column headerText="Versión"
+                          visible="#{verIndicadorBean.visibleColumns[11]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.version eq null?'Sin dato':indicadorDTO.version }">
+                    </h:outputText>                            
+                </p:column>   
+                <p:column headerText="Línea base"
+                          visible="#{verIndicadorBean.visibleColumns[12]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.lineaBase eq null?'Sin dato':indicadorDTO.lineaBase }">
+                    </h:outputText>                            
+                </p:column>  
+                <p:column headerText="Metas"
+                          visible="#{verIndicadorBean.visibleColumns[13]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.metas eq null?'Sin dato':indicadorDTO.metas }">
+                    </h:outputText>                            
+                </p:column>    
+                <p:column headerText="Año cumplimiento"
+                          width="80"
+                          visible="#{verIndicadorBean.visibleColumns[14]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.anioCumplimientoId eq null?'Sin dato':indicadorDTO.anioCumplimientoId }">
+                    </h:outputText>                            
+                </p:column>  
+                <p:column headerText="% Logro"
+                          width="30"
+                          visible="#{verIndicadorBean.visibleColumns[15]}"       
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.porcLogro eq null?'Sin dato':indicadorDTO.porcLogro }%">
+                    </h:outputText>                            
+                </p:column>   
+                <p:column headerText="Frecuencia medición"     
+                          visible="#{verIndicadorBean.visibleColumns[16]}"       
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.frecuenciaMedicionId eq null?'Sin dato':indicadorDTO.frecuenciaMedicionId }">
+                    </h:outputText>                            
+                </p:column>    
+                <p:column headerText="Medio verificación"
+                          visible="#{verIndicadorBean.visibleColumns[17]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.medioVerificacion eq null?'Sin dato':indicadorDTO.medioVerificacion }">
+                    </h:outputText>                            
+                </p:column>  
+                <p:column headerText="Forma de cálculo"
+                          visible="#{verIndicadorBean.visibleColumns[18]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.formaCalculo eq null?'Sin dato':indicadorDTO.formaCalculo }">
+                    </h:outputText>                            
+                </p:column>   
+                <p:column headerText="Fuente de información"
+                          visible="#{verIndicadorBean.visibleColumns[19]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.fuenteInformacion eq null?'Sin dato':indicadorDTO.fuenteInformacion }">
+                    </h:outputText>                            
+                </p:column>    
+                <p:column headerText="Unidad proveedora"
+                          visible="#{verIndicadorBean.visibleColumns[20]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{verIndicadorBean.getUnidadesProveedoras(indicadorDTO.id)}">
+                    </h:outputText>                            
+                </p:column>                   
+                <p:column headerText="Proyecto asociado"
+                          visible="#{verIndicadorBean.visibleColumns[21]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.proyectoAsociado eq null?'Sin dato':indicadorDTO.proyectoAsociado }">
+                    </h:outputText>                            
+                </p:column>     
+                <p:column headerText="Comentario"
+                          visible="#{verIndicadorBean.visibleColumns[22]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.comentario eq null?'Sin dato':indicadorDTO.comentario }">
+                    </h:outputText>                            
+                </p:column>    
+                <p:column headerText="Actividad comprometida"
+                          visible="#{verIndicadorBean.visibleColumns[23]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.actividadComprometida eq null?'Sin dato':indicadorDTO.actividadComprometida }">
+                    </h:outputText>                            
+                </p:column>  
+                <p:column headerText="Estado actividad"
+                          visible="#{verIndicadorBean.visibleColumns[24]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.estadoActividad eq null?'Sin dato':indicadorDTO.estadoActividad }">
+                    </h:outputText>                            
+                </p:column>                                
+                <p:column headerText="Fecha de creación"
+                          visible="#{verIndicadorBean.visibleColumns[25]}"                          
+                          styleClass="align-center">                          
+                    <h:outputText value="#{indicadorDTO.fechaCreacion eq null?'Sin dato':indicadorDTO.fechaCreacion}">
                         <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
                     </h:outputText>                    
-                </p:columns>
+                </p:column>
+                <p:column headerText="Última actualización"
+                          visible="#{verIndicadorBean.visibleColumns[26]}"                          
+                          styleClass="align-center">
+                    <h:outputText value="#{indicadorDTO.fechaActualizacion eq null?'Sin dato':indicadorDTO.fechaActualizacion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
+                    </h:outputText>                         
+                </p:column>        
                 <p:column headerText="Ver"
+                          width="30"
+                          exportable="false"                          
+                          toggleable="false"
                           styleClass="align-center">
                     <p:button
                         outcome="/indicadores/ver-info-indicador.xhtml"
@@ -588,205 +729,19 @@
                         icon="fa fa-eye">
                         <f:param name="i" value="#{indicadorDTO.id}" />
                     </p:button>
-
                 </p:column>                
                 <p:column headerText="Editar"
+                          width="30"
+                          exportable="false"
+                          toggleable="false"                          
                           styleClass="align-center">
                     <p:button
                         outcome="/indicadores/ver-info-indicador.xhtml"
                         class="btn btn-info"
                         icon="fa fa-edit">
                     </p:button>
-
-                </p:column>
-            </p:dataTable>
-        </div>         
-        <div class="ui-g-12" style="display: none;">
-            <p:dataTable                           
-                         id="_indicadores_"
-                         var="indicadorDTO" 
-                         value="#{verIndicadorBean.model}"
-                         widgetVar="tablaIndicadorHidden"                         
-                         lazy="true"
-                         paginator="true"
-                         rows="10"
-                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                         rowsPerPageTemplate="5,10,25,50,100"
-                         currentPageReportTemplate="Mostrando {startRecord} - {endRecord} de {totalRecords}" 
-                         selectionMode="single"
-                         sortMode="single"
-                         sortBy="#{indicadorDTO.id}"
-                         emptyMessage="No se recuperaron registros"
-                         reflow="true"
-                         selection="#{verIndicadorBean.indicadorSeleccionadoDTO}"
-                         rowKey="#{indicadorDTO.id}"   
-                         >
-
-                <f:facet name="header">
-                    <div style="height: 20px;">
-                        <span>Lista de indicadores</span>
-                    </div>
-                </f:facet> 
-                <p:column headerText="N° de indicador"
-                          width="10"
-                          styleClass="align-center">                 
-                    <h:outputText value="#{indicadorDTO.numIndicador eq null?'Sin dato':indicadorDTO.numIndicador }">
-                        <f:convertNumber integerOnly="true"/>
-                    </h:outputText>                    
                 </p:column>                
-                <p:column headerText="Nombre de indicador"
-                          styleClass="align-center">                 
-                    <h:outputText value="#{indicadorDTO.nombreIndicador eq null?'Sin dato':indicadorDTO.nombreIndicador }">
-                    </h:outputText>                    
-                </p:column>
-                <p:column headerText="Tipo de indicador"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.nombreTipoIndicador eq null?'Sin dato':indicadorDTO.nombreTipoIndicador}">
-                    </h:outputText>                            
-                </p:column>                
-                <p:column headerText="Clasificación"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.clasificacionId eq null?'Sin dato':indicadorDTO.clasificacionId }">
-                    </h:outputText>                            
-                </p:column>                
-                <p:column headerText="Estado"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.estado == 1 ?'VIGENTE':'NO VIGENTE' }">
-                    </h:outputText>                            
-                </p:column>    
-                <p:column headerText="Descripción indicador"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.descripcionIndicador eq null?'Sin dato':indicadorDTO.descripcionIndicador }">
-                    </h:outputText>                            
-                </p:column>  
-                <p:column headerText="Aplica lineamiento"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.aplicaLineamiento eq null?'Sin dato':indicadorDTO.aplicaLineamiento }">
-                    </h:outputText>                            
-                </p:column>    
-                <p:column headerText="Aplica objetivo"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.aplicaObjetivo eq null?'Sin dato':indicadorDTO.aplicaObjetivo }">
-                    </h:outputText>                            
-                </p:column>      
-                <p:column headerText="Descripción objetivo"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.descripcionObjetivo eq null?'Sin dato':indicadorDTO.descripcionObjetivo }">
-                    </h:outputText>                            
-                </p:column>        
-                <p:column headerText="Ajuste PDEI"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.ajustePdeiId eq null?'Sin dato':indicadorDTO.ajustePdeiId }">
-                    </h:outputText>                            
-                </p:column>    
-                <p:column headerText="Unidad de representación"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.unidadRepresentacionId eq null?'Sin dato':indicadorDTO.unidadRepresentacionId }">
-                    </h:outputText>                            
-                </p:column> 
-                <p:column headerText="Generación de datos"
-                          styleClass="align-center">
-                    <h:outputText value="Sin dato">
-                    </h:outputText>                            
-                </p:column>    
-                <p:column headerText="Plazo"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.plazoId eq null?'Sin dato':indicadorDTO.plazoId }">
-                    </h:outputText>                            
-                </p:column>  
-                <p:column headerText="Versión"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.version eq null?'Sin dato':indicadorDTO.version }">
-                    </h:outputText>                            
-                </p:column>   
-                <p:column headerText="Línea base"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.lineaBase eq null?'Sin dato':indicadorDTO.lineaBase }">
-                    </h:outputText>                            
-                </p:column>  
-                <p:column headerText="Metas"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.metas eq null?'Sin dato':indicadorDTO.metas }">
-                    </h:outputText>                            
-                </p:column>    
-                <p:column headerText="Año cumplimiento"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.anioCumplimientoId eq null?'Sin dato':indicadorDTO.anioCumplimientoId }">
-                    </h:outputText>                            
-                </p:column>  
-                <p:column headerText="% Logro"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.porcLogro eq null?'Sin dato':indicadorDTO.porcLogro }%">
-                    </h:outputText>                            
-                </p:column>   
-                <p:column headerText="Frecuencia medición"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.frecuenciaMedicionId eq null?'Sin dato':indicadorDTO.frecuenciaMedicionId }">
-                    </h:outputText>                            
-                </p:column>    
-                <p:column headerText="Medio verificación"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.medioVerificacion eq null?'Sin dato':indicadorDTO.medioVerificacion }">
-                    </h:outputText>                            
-                </p:column>  
-                <p:column headerText="Forma de cálculo"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.formaCalculo eq null?'Sin dato':indicadorDTO.formaCalculo }">
-                    </h:outputText>                            
-                </p:column>   
-                <p:column headerText="Fuente de información"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.fuenteInformacion eq null?'Sin dato':indicadorDTO.fuenteInformacion }">
-                    </h:outputText>                            
-                </p:column>    
-                <p:column headerText="Unidad proveedora"
-                          styleClass="align-center">
-                    <h:outputText value="Sin dato">
-                    </h:outputText>                            
-                </p:column>   
-                <p:column headerText="Proyecto asociado"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.proyectoAsociado eq null?'Sin dato':indicadorDTO.proyectoAsociado }">
-                    </h:outputText>                            
-                </p:column>     
-                <p:column headerText="Comentario"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.comentario eq null?'Sin dato':indicadorDTO.comentario }">
-                    </h:outputText>                            
-                </p:column>    
-                <p:column headerText="Actividad comprometida"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.actividadComprometida eq null?'Sin dato':indicadorDTO.actividadComprometida }">
-                    </h:outputText>                            
-                </p:column>  
-                <p:column headerText="Estado actividad"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.estadoActividad eq null?'Sin dato':indicadorDTO.estadoActividad }">
-                    </h:outputText>                            
-                </p:column>  
-                <p:column headerText="Unidad proveedora"
-                          styleClass="align-center">
-                    <h:outputText value="#{verIndicadorBean.getUnidadesProveedoras(indicadorDTO.id)}">
-                    </h:outputText>                            
-                </p:column>                  
-                <p:column headerText="Generación de datos"
-                          styleClass="align-center">
-                    <h:outputText value="#{verIndicadorBean.getGeneracionesDatos(indicadorDTO.id)}">
-                    </h:outputText>                            
-                </p:column>                  
-                <p:column headerText="Fecha de creación"
-                          styleClass="align-center">                          
-                    <h:outputText value="#{indicadorDTO.fechaCreacion eq null?'Sin dato':indicadorDTO.fechaCreacion}">
-                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
-                    </h:outputText>                    
-                </p:column>
-                <p:column headerText="Última actualización"
-                          styleClass="align-center">
-                    <h:outputText value="#{indicadorDTO.fechaActualizacion eq null?'Sin dato':indicadorDTO.fechaActualizacion}">
-                        <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
-                    </h:outputText>                         
-                </p:column>                  
-            </p:dataTable>
-        </div>                  
-    </ui:define>
+            </p:dataTable>                             
+        </div>                          
+    </ui:define>                
 </ui:composition>

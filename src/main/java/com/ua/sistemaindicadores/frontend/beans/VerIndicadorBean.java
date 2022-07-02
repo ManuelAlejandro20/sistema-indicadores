@@ -24,9 +24,10 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -41,6 +42,9 @@ import javax.inject.Named;
 import org.omnifaces.util.Ajax;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.ToggleEvent;
+import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.Visibility;
 
 /**
  *
@@ -61,7 +65,7 @@ public class VerIndicadorBean implements Serializable{
     @Inject
     private IndicadorService indicadorService;    
     
-    private IndicadorDTO indicadorSeleccionadoDTO;
+    private IndicadorDTO indicadorSeleccionadoDTO;    
     
     private List<IndicadorTipo> listaIndicadorTipo;
     private IndicadorTipo indicadorTipoSeleccionado;    
@@ -117,13 +121,36 @@ public class VerIndicadorBean implements Serializable{
     private List<Date> fechaCreacionRango;
     private List<Date> fechaActualizacionRango;
     
-    private List<String> selectedColumns = new ArrayList<>();
-    private Map<String, String> columnMap = new LinkedHashMap<>();
+    private List<Boolean> visibleColumns;
+    private List<String> nameColumns;
+    private List<String> selectedColumns;    
+    private Integer ultimaColumnaIndex = -1;
     
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     
     private Indicador indicadorSeleccionado;
     private String mensajeVerInfoIndicador;
+
+    public List<String> getNameColumns() {
+        return nameColumns;
+    }
+
+    public void setNameColumns(List<String> nameColumns) {
+        this.nameColumns = nameColumns;
+    }
+
+    public Integer getUltimaColumnaIndex() {
+        return ultimaColumnaIndex;
+    }
+
+    public void setUltimaColumnaIndex(Integer ultimaColumnaIndex) {
+        this.ultimaColumnaIndex = ultimaColumnaIndex;
+    }
+
+
+    
+    
+    
     
     @PostConstruct
     public void initalize(){        
@@ -145,87 +172,73 @@ public class VerIndicadorBean implements Serializable{
     public VerIndicadorBean() {
     }
     
-    public void desplegarIndicador() {
-        //Si el tipoSeleccionado es nulo (ya se porque la página carga por primera vez o porque se borran los filtros)
-        //capturara el parametro de la url, si no es nulo significa que ya cargo el parametro tipo y el filtro tipo
-        //fue fijado
-        if(indicadorSeleccionado == null){
-            Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-            try{
-                indicadorSeleccionado = indicadorService.buscarIndicadorID(Integer.valueOf(params.get("i")));
-            }catch(NumberFormatException e){
-                indicadorSeleccionado = null;
-            }
-            if(indicadorSeleccionado != null){
-                mensajeVerInfoIndicador = "Información completa de indicador " + indicadorSeleccionado.getNombreIndicador();                        
-            }else{
-                mensajeVerInfoIndicador = "No hay datos sobre este indicador";                                        
-            }
-        }
-    }    
-
-    public Boolean getFiltros() {
-        return filtros;
-    }
-
-    public void setFiltros(Boolean filtros) {
-        this.filtros = filtros;
-    }
-
-    public String getMensajeFiltros() {
-        return mensajeFiltros;
-    }
-
-    public void setMensajeFiltros(String mensajeFiltros) {
-        this.mensajeFiltros = mensajeFiltros;
-    }
-
-    public boolean getSiguiente() {
-        return siguiente;
-    }
-
-    public void setSiguiente(boolean siguiente) {
-        this.siguiente = siguiente;
-    }
-   
     private void initColumnProperties(){
-        columnMap.put("numIndicador","N° de Indicador");
-        columnMap.put("nombreIndicador","Nombre de Indicador");
-        columnMap.put("clasificacionId","Clasificación");
-        columnMap.put("nombreTipoIndicador","Tipo");        
-        columnMap.put("estado","Estado");
-        columnMap.put("porcLogro","% Logro");        
-        columnMap.put("descripcionIndicador","Descripción de Indicador");
-        columnMap.put("aplicaLineamiento","Aplica Lineamiento");
-        columnMap.put("aplicaObjetivo","Aplica Objetivo");
-        columnMap.put("descripcionObjetivo","Descripción de Objetivo");
-        columnMap.put("version","Versión");
-        columnMap.put("lineaBase","Linea Base");
-        columnMap.put("metas","Metas");
-        columnMap.put("medioVerificacion","Medio de Verificación");
-        columnMap.put("formaCalculo","Forma de Cálculo");
-        columnMap.put("fuenteInformacion","Fuente de Información");
-        columnMap.put("proyectoAsociado","Proyecto Asociado");
-        columnMap.put("comentario","Comentario");
-        columnMap.put("actividadComprometida","Actividad Comprometida");
-        columnMap.put("estadoActividad","Estado de Actividad");
-        columnMap.put("fechaCreacion","Fecha de Creación");
-        columnMap.put("fechaActualizacion","Fecha de Actualización");
-        columnMap.put("ajustePdeiId","Ajuste PDEI");
-        columnMap.put("nombreTipoIndicador","Tipo de Indicador");
-        columnMap.put("anioCumplimientoId","Año Cumplimiento");
-        columnMap.put("frecuenciaMedicionId","Frecuencia de Medición");
-        columnMap.put("plazoId","Plazo");
-        columnMap.put("unidadRepresentacionId","Unidad de Representación");
-        columnMap.put("unidadProveedoraString","Unidad Proveedora");
-        columnMap.put("generacionDatosString","Generación de Datos");
-
-        selectedColumns.add("numIndicador");
-        selectedColumns.add("nombreIndicador");
-        selectedColumns.add("clasificacionId");
-        selectedColumns.add("nombreTipoIndicador");        
-        selectedColumns.add("estado");
-        selectedColumns.add("porcLogro");          
+        visibleColumns = Arrays.asList(
+                true, //Tipo de indicador
+                true, //Clasificación
+                true, //Estado
+                false,//Descripción indicador
+                false,//Aplica lineamiento
+                false,//Aplica objetivo
+                false,//Descripcion objetivo 
+                false,//Ajuste PDEI 
+                false,//Unidad de representacion 
+                false,//Generacion de datos                 
+                false,//Plazo 
+                false,//Version 
+                false,//Linea base 
+                false,//Metas 
+                false,//Anio Cumplimiento 
+                true, //% logro 
+                true, //Frecuencia medicion
+                false,//Medio verificacion
+                false,//Forma de calculo
+                false,//Fuente de informacion 
+                false,//Unidad proveedora                   
+                false,//Proyecto asociado 
+                false,//Comentario 
+                false,//Actividad comprometida 
+                false,//Estado actividad               
+                false,//Fecha de creacion 
+                false);//Fecha de actualizacion      
+        
+        nameColumns = Arrays.asList(
+                "Tipo de indicador",
+                "Clasificación",
+                "Estado",
+                "Descripción indicador",
+                "Aplica lineamiento",
+                "Aplica objetivo",
+                "Descripción objetivo", 
+                "Ajuste PDEI", 
+                "Unidad de representación", 
+                "Generación de datos",                 
+                "Plazo", 
+                "Versión", 
+                "Linea base", 
+                "Metas", 
+                "Año Cumplimiento", 
+                "% Logro", 
+                "Frecuencia medición",
+                "Medio verificación",
+                "Forma de cálculo",
+                "Fuente de información", 
+                "Unidad proveedora",                   
+                "Proyecto asociado", 
+                "Comentario", 
+                "Actividad comprometida", 
+                "Estado actividad",               
+                "Fecha de creacion", 
+                "Fecha de actualizacion");          
+        
+        selectedColumns = new LinkedList<String>(Arrays.asList(
+                "Tipo de indicador",
+                "Clasificación",
+                "Estado",
+                "% Logro", 
+                "Frecuencia medición"                
+        ));
+            
     }
     
     
@@ -323,7 +336,105 @@ public class VerIndicadorBean implements Serializable{
             return event.getNewStep();
         }
     }    
+        
+    public void toggleProceso(ToggleEvent e){
+        Integer indexElemento = (Integer) e.getData() - 2;
 
+        if(selectedColumns.contains(nameColumns.get(indexElemento))){
+            selectedColumns.remove(nameColumns.get(indexElemento));
+        }else{
+            selectedColumns.add(nameColumns.get(indexElemento));
+        }        
+                            
+        if(selectedColumns.size() == 7){   
+            selectedColumns.remove(nameColumns.get(indexElemento));
+            PrimeFaces.current().executeScript("handleCheckBox("+ indexElemento +");");
+            FacesContext.getCurrentInstance().addMessage("mensaje", 
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN", 
+                    "Sólo se pueden escoger 6 opciones para desplegar")
+            );  
+        }else{
+            visibleColumns.set(indexElemento, e.getVisibility() == Visibility.VISIBLE);  
+        }                        
+    }
+           
+    public void desplegarIndicador() {
+        //Si el tipoSeleccionado es nulo (ya se porque la página carga por primera vez o porque se borran los filtros)
+        //capturara el parametro de la url, si no es nulo significa que ya cargo el parametro tipo y el filtro tipo
+        //fue fijado   
+        if(indicadorSeleccionado == null){
+            Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            try{
+                indicadorSeleccionado = indicadorService.buscarIndicadorID(Integer.valueOf(params.get("i")));
+            }catch(NumberFormatException e){
+                indicadorSeleccionado = null;
+            }
+            if(indicadorSeleccionado != null){
+                mensajeVerInfoIndicador = "Información completa de indicador " + indicadorSeleccionado.getNombreIndicador();                        
+            }else{
+                mensajeVerInfoIndicador = "No hay datos sobre este indicador";                                        
+            }
+        }
+    }          
+    
+    public String getUnidadesProveedoras(Integer indicadorId){
+        Indicador indicador = indicadorService.buscarIndicadorID(indicadorId);
+        Collection<UnidadProveedora> listaUP = indicador.getUnidadProveedoraCollection();
+        String unidadesProveedoras = "Sin datos";
+        
+        if(listaUP != null){
+            if(listaUP.size() != 0){
+                unidadesProveedoras = "";
+                for(UnidadProveedora up : listaUP){
+                    unidadesProveedoras += up.getUnidadProveedora() + ",\n";
+                }
+                unidadesProveedoras = unidadesProveedoras.substring(0, unidadesProveedoras.length() - 2);  
+            }
+        }
+        return unidadesProveedoras;
+    }    
+    
+    public String getGeneracionesDatos(Integer indicadorId){
+        Indicador indicador = indicadorService.buscarIndicadorID(indicadorId);
+        Collection<GeneracionDatos> listaGD = indicador.getGeneracionDatosCollection();
+        String generacionDatos = "Sin datos";
+        
+        if(listaGD != null){
+            if(listaGD.size() != 0){
+                generacionDatos = "";
+                for(GeneracionDatos gd : listaGD){
+                    generacionDatos += gd.getGeneracionDatos() + ",\n";
+                }
+                generacionDatos = generacionDatos.substring(0, generacionDatos.length() - 2);  
+            }
+        }
+        return generacionDatos;
+    }        
+       
+    public Boolean getFiltros() {
+        return filtros;
+    }
+
+    public void setFiltros(Boolean filtros) {
+        this.filtros = filtros;
+    }
+
+    public String getMensajeFiltros() {
+        return mensajeFiltros;
+    }
+
+    public void setMensajeFiltros(String mensajeFiltros) {
+        this.mensajeFiltros = mensajeFiltros;
+    }
+
+    public boolean getSiguiente() {
+        return siguiente;
+    }
+
+    public void setSiguiente(boolean siguiente) {
+        this.siguiente = siguiente;
+    }
+   
     public IndicadorDTO getIndicadorSeleccionadoDTO() {
         return indicadorSeleccionadoDTO;
     }
@@ -668,6 +779,14 @@ public class VerIndicadorBean implements Serializable{
         this.fechaActualizacionRango = fechaActualizacionRango;
     }       
 
+    public List<Boolean> getVisibleColumns() {
+        return visibleColumns;
+    }
+
+    public void setVisibleColumns(List<Boolean> visibleColumns) {
+        this.visibleColumns = visibleColumns;
+    }
+
     public List<String> getSelectedColumns() {
         return selectedColumns;
     }
@@ -675,53 +794,7 @@ public class VerIndicadorBean implements Serializable{
     public void setSelectedColumns(List<String> selectedColumns) {
         this.selectedColumns = selectedColumns;
     }
-
-    public Map<String, String> getColumnMap() {
-        return columnMap;
-    }
-
-    public void setColumnMap(Map<String, String> columnMap) {
-        this.columnMap = columnMap;
-    }                        
-    
-    public String getUnidadesProveedoras(Integer indicadorId){
-        Indicador indicador = indicadorService.buscarIndicadorID(indicadorId);
-        Collection<UnidadProveedora> listaUP = indicador.getUnidadProveedoraCollection();
-        String unidadesProveedoras = "Sin datos";
-        
-        if(listaUP != null){
-            if(listaUP.size() != 0){
-                unidadesProveedoras = "";
-                for(UnidadProveedora up : listaUP){
-                    unidadesProveedoras += up.getUnidadProveedora() + ",\n";
-                }
-                unidadesProveedoras = unidadesProveedoras.substring(0, unidadesProveedoras.length() - 2);  
-            }
-        }
-        return unidadesProveedoras;
-    }    
-    
-    public String getGeneracionesDatos(Integer indicadorId){
-        Indicador indicador = indicadorService.buscarIndicadorID(indicadorId);
-        Collection<GeneracionDatos> listaGD = indicador.getGeneracionDatosCollection();
-        String generacionDatos = "Sin datos";
-        
-        if(listaGD != null){
-            if(listaGD.size() != 0){
-                generacionDatos = "";
-                for(GeneracionDatos gd : listaGD){
-                    generacionDatos += gd.getGeneracionDatos() + ",\n";
-                }
-                generacionDatos = generacionDatos.substring(0, generacionDatos.length() - 2);  
-            }
-        }
-        return generacionDatos;
-    }        
-    
-    public void checkColumns(){       
-        PrimeFaces.current().executeScript("checkColumns("+ selectedColumns.size() +");");
-    }
-    
+               
     //Filtros
     
     public void onSeleccionTipoIndicadorListener(){
@@ -1289,7 +1362,5 @@ public class VerIndicadorBean implements Serializable{
     public void setMensajeVerInfoIndicador(String mensajeVerInfoIndicador) {
         this.mensajeVerInfoIndicador = mensajeVerInfoIndicador;
     }
-    
-    
-    
+      
 }
