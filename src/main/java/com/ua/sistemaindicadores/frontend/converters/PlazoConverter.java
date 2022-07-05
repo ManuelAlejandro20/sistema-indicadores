@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 /**
  *
- * @author diego
+ * @author aleja
  */
 @FacesConverter(value="plazoConverter", managed=true)
 public class PlazoConverter implements Converter<Plazo>{

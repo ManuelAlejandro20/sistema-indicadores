@@ -46,7 +46,7 @@ public class GeneracionDatos implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "generacion_datos")
     private String generacionDatos;
-    @JoinTable(name = "generacion_datos_indicador", joinColumns = {
+    @JoinTable(name = "generacion_datos_indicador", schema="indicadores", joinColumns = {
         @JoinColumn(name = "id_generacion_datos", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "id_indicador", referencedColumnName = "id")})
     @ManyToMany

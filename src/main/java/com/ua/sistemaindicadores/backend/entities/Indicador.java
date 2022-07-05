@@ -8,10 +8,12 @@ package com.ua.sistemaindicadores.backend.entities;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,6 +40,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "indicador", schema = "indicadores")
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "Indicador.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.IndicadorDTO(i.id, i.numIndicador, i.nombreIndicador, i.estado, i.descripcionIndicador, "
+                                                            + "i.aplicaLineamiento, i.aplicaObjetivo, i.descripcionObjetivo, i.version, i.lineaBase, i.metas, i.porcLogro, i.medioVerificacion, "
+                                                            + "i.formaCalculo, i.fuenteInformacion, i.proyectoAsociado, i.comentario, i.actividadComprometida, i.estadoActividad, i.fechaCreacion, i.fechaActualizacion, "
+                                                            + "a.ajustePdei, c.tipo, ac.anioCumplimiento, c.nombre, f.frecuenciaMedicion, p.plazo, ur.unidadRepresentacion) "
+                                                     + "FROM Indicador i INNER JOIN i.ajustePdeiId a INNER JOIN i.anioCumplimientoId ac INNER JOIN "
+                                                            + "i.clasificacionId c INNER JOIN i.frecuenciaMedicionId f INNER JOIN i.plazoId p INNER JOIN i.unidadRepresentacionId ur "
+                                                     + "WHERE i.id = :Id"),   
     @NamedQuery(name = "Indicador.findAll", query = "SELECT i FROM Indicador i"),
     @NamedQuery(name = "Indicador.findById", query = "SELECT i FROM Indicador i WHERE i.id = :id"),
     @NamedQuery(name = "Indicador.findByNumIndicador", query = "SELECT i FROM Indicador i WHERE i.numIndicador = :numIndicador"),
@@ -166,12 +175,12 @@ public class Indicador implements Serializable {
     @Column(name = "fecha_actualizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaActualizacion;
-    @ManyToMany(mappedBy = "indicadorCollection")
-    private Collection<GeneracionDatos> generacionDatosCollection;
-    @JoinTable(name = "unidad_proveedora_indicador", joinColumns = {
+    @ManyToMany(mappedBy = "indicadorCollection", fetch = FetchType.EAGER)
+    private Set<GeneracionDatos> generacionDatosCollection;
+    @JoinTable(name = "unidad_proveedora_indicador", schema="indicadores", joinColumns = {
         @JoinColumn(name = "id_indicador", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "id_unidad_proveedora", referencedColumnName = "id")})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Collection<UnidadProveedora> unidadProveedoraCollection;
     @JoinColumn(name = "ajuste_pdei_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -398,7 +407,7 @@ public class Indicador implements Serializable {
         return generacionDatosCollection;
     }
 
-    public void setGeneracionDatosCollection(Collection<GeneracionDatos> generacionDatosCollection) {
+    public void setGeneracionDatosCollection(Set<GeneracionDatos> generacionDatosCollection) {
         this.generacionDatosCollection = generacionDatosCollection;
     }
 

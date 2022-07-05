@@ -17,6 +17,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -45,6 +47,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Clasificacion.obtenerDTO", query = "SELECT NEW com.ua.sistemaindicadores.backend.dtos.ClasificacionDTO(i.id, r.id, i.nombre, i.estado, i.tipo, i.descripcion, i.fechaCreacion, i.fechaActualizacion) FROM Clasificacion i INNER JOIN i.indicadorTipoId r WHERE i.id = :Id"),       
     @NamedQuery(name = "Clasificacion.findByFechaCreacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaCreacion = :fechaCreacion"), 
     @NamedQuery(name = "Clasificacion.findByFechaActualizacion", query = "SELECT c FROM Clasificacion c WHERE c.fechaActualizacion = :fechaActualizacion")})
+@NamedNativeQueries({
+    @NamedNativeQuery(name = "Clasificacion.checkClasificacionExists", query = "SELECT * FROM indicadores.clasificacion c WHERE c.nombre=:nombre and c.tipo=:tipo", resultClass=Clasificacion.class)})
 public class Clasificacion implements Serializable {
 
     private static final long serialVersionUID = 1L;

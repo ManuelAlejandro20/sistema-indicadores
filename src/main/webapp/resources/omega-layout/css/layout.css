@@ -13,6 +13,31 @@
 /* UI ICONS */
 /* positioning */
 
+.ui-accordion .ui-accordion-header.ui-state-active{
+    border: 1px solid #d9d9d9 !important;
+    background: #f6f7f9 !important;
+}
+
+.ui-accordion .ui-accordion-content{
+    border: 1px solid #d9d9d9 !important;
+}
+
+.ui-columntoggler .ui-columntoggler-close{
+    margin-top: 10px !important;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-filter-container .ui-icon {
+    right: 10% !important;
+}
+
+.textbox-disabled {
+    opacity: 100% !important; 
+}
+
+.without-selectall .ui-selectcheckboxmenu-header .ui-chkbox {
+    display: none; 
+}
+
 .panelgrid-lefttext{
     text-align: left !important;
 }
@@ -50,6 +75,20 @@
 }
 
 .ui-button-formulario:hover {
+    border: 1px solid #ff6600 !important;
+    color: black !important;
+    background: white !important;
+}
+
+.ui-button-convert {
+    margin-left : 10px;
+    border: 1px solid #ff6600 !important;
+    color: #fff;
+    background: #ff6600 !important;
+    transition: all .4s ease !important;
+}
+
+.ui-button-convert:hover {
     border: 1px solid #ff6600 !important;
     color: black !important;
     background: white !important;
@@ -197,7 +236,9 @@
   text-indent: 0px !important;
   text-align: center; }
   .ui-icon-triangle-1-e:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f0da";
+    font-weight: 600; }
 
 .ui-icon-triangle-1-se {
   background-position: -48px -16px; }
@@ -1053,9 +1094,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-indent: 0px !important;
+  margin-top: -5px !important;
   text-align: center; }
   .ui-icon-close:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f00d";
+    font-weight: 600;}
 
 .ui-icon-closethick {
   background-image: none !important;
@@ -1256,7 +1300,9 @@
   text-indent: 0px !important;
   text-align: center; }
   .ui-icon-check:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f00c";
+    font-weight: 600; }
 
 .ui-icon-bullet {
   background-image: none !important;
@@ -2197,8 +2243,13 @@ html {
   #login-wrapper .login-footer {
     color: #ffffff;
     font-size: 14px;
-    margin-top: 50px; }
+    margin-top: 20px; }
 
+.footer-page{
+    margin-top: 30px !important;
+}
+  
+  
 @media (max-width: 40em) {
   .login-body {
     padding-top: 50px; }
@@ -2861,7 +2912,9 @@ h2 {
   text-indent: 0px !important;
   text-align: center; }
   .ui-selectcheckboxmenu-panel .ui-icon.ui-icon-circle-close:before {
-    content: ""; }
+    font-family: "Font Awesome 5 Free";
+    content: "\f00d";
+    font-weight: 600; }
 
 .ui-fluid .ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger .ui-icon {
   padding-left: 5px; }

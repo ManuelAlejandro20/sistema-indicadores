@@ -66,6 +66,15 @@
     </welcome-file-list>
     
     <error-page>
+        <error-code>404</error-code>
+        <location>/faces/404.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/faces/403.xhtml</location>
+    </error-page>    
+    
+    <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/faces/expired.xhtml</location>
     </error-page>
@@ -81,10 +90,9 @@
         <auth-constraint>
             <description></description>
             <role-name>ADMINISTRADOR</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>                        
+            <role-name>USUARIO_INTERNO_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_EXTERNO_SEGUIMIENTO</role-name>            
         </auth-constraint>
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
@@ -102,10 +110,9 @@
         <auth-constraint>
             <description></description>
             <role-name>ADMINISTRADOR</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>                        
+            <role-name>USUARIO_INTERNO_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_EXTERNO_SEGUIMIENTO</role-name>            
         </auth-constraint>
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
@@ -123,10 +130,7 @@
         <auth-constraint>
             <description></description>
             <role-name>ADMINISTRADOR</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>                        
         </auth-constraint>
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
@@ -144,10 +148,7 @@
         <auth-constraint>
             <description></description>
             <role-name>ADMINISTRADOR</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>                        
         </auth-constraint>
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
@@ -165,10 +166,7 @@
         <auth-constraint>
             <description></description>
             <role-name>ADMINISTRADOR</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>                        
         </auth-constraint>
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
@@ -186,10 +184,9 @@
         <auth-constraint>
             <description></description>
             <role-name>ADMINISTRADOR</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>                        
+            <role-name>USUARIO_INTERNO_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_EXTERNO_SEGUIMIENTO</role-name>           
         </auth-constraint>
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
@@ -207,10 +204,9 @@
         <auth-constraint>
             <description></description>
             <role-name>ADMINISTRADOR</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
-            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>            
+            <role-name>USUARIO_INTERNO_SEGUIMIENTO</role-name>
+            <role-name>USUARIO_EXTERNO_SEGUIMIENTO</role-name>                 
         </auth-constraint>
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
@@ -232,18 +228,14 @@
     </security-role>
     <security-role>
         <description></description>
-        <role-name>USUARIO_ADMINISTRADOR_INFEXT_VINCULACION</role-name>
-    </security-role>
-    <security-role>
-        <description></description>
-        <role-name>USUARIO_INTERNO_INFEXT_VINCULACION</role-name>
-    </security-role>
-    <security-role>
-        <description></description>
-        <role-name>USUARIO_EXTERNO_INFEXT_VINCULACION</role-name>
-    </security-role>                    
-    <security-role>
-        <description></description>
         <role-name>USUARIO_ADMINISTRADOR_SEGUIMIENTO</role-name>
+    </security-role>    
+    <security-role>
+        <description></description>
+        <role-name>USUARIO_INTERNO_SEGUIMIENTO</role-name>
+    </security-role>      
+    <security-role>
+        <description></description>
+        <role-name>USUARIO_EXTERNO_SEGUIMIENTO</role-name>
     </security-role>             
 </web-app>

@@ -4,61 +4,85 @@
  * and open the template in the editor.
  */
 package com.ua.sistemaindicadores.backend.dtos;
+
+import com.ua.sistemaindicadores.backend.entities.GeneracionDatos;
+import com.ua.sistemaindicadores.backend.entities.Indicador;
+import com.ua.sistemaindicadores.backend.entities.UnidadProveedora;
+import java.util.Collection;
 import java.util.Date;
 
 /**
  *
- * @author diego
+ * @author aleja
  */
 public class IndicadorDTO {
     private Integer id;
-    private Integer numero;
-    private String nombre;
+    private Integer numIndicador;
+    private String nombreIndicador;
     private Short estado;
-    private String descripcion;
-    private String lineamiento;
-    private String objetivo;
-    private String descripcion_objetivo;
+    private String descripcionIndicador;
+    private String aplicaLineamiento;
+    private String aplicaObjetivo;
+    private String descripcionObjetivo;
     private String version;
-    private String linea_base;
+    private String lineaBase;
     private String metas;
-    private String porcentaje_logro;
-    private String medio_verificacion;
-    private String forma_calculo;
-    private String fuente_informacion;
-    private String proyecto_asociado;
+    private String porcLogro;
+    private String medioVerificacion;
+    private String formaCalculo;
+    private String fuenteInformacion;
+    private String proyectoAsociado;
     private String comentario;
-    private String actividad_comprometida;
-    private String estado_actividad;
+    private String actividadComprometida;
+    private String estadoActividad;
     private Date fechaCreacion;
     private Date fechaActualizacion;
-    private Integer indicadorTipoId;
-    private Integer clasificacionId;
+    private String ajustePdeiId;
+    private String nombreTipoIndicador;
+    private Integer anioCumplimientoId;
+    private String clasificacionId;
+    private String frecuenciaMedicionId;
+    private String plazoId;
+    private String unidadRepresentacionId; 
 
-    public IndicadorDTO(Integer id, Integer numero, String nombre, Short estado, String descripcion, String lineamiento, String objetivo, String descripcion_objetivo, String version, String linea_base, String metas, String porcentaje_logro, String medio_verificacion, String forma_calculo, String fuente_informacion, String proyecto_asociado, String comentario, String actividad_comprometida, String estado_actividad, Date fechaCreacion, Date fechaActualizacion, Integer indicadorTipoId, Integer clasificacionId) {
+    public IndicadorDTO(Integer id, Integer numIndicador, String nombreIndicador, Short estado, 
+            String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, 
+            String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, 
+            String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, 
+            String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, 
+            Date fechaActualizacion, String ajustePdeiId, String nombreTipoIndicador, 
+            Integer anioCumplimientoId, String clasificacionId, String frecuenciaMedicionId, String plazoId, 
+            String unidadRepresentacionId) {
         this.id = id;
-        this.numero = numero;
-        this.nombre = nombre;
+        this.numIndicador = numIndicador;
+        this.nombreIndicador = nombreIndicador;
         this.estado = estado;
-        this.descripcion = descripcion;
-        this.lineamiento = lineamiento;
-        this.objetivo = objetivo;
-        this.descripcion_objetivo = descripcion_objetivo;
+        this.descripcionIndicador = descripcionIndicador;
+        this.aplicaLineamiento = aplicaLineamiento;
+        this.aplicaObjetivo = aplicaObjetivo;
+        this.descripcionObjetivo = descripcionObjetivo;
         this.version = version;
-        this.linea_base = linea_base;
+        this.lineaBase = lineaBase;
         this.metas = metas;
-        this.porcentaje_logro = porcentaje_logro;
-        this.medio_verificacion = medio_verificacion;
-        this.forma_calculo = forma_calculo;
-        this.fuente_informacion = fuente_informacion;
-        this.proyecto_asociado = proyecto_asociado;
+        this.porcLogro = porcLogro;
+        this.medioVerificacion = medioVerificacion;
+        this.formaCalculo = formaCalculo;
+        this.fuenteInformacion = fuenteInformacion;
+        this.proyectoAsociado = proyectoAsociado;
         this.comentario = comentario;
-        this.actividad_comprometida = actividad_comprometida;
-        this.estado_actividad = estado_actividad;
+        this.actividadComprometida = actividadComprometida;
+        this.estadoActividad = estadoActividad;
         this.fechaCreacion = fechaCreacion;
         this.fechaActualizacion = fechaActualizacion;
-        this.indicadorTipoId = indicadorTipoId;
+        this.ajustePdeiId = ajustePdeiId;
+        this.nombreTipoIndicador = nombreTipoIndicador;
+        this.anioCumplimientoId = anioCumplimientoId;
         this.clasificacionId = clasificacionId;
+        this.frecuenciaMedicionId = frecuenciaMedicionId;
+        this.plazoId = plazoId;
+        this.unidadRepresentacionId = unidadRepresentacionId;
+        
+        
     }
 
     public Integer getId() {
@@ -69,20 +93,20 @@ public class IndicadorDTO {
         this.id = id;
     }
 
-    public Integer getNumero() {
-        return numero;
+    public Integer getNumIndicador() {
+        return numIndicador;
     }
 
-    public void setNumero(Integer numero) {
-        this.numero = numero;
+    public void setNumIndicador(Integer numIndicador) {
+        this.numIndicador = numIndicador;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombreIndicador() {
+        return nombreIndicador;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombreIndicador(String nombreIndicador) {
+        this.nombreIndicador = nombreIndicador;
     }
 
     public Short getEstado() {
@@ -93,36 +117,36 @@ public class IndicadorDTO {
         this.estado = estado;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescripcionIndicador() {
+        return descripcionIndicador;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescripcionIndicador(String descripcionIndicador) {
+        this.descripcionIndicador = descripcionIndicador;
     }
 
-    public String getLineamiento() {
-        return lineamiento;
+    public String getAplicaLineamiento() {
+        return aplicaLineamiento;
     }
 
-    public void setLineamiento(String lineamiento) {
-        this.lineamiento = lineamiento;
+    public void setAplicaLineamiento(String aplicaLineamiento) {
+        this.aplicaLineamiento = aplicaLineamiento;
     }
 
-    public String getObjetivo() {
-        return objetivo;
+    public String getAplicaObjetivo() {
+        return aplicaObjetivo;
     }
 
-    public void setObjetivo(String objetivo) {
-        this.objetivo = objetivo;
+    public void setAplicaObjetivo(String aplicaObjetivo) {
+        this.aplicaObjetivo = aplicaObjetivo;
     }
 
-    public String getDescripcion_objetivo() {
-        return descripcion_objetivo;
+    public String getDescripcionObjetivo() {
+        return descripcionObjetivo;
     }
 
-    public void setDescripcion_objetivo(String descripcion_objetivo) {
-        this.descripcion_objetivo = descripcion_objetivo;
+    public void setDescripcionObjetivo(String descripcionObjetivo) {
+        this.descripcionObjetivo = descripcionObjetivo;
     }
 
     public String getVersion() {
@@ -133,12 +157,12 @@ public class IndicadorDTO {
         this.version = version;
     }
 
-    public String getLinea_base() {
-        return linea_base;
+    public String getLineaBase() {
+        return lineaBase;
     }
 
-    public void setLinea_base(String linea_base) {
-        this.linea_base = linea_base;
+    public void setLineaBase(String lineaBase) {
+        this.lineaBase = lineaBase;
     }
 
     public String getMetas() {
@@ -149,44 +173,44 @@ public class IndicadorDTO {
         this.metas = metas;
     }
 
-    public String getPorcentaje_logro() {
-        return porcentaje_logro;
+    public String getPorcLogro() {
+        return porcLogro;
     }
 
-    public void setPorcentaje_logro(String porcentaje_logro) {
-        this.porcentaje_logro = porcentaje_logro;
+    public void setPorcLogro(String porcLogro) {
+        this.porcLogro = porcLogro;
     }
 
-    public String getMedio_verificacion() {
-        return medio_verificacion;
+    public String getMedioVerificacion() {
+        return medioVerificacion;
     }
 
-    public void setMedio_verificacion(String medio_verificacion) {
-        this.medio_verificacion = medio_verificacion;
+    public void setMedioVerificacion(String medioVerificacion) {
+        this.medioVerificacion = medioVerificacion;
     }
 
-    public String getForma_calculo() {
-        return forma_calculo;
+    public String getFormaCalculo() {
+        return formaCalculo;
     }
 
-    public void setForma_calculo(String forma_calculo) {
-        this.forma_calculo = forma_calculo;
+    public void setFormaCalculo(String formaCalculo) {
+        this.formaCalculo = formaCalculo;
     }
 
-    public String getFuente_informacion() {
-        return fuente_informacion;
+    public String getFuenteInformacion() {
+        return fuenteInformacion;
     }
 
-    public void setFuente_informacion(String fuente_informacion) {
-        this.fuente_informacion = fuente_informacion;
+    public void setFuenteInformacion(String fuenteInformacion) {
+        this.fuenteInformacion = fuenteInformacion;
     }
 
-    public String getProyecto_asociado() {
-        return proyecto_asociado;
+    public String getProyectoAsociado() {
+        return proyectoAsociado;
     }
 
-    public void setProyecto_asociado(String proyecto_asociado) {
-        this.proyecto_asociado = proyecto_asociado;
+    public void setProyectoAsociado(String proyectoAsociado) {
+        this.proyectoAsociado = proyectoAsociado;
     }
 
     public String getComentario() {
@@ -197,20 +221,20 @@ public class IndicadorDTO {
         this.comentario = comentario;
     }
 
-    public String getActividad_comprometida() {
-        return actividad_comprometida;
+    public String getActividadComprometida() {
+        return actividadComprometida;
     }
 
-    public void setActividad_comprometida(String actividad_comprometida) {
-        this.actividad_comprometida = actividad_comprometida;
+    public void setActividadComprometida(String actividadComprometida) {
+        this.actividadComprometida = actividadComprometida;
     }
 
-    public String getEstado_actividad() {
-        return estado_actividad;
+    public String getEstadoActividad() {
+        return estadoActividad;
     }
 
-    public void setEstado_actividad(String estado_actividad) {
-        this.estado_actividad = estado_actividad;
+    public void setEstadoActividad(String estadoActividad) {
+        this.estadoActividad = estadoActividad;
     }
 
     public Date getFechaCreacion() {
@@ -229,20 +253,65 @@ public class IndicadorDTO {
         this.fechaActualizacion = fechaActualizacion;
     }
 
-    public Integer getIndicadorTipoId() {
-        return indicadorTipoId;
+    public String getAjustePdeiId() {
+        return ajustePdeiId;
     }
 
-    public void setIndicadorTipoId(Integer indicadorTipoId) {
-        this.indicadorTipoId = indicadorTipoId;
+    public void setAjustePdeiId(String ajustePdeiId) {
+        this.ajustePdeiId = ajustePdeiId;
     }
 
-    public Integer getClasificacionId() {
+    public Integer getAnioCumplimientoId() {
+        return anioCumplimientoId;
+    }
+
+    public void setAnioCumplimientoId(Integer anioCumplimientoId) {
+        this.anioCumplimientoId = anioCumplimientoId;
+    }
+
+    public String getNombreTipoIndicador() {
+        return nombreTipoIndicador;
+    }
+
+    public void setNombreTipoIndicador(String nombreTipoIndicador) {
+        this.nombreTipoIndicador = nombreTipoIndicador;
+    }   
+    
+    public String getClasificacionId() {
         return clasificacionId;
     }
 
-    public void setClasificacionId(Integer clasificacionId) {
+    public void setClasificacionId(String clasificacionId) {
         this.clasificacionId = clasificacionId;
     }
+
+    public String getFrecuenciaMedicionId() {
+        return frecuenciaMedicionId;
+    }
+
+    public void setFrecuenciaMedicionId(String frecuenciaMedicionId) {
+        this.frecuenciaMedicionId = frecuenciaMedicionId;
+    }
+
+    public String getPlazoId() {
+        return plazoId;
+    }
+
+    public void setPlazoId(String plazoId) {
+        this.plazoId = plazoId;
+    }
+
+    public String getUnidadRepresentacionId() {
+        return unidadRepresentacionId;
+    }
+
+    public void setUnidadRepresentacionId(String unidadRepresentacionId) {
+        this.unidadRepresentacionId = unidadRepresentacionId;
+    }
+
+
+
+    
+    
     
 }

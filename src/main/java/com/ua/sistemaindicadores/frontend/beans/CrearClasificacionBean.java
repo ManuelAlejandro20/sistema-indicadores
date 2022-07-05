@@ -100,8 +100,8 @@ public class CrearClasificacionBean implements Serializable {
         nuevaClasificacion.setFechaCreacion(new Date());
         nuevaClasificacion.setFechaActualizacion(new Date());
         nuevaClasificacion.setIndicadorCollection(new ArrayList<>());        
-
-        try {
+       
+        if(!clasificacionService.checkClasificacionExists(nombreClasificacion, indicadorTipoSeleccionado.getNombre())) {
             clasificacionService.crearClasificacion(nuevaClasificacion);
             context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
                     "La clasificación " + nombreClasificacion + " ha sido agregada correctamente")
@@ -140,7 +140,7 @@ public class CrearClasificacionBean implements Serializable {
             context.getExternalContext()
                     .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-clasificacion.xhtml");            
             
-        } catch (EJBException e) {
+        }else{
 
             context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
                     "La clasificación " + nombreClasificacion + " ya existe en los registros")

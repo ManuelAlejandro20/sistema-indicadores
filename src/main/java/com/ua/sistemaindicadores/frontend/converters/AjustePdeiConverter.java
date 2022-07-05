@@ -5,7 +5,7 @@
  */
 package com.ua.sistemaindicadores.frontend.converters;
 
-import com.ua.sistemaindicadores.backend.entities.UnidadRepresentacion;
+import com.ua.sistemaindicadores.backend.entities.AjustePdei;
 import com.ua.sistemaindicadores.backend.services.IndicadorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,31 +18,31 @@ import javax.inject.Inject;
 
 /**
  *
- * @author diego
+ * @author aleja
  */
-@FacesConverter(value="unidadRepresentacionConverter", managed=true)
-public class UnidadRepresentacionConverter implements Converter<UnidadRepresentacion>{
+@FacesConverter(value="ajusteConverter", managed=true)
+public class AjustePdeiConverter implements Converter<AjustePdei>{
 
     @Inject
     transient private IndicadorService indicadorService;
     
     @Override
-    public UnidadRepresentacion getAsObject(FacesContext context, UIComponent uic, String value) {
+    public AjustePdei getAsObject(FacesContext context, UIComponent uic, String value) {
         if(value != null && !value.isEmpty())
         {
             try
             {
-                return indicadorService.buscarUnidadRepresentacionID(Integer.parseInt(value));
+                return indicadorService.buscarAjustePdeiID(Integer.parseInt(value));
             }catch(EJBAccessException ex)
             {
-            Logger.getLogger(UnidadRepresentacionConverter.class.getName()).log(Level.SEVERE,null, ex);
+            Logger.getLogger(AjustePdeiConverter.class.getName()).log(Level.SEVERE,null, ex);
             }
         }
         return null;
     }
 
     @Override
-    public String getAsString(FacesContext context, UIComponent uic, UnidadRepresentacion value) {
+    public String getAsString(FacesContext context, UIComponent uic, AjustePdei value) {
          if(value != null)
          {
              return value.getId().toString();

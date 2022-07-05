@@ -50,4 +50,3 @@ public class FrecuenciaMedicionConverter implements Converter<FrecuenciaMedicion
          return "";
     }
 }
-

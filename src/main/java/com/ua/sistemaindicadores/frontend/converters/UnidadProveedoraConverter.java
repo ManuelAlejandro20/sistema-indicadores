@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 /**
  *
- * @author diego
+ * @author aleja
  */
 @FacesConverter(value="unidadProveedoraConverter", managed=true)
 public class UnidadProveedoraConverter implements Converter<UnidadProveedora>{
@@ -50,4 +50,3 @@ public class UnidadProveedoraConverter implements Converter<UnidadProveedora>{
          return "";
     }
 }
-

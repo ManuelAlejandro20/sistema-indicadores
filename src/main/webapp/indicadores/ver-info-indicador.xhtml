@@ -5,8 +5,12 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">      
+        <f:metadata>
+            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.VerIndicadorBean"/>
+            <f:event type="preRenderView" listener="#{verIndicadorBean.desplegarIndicador}"/>            
+        </f:metadata>               
         <div class="ui-g-12 ui-g-title align-center">
-            <h2 class="border-bottom-orange align-center">Información completa de indicador ---</h2>   
+            <h2 class="border-bottom-orange align-center">#{verIndicadorBean.mensajeVerInfoIndicador}</h2>   
         </div>              
         <div class="ui-g-12">
             <div class="ui-g-12 ui-md-2"></div>
@@ -16,9 +20,9 @@
                              styleClass="ui-noborder ui-panelgrid-blank align-left"
                              columns="2">
                     <h3>NOMBRE INDICADOR: </h3>
-                    <p:outputLabel id="nombre" value="NOMBRE INDICADOR"/>    
+                    <p:outputLabel id="nombre" value="#{verIndicadorBean.indicadorSeleccionado.nombreIndicador}"/>    
                     <h3>N° INDICADOR: </h3>
-                    <p:outputLabel id="nInd" value="123456"/>                        
+                    <p:outputLabel id="nInd" value="#{verIndicadorBean.indicadorSeleccionado.numIndicador}"/>                        
                 </p:panelGrid>                    
                     
                 </div>
@@ -27,9 +31,9 @@
                              styleClass="ui-noborder ui-panelgrid-blank align-left"
                              columns="2">                        
                     <h3>% LOGRO: </h3>
-                    <p:outputLabel id="porc" value="22%"/>   
+                    <p:outputLabel id="porc" value="#{verIndicadorBean.indicadorSeleccionado.porcLogro}%"/>   
                     <h3>ESTADO: </h3>
-                    <p:outputLabel id="estado" style="color: orangered;" value="NO VIGENTE"/>                       
+                    <p:outputLabel id="estado" style="#{verIndicadorBean.indicadorSeleccionado.estado == 1 ?'color: green;':'color: orangered;' }" value="#{verIndicadorBean.indicadorSeleccionado.estado == 1 ? 'VIGENTE':'NO VIGENTE' }"/>                       
                 </p:panelGrid>                    
                 </div>
 
@@ -43,82 +47,86 @@
                     <p:panel class="formulario" header="INFORMACIÓN INDICADOR">
                         <p:panelGrid class="crear-tipo-indicadores-table" 
                                      layout="grid"
-                                     styleClass="ui-noborder align-left"
+                                     styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
                                      columns="2">
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="TIPO INDICADOR:"/>    
-                            <p:outputLabel id="tipoInd" value="PLAN DE MEJORA"/>
+                            <p:outputLabel id="tipoInd" value="#{verIndicadorBean.indicadorSeleccionado.clasificacionId.tipo}"/>
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="CLASIFICACIÓN:"/>    
-                            <p:outputLabel id="clas" value="CLASIFICACIÓN"/>    
+                            <p:outputLabel id="clas" value="#{verIndicadorBean.indicadorSeleccionado.clasificacionId.nombre}"/>    
                             <!-- -->                            
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="DESCRIPCIÓN INDICADOR:"/>  
-                            <p:inputTextarea disabled="true" id="descripcion" rows="8" cols="18"/>   
+                            <p:inputTextarea class="textbox-disabled" disabled="true" value="#{verIndicadorBean.indicadorSeleccionado.descripcionIndicador}" id="descripcion" rows="8" cols="18"/>   
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="APLICA LINEAMIENTO:"/>    
-                            <p:outputLabel id="lin" value="LINEAMIENTO"/>    
+                            <p:outputLabel id="lin" value="#{verIndicadorBean.indicadorSeleccionado.aplicaLineamiento}"/>    
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="APLICA OBJETIVO:"/>    
-                            <p:outputLabel id="obj" value="OBJETIVO"/>                                
+                            <p:outputLabel id="obj" value="#{verIndicadorBean.indicadorSeleccionado.aplicaObjetivo}"/>                                
                             <!-- -->                            
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="DESCRIPCIÓN OBJETIVO:"/>  
-                            <p:inputTextarea disabled="true" id="descripcionObj" rows="8" cols="18"/>       
+                            <p:inputTextarea class="textbox-disabled" disabled="true" value="#{verIndicadorBean.indicadorSeleccionado.descripcionObjetivo}" id="descripcionObj" rows="8" cols="18"/>   
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="AJUSTE PEDI:"/>    
-                            <p:outputLabel id="ajustepdei" value="AJUSTE PDEI"/>     
+                            <p:outputLabel id="ajustepdei" value="#{verIndicadorBean.indicadorSeleccionado.ajustePdeiId.ajustePdei}"/>     
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="UNIDAD REPRESENTACIÓN:"/>    
-                            <p:outputLabel id="unidadR" value="UNIDAD REPRESENTACIÓN"/>  
+                            <p:outputLabel id="unidadR" value="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion}"/>  
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="GENERACIÓN DE LOS DATOS:"/>    
-                            <p:outputLabel id="genDatos" value="GENERACIÓN DE LOS DATOS"/>       
+                            <p:outputLabel id="genDatos" value="#{verIndicadorBean.indicadorSeleccionado eq null ? 'Sin datos' : verIndicadorBean.getGeneracionesDatos(verIndicadorBean.indicadorSeleccionado.id)}"/>       
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="PLAZO:"/>    
-                            <p:outputLabel id="plazo" value="PLAZO"/>      
+                            <p:outputLabel id="plazo" value="#{verIndicadorBean.indicadorSeleccionado.plazoId.plazo}"/>      
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="VERSIÓN:"/>    
-                            <p:outputLabel id="version" value="VERSIÓN"/>    
+                            <p:outputLabel id="version" value="#{verIndicadorBean.indicadorSeleccionado.version}"/>    
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="LÍNEA BASE:"/>    
-                            <p:outputLabel id="linbase" value="LÍNEA BASE"/>    
+                            <p:outputLabel id="linbase" value="#{verIndicadorBean.indicadorSeleccionado.lineaBase}"/>    
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="METAS:"/>    
-                            <p:outputLabel id="metas" value="METAS"/>        
+                            <p:outputLabel id="metas" value="#{verIndicadorBean.indicadorSeleccionado.metas}"/>        
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="AÑO CUMPLIMIENTO:"/>    
-                            <p:outputLabel id="anioCum" value="AÑO CUMPLIMIENTO"/>  
+                            <p:outputLabel id="anioCum" value="#{verIndicadorBean.indicadorSeleccionado.anioCumplimientoId.anioCumplimiento}"/>  
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="FRECUENCIA DE MEDICIÓN:"/>    
-                            <p:outputLabel id="fmedicion" value="FRECUENCIA DE MEDICIÓN"/>   
+                            <p:outputLabel id="fmedicion" value="#{verIndicadorBean.indicadorSeleccionado.frecuenciaMedicionId.frecuenciaMedicion}"/>   
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="MEDIO DE VERIFICACIÓN:"/>    
-                            <p:outputLabel id="medVer" value="MEDIO DE VERIFICACIÓN"/>     
+                            <p:outputLabel id="medVer" value="#{verIndicadorBean.indicadorSeleccionado.medioVerificacion}"/>     
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="FORMA DE CÁLCULO:"/>    
-                            <p:outputLabel id="fcalculo" value="FORMA DE CÁLCULO"/>  
+                            <p:outputLabel id="fcalculo" value="#{verIndicadorBean.indicadorSeleccionado.formaCalculo}"/>  
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="FUENTE DE INFORMACIÓN:"/>    
-                            <p:outputLabel id="finfo" value="FUENTE DE INFORMACIÓN"/>     
+                            <p:outputLabel id="finfo" value="#{verIndicadorBean.indicadorSeleccionado.fuenteInformacion}"/>     
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="UNIDAD PROVEEDORA:"/>    
-                            <p:outputLabel id="uprov" value="UNIDAD PROVEEDORA"/>       
+                            <p:outputLabel id="uprov" value="#{verIndicadorBean.indicadorSeleccionado eq null ?  'Sin datos' : verIndicadorBean.getUnidadesProveedoras(verIndicadorBean.indicadorSeleccionado.id)}"/>       
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="PROYECTO ASOCIADO:"/>    
-                            <p:outputLabel id="proyAs" value="PROYECTO ASOCIADO"/>    
+                            <p:outputLabel id="proyAs" value="#{verIndicadorBean.indicadorSeleccionado.proyectoAsociado}"/>    
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="COMENTARIO:"/>    
-                            <p:outputLabel id="comentario" value="COMENTARIO"/> 
+                            <p:outputLabel id="comentario" value="#{verIndicadorBean.indicadorSeleccionado.comentario}"/> 
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="ACTIVIDAD COMPROMETIDA:"/>    
-                            <p:outputLabel id="actividad" value="ACTIVIDAD COMPROMETIDA"/> 
+                            <p:outputLabel id="actividad" value="#{verIndicadorBean.indicadorSeleccionado.actividadComprometida}"/> 
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="ESTADO ACTIVIDAD:"/>    
-                            <p:outputLabel id="estadoAct" value="ESTADO ACTIVIDAD"/> 
+                            <p:outputLabel id="estadoAct" value="#{verIndicadorBean.indicadorSeleccionado.estadoActividad}"/> 
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="FECHA CREACIÓN:"/>    
-                            <p:outputLabel id="fechaCreacion" value="FECHA CREACIÓN"/> 
+                            <p:outputLabel id="fechaCreacion" value="#{verIndicadorBean.indicadorSeleccionado.fechaCreacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
+                            </p:outputLabel>
                             <!-- -->
                             <p:outputLabel class="label-verinfo-indicador" style="font-size: 15px !important;" value="FECHA ACTUALIZACIÓN:"/>    
-                            <p:outputLabel id="fechaAct" value="FECHA ACTUALIZACIÓN"/>                             
+                            <p:outputLabel id="fechaAct" value="#{verIndicadorBean.indicadorSeleccionado.fechaActualizacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy 'a las' HH:mm:ss" timeZone="GMT-4"/>
+                            </p:outputLabel>
                         </p:panelGrid>                                         
                     </p:panel>
                 </div>       

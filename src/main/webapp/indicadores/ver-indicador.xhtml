@@ -14,13 +14,6 @@
         <br></br>        
         <p:growl id="growl" showDetail="true"/>
         <p:toolbar class="ui-g-toolbar-adm">
-
-            <p:toolbarGroup>
-                <p:commandButton value="Crear indicador" 
-                                 class="btn btn-blue btn-group-align"                                     
-                                 action="/faces/creacion/crear-indicador.xhtml?faces-redirect=true"/>
-            </p:toolbarGroup>
-
             <p:toolbarGroup align="right">
                 <p:commandButton value="#{verIndicadorBean.mensajeFiltros}" 
                                  class="btn btn-orange btn-group-align"
@@ -729,18 +722,7 @@
                         icon="fa fa-eye">
                         <f:param name="i" value="#{indicadorDTO.id}" />
                     </p:button>
-                </p:column>                
-                <p:column headerText="Editar"
-                          width="30"
-                          exportable="false"
-                          toggleable="false"                          
-                          styleClass="align-center">
-                    <p:button
-                        outcome="/indicadores/ver-info-indicador.xhtml"
-                        class="btn btn-info"
-                        icon="fa fa-edit">
-                    </p:button>
-                </p:column>                
+                </p:column>                              
             </p:dataTable>                             
         </div>                          
     </ui:define>                

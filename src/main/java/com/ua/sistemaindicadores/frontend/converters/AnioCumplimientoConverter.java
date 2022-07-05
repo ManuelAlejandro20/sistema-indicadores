@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 /**
  *
- * @author diego
+ * @author aleja
  */
 @FacesConverter(value="anioCumplimientoConverter", managed=true)
 public class AnioCumplimientoConverter implements Converter<AnioCumplimiento>{
@@ -50,4 +50,3 @@ public class AnioCumplimientoConverter implements Converter<AnioCumplimiento>{
          return "";
     }
 }
-

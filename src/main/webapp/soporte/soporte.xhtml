@@ -4,7 +4,10 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/template.xhtml">
-    <ui:define name="content">      
+    <ui:define name="content">     
+        <f:metadata>
+            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.SoporteBean"/>
+        </f:metadata>             
         <div class="ui-g-12 ui-g-title align-center">
             <h2 class="border-bottom-orange align-center">Soporte</h2>   
         </div>
@@ -18,60 +21,80 @@
                                      layout="grid"
                                      styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
                                      columns="2">
-                            <p:outputLabel class="texto-ver-centrado" id="nombreLabel" value="Nombres *"/>
+                            <p:outputLabel class="texto-ver-centrado" id="nombresLabel" value="Nombres *"/>
                             <p:inputText 
-                                id="nombre"
+                                id="nombres"
+                                value="#{soporteBean.nombres}"
                                 required="true" 
                                 requiredMessage="Campo nombres es requerido."
                                 tabindex="1"/>
-                            <p:message for="nombreLabel"/>       
-                            <p:message for="nombre"/>       
-                            <p:outputLabel class="texto-ver-centrado" id="apellidoLabel" value="Apellidos *"/>
+                            <p:message for="nombresLabel"/>       
+                            <p:message for="nombres"/>       
+                            <p:outputLabel class="texto-ver-centrado" id="apellidosLabel" value="Apellidos *"/>
                             <p:inputText 
-                                id="apellido"
+                                id="apellidos"
+                                value="#{soporteBean.apellidos}"
                                 required="true" 
                                 requiredMessage="Campo Apellidos es requerido."
                                 tabindex="2"/>
-                            <p:message for="apellidoLabel"/>       
-                            <p:message for="apellido"/>                                         
+                            <p:message for="apellidosLabel"/>       
+                            <p:message for="apellidos"/>                                         
                             <p:outputLabel class="texto-ver-centrado" id="cargoLabel" value="Cargo *"/>
                             <p:inputText 
                                 id="cargo"
+                                value="#{soporteBean.cargo}"
                                 required="true" 
                                 requiredMessage="Campo Cargo es requerido."
                                 tabindex="3"/>
                             <p:message for="cargoLabel"/>       
                             <p:message for="cargo"/>    
                             <p:outputLabel class="texto-ver-centrado" id="correoLabel" value="Correo *"/>
-                            <p:inputText 
-                                id="correo"
-                                required="true" 
-                                requiredMessage="Campo Correo es requerido."
-                                tabindex="5"/>
+                            <p:inputText id="correo"
+                                         value="#{soporteBean.correo}"
+                                         required="true" 
+                                         requiredMessage="Campo Correo es requerido."                                     
+                                         tabindex="4">
+                                <f:validator validatorId="emailValidator"/>
+                            </p:inputText>
                             <p:message for="correoLabel"/>       
                             <p:message for="correo"/>        
                             <p:outputLabel class="texto-ver-centrado" id="asuntoLabel" value="Asunto *"/>
                             <p:inputText 
                                 id="asunto"
+                                value="#{soporteBean.asunto}"
                                 required="true" 
                                 requiredMessage="Campo Asunto es requerido."
-                                tabindex="6"/>
+                                tabindex="5"/>
                             <p:message for="asuntoLabel"/>       
                             <p:message for="asunto"/>                              
                             <p:outputLabel class="texto-ver-centrado" id="mensajeLabel" value="Mensaje: *"/>                            
                             <p:inputTextarea 
-                                maxlength="250"
+                                value="#{soporteBean.mensaje}"
                                 required="true" 
                                 requiredMessage="Campo Mensaje es requerido." 
                                 id="mensaje" rows="15" cols="18"/>
                             <p:message for="mensajeLabel"/>                                     
                             <p:message for="mensaje"/>      
-                            <p:commandButton widgetVar="enviarButton"
-                                             value="Enviar"  
-                                             class="ui-button-formulario"   
+                            <p:commandButton id="enviar" 
+                                             value="Enviar"                                               
+                                             widgetVar="enviarButton"
+                                             icon="fa fa-send"
+                                             partialSubmit="true"                                             
+                                             class="ui-button-formulario"  
+                                             actionListener="#{soporteBean.enviarMensajeSoporte()}"  
                                              onclick="PF('enviarButton').disable()"
+                                             disabled="#{soporteBean.disabled}"
                                              update="@form" 
-                                             process="@this, @form"/>
+                                             process="@this, @form">
+                                    <p:confirm header="Confirmación"
+                                               message="Se enviará el mensaje de soporte ¿desea continuar?"
+                                               icon="fa fa-warning"
+                                               />
+                            </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">                            
+                            <p:commandButton value="Sí" type="button" styleClass="ui-button-formulario ui-confirmdialog-yes" />
+                            <p:commandButton value="No" type="button" styleClass="ui-button-formulario ui-confirmdialog-no ui-button-flat"/>
+                        </p:confirmDialog>                            
                         </p:panelGrid>
                     </p:panel>
                 </div>       

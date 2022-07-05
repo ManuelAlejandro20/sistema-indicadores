@@ -37,16 +37,33 @@
         </p:toolbar>
         <div class="ui-g-12" style="display:#{verClasificacionBean.filtros?'none':'block'}">
             <p:panel class="formulario" header="FILTROS">
-                <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder">
-                    <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="nombreLabel" value="NOMBRE CLASIFICACIÓN"/>
-                    <p:inputText id="nombre"
-                                 value="#{verClasificacionBean.nombreSeleccionado}">
-                        <p:ajax event="keyup" 
+                <p:panelGrid layout="grid" columns="4" styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">
+                    <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="clasLabel" value="CLASIFICACIÓN"/>
+                    <p:selectOneMenu id="clasLista"
+                                     value="#{verClasificacionBean.clasSeleccionada}"
+                                     var="clas"
+                                     converter="clasificacionConverter"
+                                     filter="true" 
+                                     filterMatchMode="contains" 
+                                     styleClass="manymenu-advanced"                                     
+                                     >
+                        <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{verClasificacionBean.listaClasificaciones}"
+                                       var="clasVar"
+                                       itemLabel="#{clasVar.id}-#{clasVar.nombre}"
+                                       itemValue="#{clasVar}"/>
+                        <p:column>
+                            #{clas.id}
+                        </p:column>                                
+                        <p:column>
+                            #{clas.nombre}
+                        </p:column>                              
+                        <p:ajax event="itemSelect" 
                                 delay="50"
-                                listener="#{verClasificacionBean.onSeleccionNombreListener}"
+                                listener="#{verClasificacionBean.onSeleccionClasificacionListener}"
                                 process="@this" 
                                 update="@form:clasificaciones" />
-                    </p:inputText>                                         
+                    </p:selectOneMenu>                                                         
                     <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="tipoLabel" value="TIPO"/>
                     <p:selectOneMenu id="listaTipo"
                                      value="#{verClasificacionBean.tipoSeleccionado}"
@@ -69,7 +86,7 @@
                                 delay="50"
                                 listener="#{verClasificacionBean.onSeleccionTipoListener}"
                                 process="@this" 
-                                update="@form:clasificaciones" />
+                                update="@form:clasificaciones, @form:clasLista" />
                     </p:selectOneMenu>                                           
                     <p:outputLabel style="font-weight:bold; vertical-align: -webkit-baseline-middle;" id="estadoLabel" value="ESTADO"/>
                     <p:selectOneMenu id="estado"
