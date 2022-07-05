@@ -16,6 +16,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -69,7 +71,7 @@ public class Indicador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "num_indicador")
-    private int numIndicador;
+    private Integer numIndicador;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -78,7 +80,7 @@ public class Indicador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "estado")
-    private short estado;
+    private Short estado;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -164,6 +166,13 @@ public class Indicador implements Serializable {
     @Column(name = "fecha_actualizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaActualizacion;
+    @ManyToMany(mappedBy = "indicadorCollection")
+    private Collection<GeneracionDatos> generacionDatosCollection;
+    @JoinTable(name = "unidad_proveedora_indicador", joinColumns = {
+        @JoinColumn(name = "id_indicador", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_unidad_proveedora", referencedColumnName = "id")})
+    @ManyToMany
+    private Collection<UnidadProveedora> unidadProveedoraCollection;
     @JoinColumn(name = "ajuste_pdei_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private AjustePdei ajustePdeiId;
@@ -176,15 +185,9 @@ public class Indicador implements Serializable {
     @JoinColumn(name = "frecuencia_medicion_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private FrecuenciaMedicion frecuenciaMedicionId;
-    @JoinColumn(name = "generacion_datos_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private GeneracionDatos generacionDatosId;
     @JoinColumn(name = "plazo_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Plazo plazoId;
-    @JoinColumn(name = "unidad_proveedora_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private UnidadProveedora unidadProveedoraId;
     @JoinColumn(name = "unidad_representacion_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private UnidadRepresentacion unidadRepresentacionId;
@@ -198,14 +201,7 @@ public class Indicador implements Serializable {
         this.id = id;
     }
 
-    public Indicador(Integer id, int numIndicador, String nombreIndicador,
-            short estado, String descripcionIndicador, String aplicaLineamiento,
-            String aplicaObjetivo, String descripcionObjetivo, String version,
-            String lineaBase, String metas, String porcLogro,
-            String medioVerificacion, String formaCalculo,
-            String fuenteInformacion, String proyectoAsociado, String comentario,
-            String actividadComprometida, String estadoActividad,
-            Date fechaCreacion, Date fechaActualizacion) {
+    public Indicador(Integer id, Integer numIndicador, String nombreIndicador, Short estado, String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, Date fechaActualizacion) {
         this.id = id;
         this.numIndicador = numIndicador;
         this.nombreIndicador = nombreIndicador;
@@ -237,11 +233,11 @@ public class Indicador implements Serializable {
         this.id = id;
     }
 
-    public int getNumIndicador() {
+    public Integer getNumIndicador() {
         return numIndicador;
     }
 
-    public void setNumIndicador(int numIndicador) {
+    public void setNumIndicador(Integer numIndicador) {
         this.numIndicador = numIndicador;
     }
 
@@ -253,11 +249,11 @@ public class Indicador implements Serializable {
         this.nombreIndicador = nombreIndicador;
     }
 
-    public short getEstado() {
+    public Short getEstado() {
         return estado;
     }
 
-    public void setEstado(short estado) {
+    public void setEstado(Short estado) {
         this.estado = estado;
     }
 
@@ -397,6 +393,24 @@ public class Indicador implements Serializable {
         this.fechaActualizacion = fechaActualizacion;
     }
 
+    @XmlTransient
+    public Collection<GeneracionDatos> getGeneracionDatosCollection() {
+        return generacionDatosCollection;
+    }
+
+    public void setGeneracionDatosCollection(Collection<GeneracionDatos> generacionDatosCollection) {
+        this.generacionDatosCollection = generacionDatosCollection;
+    }
+
+    @XmlTransient
+    public Collection<UnidadProveedora> getUnidadProveedoraCollection() {
+        return unidadProveedoraCollection;
+    }
+
+    public void setUnidadProveedoraCollection(Collection<UnidadProveedora> unidadProveedoraCollection) {
+        this.unidadProveedoraCollection = unidadProveedoraCollection;
+    }
+
     public AjustePdei getAjustePdeiId() {
         return ajustePdeiId;
     }
@@ -429,28 +443,12 @@ public class Indicador implements Serializable {
         this.frecuenciaMedicionId = frecuenciaMedicionId;
     }
 
-    public GeneracionDatos getGeneracionDatosId() {
-        return generacionDatosId;
-    }
-
-    public void setGeneracionDatosId(GeneracionDatos generacionDatosId) {
-        this.generacionDatosId = generacionDatosId;
-    }
-
     public Plazo getPlazoId() {
         return plazoId;
     }
 
     public void setPlazoId(Plazo plazoId) {
         this.plazoId = plazoId;
-    }
-
-    public UnidadProveedora getUnidadProveedoraId() {
-        return unidadProveedoraId;
-    }
-
-    public void setUnidadProveedoraId(UnidadProveedora unidadProveedoraId) {
-        this.unidadProveedoraId = unidadProveedoraId;
     }
 
     public UnidadRepresentacion getUnidadRepresentacionId() {
