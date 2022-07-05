@@ -17,533 +17,453 @@
             <div class="ui-g-12 ui-md-6 ui-g-nopad">
                 <div class="card card-creacion-tipo-indicador">                                              
                     <p:panel id="formulario" class="formulario" header="CREAR INDICADOR">
-                        <p:panelGrid class="crear-tipo-indicadores-table" 
-                                     layout="grid"
-                                     styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
-                                     columns="2">
-                            <!---->                  
-                            <p:outputLabel class="texto-ver-centrado" id="vigenciaLabel" value="Vigencia: *"/>  
-                            <p:selectOneMenu
-                                value="#{crearIndicadorBean.vigencia}" 
-                                id="vigencia" required="true">
-                                <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
-                                <f:selectItem itemLabel="No Vigente" itemValue="NO VIGENTE"/>
-                                <p:ajax event="itemSelect"
-                                        listener="#{crearIndicadorBean.cambiarEstado}"
-                                        process="@this"
-                                        update="@form:listaTipo, @form:listaClas"/>       
-                            </p:selectOneMenu>
-                            <p:message for="vigenciaLabel"/>                                     
-                            <p:message for="vigencia"/>     
-                            <p:outputLabel class="texto-ver-centrado" id="listaTipoLabel" value="Tipo indicador: *"/>
-                            <p:selectOneMenu id="listaTipo"
-                                             value="#{crearIndicadorBean.indicadorTipoSeleccionado}"
-                                             required="true"
-                                             requiredMessage="Se debe selccionar un tipo de indicador."
-                                             var="tipo"
-                                             converter="tipoIndicadorConverter"
-                                             filter="true" 
-                                             filterMatchMode="contains" 
-                                             styleClass="manymenu-advanced"
-                                             >
-                                <f:selectItems value="#{crearIndicadorBean.listaIndicadorTipo}"
-                                               var="indTipo"
-                                               itemLabel="#{indTipo.nombre}"
-                                               itemValue="#{indTipo}"
-                                               itemDescription="#{indTipo.descripcion}"/>
-                                <p:column>
-                                    #{tipo.nombre}
-                                </p:column>
-                                <p:message for="indTipo"/>                
-                                <p:ajax event="itemSelect"
-                                        listener="#{crearIndicadorBean.cambiarTipoIndicador}"
-                                        process="@this"
-                                        update="@form:listaClas"/>                                  
-                            </p:selectOneMenu>
-                            <p:message for="listaTipoLabel"/>                                     
-                            <p:message for="listaTipo"/>                              
-                            <!---->
-                            <p:outputLabel class="texto-ver-centrado" id="clasLabel" value="Clasificación: *"/>
-                            <p:selectOneMenu id="listaClas"
-                                             value="#{crearIndicadorBean.clasificacionSeleccionada}"
-                                             required="true"
-                                             requiredMessage="Se debe seleccionar una clasificación."
-                                             var="clas"
-                                             converter="clasificacionConverter"
-                                             filter="true" 
-                                             filterMatchMode="contains" 
-                                             styleClass="manymenu-advanced"
-                                             >
-                                <f:selectItems value="#{crearIndicadorBean.listaClasificacion}"
-                                               var="clasificacion"
-                                               itemLabel="#{clasificacion.nombre}"
-                                               itemValue="#{clasificacion}"
-                                               itemDescription="#{clasificacion.descripcion}"/>
-                                <p:column>
-                                    #{clas.nombre}
-                                </p:column>
-                                <p:message for="clasificacion"/>                
-                            </p:selectOneMenu>
-                            <p:message for="clasLabel"/>                                     
-                            <p:message for="listaClas"/>     
-                            <!---->
-                            <p:outputLabel class="texto-ver-centrado" id="nIndLabel" value="N° de indicador: *"/>
-                            <p:inputText 
-                                value="#{crearIndicadorBean.n_indicador}"
-                                required="true"
-                                requiredMessage="Campo n° de indicador es requerido."
-                                id="nInd"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="nIndLabel"/>                                     
-                            <p:message for="nInd"/>     
-                            <!---->     
-                            <p:outputLabel class="texto-ver-centrado" id="nombreLabel" value="Nombre de indicador: *"/>
-                            <p:inputText 
-                                value="#{crearIndicadorBean.nombreIndicador}"
-                                required="true"
-                                requiredMessage="Campo nombre de indicador es requerido."
-                                id="nombre"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="nombreLabel"/>                                     
-                            <p:message for="nombre"/>     
-                            <!---->                            
-                            <p:outputLabel class="texto-ver-centrado" id="descripcionIndicadorLabel" value="Descripción de indicador: *"/>
-                            <p:inputTextarea 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo descripción de indicador es requerido."
-                                value="#{crearIndicadorBean.descripcionIndicador}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="descripcionIndicador"                                 
-                                maxlength="240" 
-                                rows="8" cols="18">
-                                <p:ajax process='@this'/>
-                            </p:inputTextarea>
-                            <p:message for="descripcionIndicadorLabel"/>                                     
-                            <p:message for="descripcionIndicador"/>     
-                            <!---->    
-                            <p:outputLabel class="texto-ver-centrado" id="aplicaLineamientoLabel" value="Aplica lineamiento: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo aplica lineamiento es requerido."                                
-                                value="#{crearIndicadorBean.aplicaLineamiento}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="aplicaLineamiento"                                 
-                                >
-                                <p:ajax process='@this'/>
-                            </p:inputText>
-                            <p:message for="aplicaLineamientoLabel"/>                                     
-                            <p:message for="aplicaLineamiento"/>     
-                            <!---->                              
-                            <p:outputLabel class="texto-ver-centrado" id="aplicaObjetivoLabel" value="Aplica objetivo: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo aplica objetivo es requerido."                                
-                                value="#{crearIndicadorBean.aplicaObjetivo}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="aplicaObjetivo"                                 
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="aplicaObjetivoLabel"/>                                     
-                            <p:message for="aplicaObjetivo"/>     
-                            <!---->                                  
-                            <p:outputLabel class="texto-ver-centrado" id="descripcionObjetivoLabel" value="Descripción de objetivo: *"/>
-                            <p:inputTextarea 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo descripción de objetivo es requerido."                                
-                                value="#{crearIndicadorBean.descripcionObjetivo}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="descripcionObjetivo"                                 
-                                maxlength="240"
-                                rows="8" cols="18">
-                                <p:ajax process='@this'/>                                
-                            </p:inputTextarea>
-                            <p:message for="descripcionObjetivoLabel"/>                                     
-                            <p:message for="descripcionObjetivo"/>     
-                            <!---->      
-                            <p:outputLabel class="texto-ver-centrado" id="ajustePDEILabel" value="Ajuste PDEI: *"/>
-                            <p:selectOneMenu  
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo ajuste PDEI es requerido."                                
-                                value="#{crearIndicadorBean.ajustePDEI}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="ajustePDEI">
-                                <p:ajax process='@this'/>                                
-                            </p:selectOneMenu>
-                            <p:message for="ajustePDEILabel"/>                                     
-                            <p:message for="ajustePDEI"/>                              
-                            <!---->  
-                            <p:outputLabel class="texto-ver-centrado" id="unidadRepresentacionLabel" value="Unidad de representación: *"/>
-                            <p:selectOneMenu 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo unidad de representación es requerido."                                
-                                value="#{crearIndicadorBean.unidadRepresentacion}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="unidadRepresentacion">
-                                <p:ajax process='@this'/>                                
-                            </p:selectOneMenu>
-                            <p:message for="unidadRepresentacionLabel"/>                                     
-                            <p:message for="unidadRepresentacion"/>                              
-                            <!---->  
-                            <p:outputLabel class="texto-ver-centrado" id="generacionDatosLabel" value="Generación de los datos: *"/>
-                            <p:selectOneMenu  
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo generación de los datos es requerido."                                
-                                value="#{crearIndicadorBean.generacionDatos}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="generacionDatos">
-                                <p:ajax process='@this'/>                                
-                            </p:selectOneMenu>
-                            <p:message for="generacionDatosLabel"/>                                     
-                            <p:message for="generacionDatos"/>                              
-                            <!---->                              
-                            <p:outputLabel class="texto-ver-centrado" id="plazoLabel" value="Plazo: *"/>
-                            <p:selectOneMenu  
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo plazo es requerido."                                
-                                value="#{crearIndicadorBean.plazo}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="plazo">
-                                <p:ajax process='@this'/>                                
-                            </p:selectOneMenu>
-                            <p:message for="plazoLabel"/>                                     
-                            <p:message for="plazo"/>                              
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="versionLabel" value="Versión: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo versión es requerido."                                
-                                value="#{crearIndicadorBean.version}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="version"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="versionLabel"/>                                     
-                            <p:message for="version"/>    
-                            <!---->     
-                            <p:outputLabel class="texto-ver-centrado" id="lineaBaseLabel" value="Línea base: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo linea base es requerido."                                
-                                value="#{crearIndicadorBean.lineaBase}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="lineaBase"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="lineaBaseLabel"/>                                     
-                            <p:message for="lineaBase"/>    
-                            <!---->                                 
-                            <p:outputLabel class="texto-ver-centrado" id="anio2020Label" value="2020: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2020 es requerido."                                
-                                value="#{crearIndicadorBean.anio2020}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2020"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2020Label"/>                                     
-                            <p:message for="anio2020"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anio2021Label" value="2021: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2021 es requerido."                                 
-                                value="#{crearIndicadorBean.anio2021}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2021"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2021Label"/>                                     
-                            <p:message for="anio2021"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anio2022Label" value="2022: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2022 es requerido."                                 
-                                value="#{crearIndicadorBean.anio2022}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2022"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2022Label"/>                                     
-                            <p:message for="anio2022"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anio2023Label" value="2023: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2023 es requerido."                                 
-                                value="#{crearIndicadorBean.anio2023}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2023"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2023Label"/>                                     
-                            <p:message for="anio2023"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anio2024Label" value="2024: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2024 es requerido."                                 
-                                value="#{crearIndicadorBean.anio2024}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2024"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2024Label"/>                                     
-                            <p:message for="anio2024"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anio2025Label" value="2025: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2025 es requerido."                                 
-                                value="#{crearIndicadorBean.anio2025}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2025"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2025Label"/>                                     
-                            <p:message for="anio2025"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anio2026Label" value="2026: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2026 es requerido."                                 
-                                value="#{crearIndicadorBean.anio2026}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2026"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2026Label"/>                                     
-                            <p:message for="anio2026"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anio2027Label" value="2027: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2027 es requerido."                                 
-                                value="#{crearIndicadorBean.anio2027}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2027"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2027Label"/>                                     
-                            <p:message for="anio2027"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anio2028Label" value="2028: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2028 es requerido."                                 
-                                value="#{crearIndicadorBean.anio2028}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2028"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2028Label"/>                                     
-                            <p:message for="anio2028"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anio2029Label" value="2029: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2029 es requerido."                                 
-                                value="#{crearIndicadorBean.anio2029}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2029"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2029Label"/>                                     
-                            <p:message for="anio2029"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anio2030Label" value="2030: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo 2030 es requerido."                                 
-                                value="#{crearIndicadorBean.anio2030}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anio2030"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="anio2030Label"/>                                     
-                            <p:message for="anio2030"/>    
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="metasLabel" value="Metas: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo metas es requerido."                                 
-                                value="#{crearIndicadorBean.metas}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="metas"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="metasLabel"/>                                     
-                            <p:message for="metas"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="anioCumplimientoLabel" value="Año cumplimiento: *"/>
-                            <p:selectOneMenu
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo año cumplimiento es requerido."                                 
-                                value="#{crearIndicadorBean.anioCumplimiento}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="anioCumplimiento">
-                                <p:ajax process='@this'/>                                
-                            </p:selectOneMenu>
-                            <p:message for="anioCumplimientoLabel"/>                                     
-                            <p:message for="anioCumplimiento"/>   
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="logroLabel" value="% Logro: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo % logro es requerido."                                 
-                                value="#{crearIndicadorBean.logro}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="logro"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="logroLabel"/>                                     
-                            <p:message for="logro"/> 
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="frecuenciaMedicionLabel" value="Frecuencia de medición: *"/>
-                            <p:selectOneMenu  
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo frecuencia de medición es requerido."                                 
-                                value="#{crearIndicadorBean.frecuenciaMedicion}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="frecuenciaMedicion">
-                                <p:ajax process='@this'/>                                
-                            </p:selectOneMenu>
-                            <p:message for="frecuenciaMedicionLabel"/>                                     
-                            <p:message for="frecuenciaMedicion"/>  
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="medioVerificacionLabel" value="Medio de verificación: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo medio de verificación es requerido."                                 
-                                value="#{crearIndicadorBean.medioVerificacion}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="medioVerificacion"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="medioVerificacionLabel"/>                                     
-                            <p:message for="medioVerificacion"/>  
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="formaCalculoLabel" value="Forma de cálculo: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo forma de cálculo es requerido."                                 
-                                value="#{crearIndicadorBean.formaCalculo}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="formaCalculo"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="formaCalculoLabel"/>                                     
-                            <p:message for="formaCalculo"/>     
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="fuenteInformacionLabel" value="Fuente de información: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo fuente de información es requerido."                                 
-                                value="#{crearIndicadorBean.fuenteInformacion}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="fuenteInformacion"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="fuenteInformacionLabel"/>                                     
-                            <p:message for="fuenteInformacion"/>        
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="unidadProveedoraLabel" value="Unidad proveedora: *"/>
-                            <p:selectOneMenu 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo unidad proveedora es requerido."                                 
-                                value="#{crearIndicadorBean.unidadProveedora}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="unidadProveedora">
-                                <p:ajax process='@this'/>
-                            </p:selectOneMenu>                            
-                            <p:message for="unidadProveedoraLabel"/>                                     
-                            <p:message for="unidadProveedora"/>      
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="proyectoAsociadoLabel" value="Proyecto asociado: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo proyecto asociado es requerido."                                 
-                                value="#{crearIndicadorBean.proyectoAsociado}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="proyectoAsociado"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="proyectoAsociadoLabel"/>                                     
-                            <p:message for="proyectoAsociado"/>           
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="comentarioLabel" value="Comentario: *"/>
-                            <p:inputTextarea 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo comentario es requerido."                                 
-                                value="#{crearIndicadorBean.comentario}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="comentario"                                 
-                                maxlength="240" 
-                                rows="8" cols="18">
-                                <p:ajax process='@this'/>                                
-                            </p:inputTextarea>
-                            <p:message for="comentarioLabel"/>                                     
-                            <p:message for="comentario"/>        
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="actividadComprometidaLabel" value="Actividad comprometida: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo actividad comprometida es requerida."                                 
-                                value="#{crearIndicadorBean.actividadComprometida}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="actividadComprometida"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="actividadComprometidaLabel"/>                                     
-                            <p:message for="actividadComprometida"/>      
-                            <!---->                                     
-                            <p:outputLabel class="texto-ver-centrado" id="estadoActividadLabel" value="Estado de actividad: *"/>
-                            <p:inputText 
-                                required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                requiredMessage="Campo estado de actividad es requerido."                                 
-                                value="#{crearIndicadorBean.estadoActividad}"
-                                disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                id="estadoActividad"                                
-                                >
-                                <p:ajax process='@this'/>                                
-                            </p:inputText>
-                            <p:message for="estadoActividadLabel"/>                                     
-                            <p:message for="estadoActividad"/>                                  
-                            <!---->     
-                            <!---->     
-                            <!---->     
-                            <p:commandButton value="Crear indicador"   
-                                             class="ui-button-formulario"     
-                                             action="#{crearIndicadorBean.crearIndicador}"   
-                                             update="@form" 
-                                             process="@this, @form"/>                                
-                        </p:panelGrid>
+                        <p:wizard flowListener="#{crearIndicadorBean.flujoProceso}"
+                                  showStepStatus="true"
+                                  nextLabel="Siguiente"
+                                  backLabel="Anterior"
+                                  >        
+                            <p:tab id="pag1" title="1">
+                                <p:panelGrid class="crear-tipo-indicadores-table" 
+                                             layout="grid"
+                                             styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
+                                             columns="2">
+                                    <!---->
+                                    <p:outputLabel class="texto-ver-centrado" id="vigenciaLabel" value="Vigencia: *"/>  
+                                    <p:selectOneMenu
+                                        value="#{crearIndicadorBean.vigencia}" 
+                                        id="vigencia" required="true">
+                                        <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
+                                        <f:selectItem itemLabel="No Vigente" itemValue="NO VIGENTE"/>
+                                        <p:ajax event="itemSelect"
+                                                listener="#{crearIndicadorBean.cambiarEstado}"
+                                                process="@this"
+                                                update="@form:listaTipo, @form:listaClas"/>       
+                                    </p:selectOneMenu>
+                                    <p:message for="vigenciaLabel"/>                                     
+                                    <p:message for="vigencia"/>     
+                                    <p:outputLabel class="texto-ver-centrado" id="listaTipoLabel" value="Tipo indicador: *"/>
+                                    <p:selectOneMenu id="listaTipo"
+                                                     value="#{crearIndicadorBean.indicadorTipoSeleccionado}"
+                                                     required="true"
+                                                     requiredMessage="Se debe selccionar un tipo de indicador."
+                                                     var="tipo"
+                                                     converter="tipoIndicadorConverter"
+                                                     filter="true" 
+                                                     filterMatchMode="contains" 
+                                                     styleClass="manymenu-advanced"
+                                                     >
+                                        <f:selectItems value="#{crearIndicadorBean.listaIndicadorTipo}"
+                                                       var="indTipo"
+                                                       itemLabel="#{indTipo.nombre}"
+                                                       itemValue="#{indTipo}"
+                                                       itemDescription="#{indTipo.descripcion}"/>
+                                        <p:column>
+                                            #{tipo.nombre}
+                                        </p:column>
+                                        <p:message for="indTipo"/>                
+                                        <p:ajax event="itemSelect"
+                                                listener="#{crearIndicadorBean.cambiarTipoIndicador}"
+                                                process="@this"
+                                                update="@form:listaClas"/>                                  
+                                    </p:selectOneMenu>
+                                    <p:message for="listaTipoLabel"/>                                     
+                                    <p:message for="listaTipo"/>                              
+                                    <!---->
+                                    <p:outputLabel class="texto-ver-centrado" id="clasLabel" value="Clasificación: *"/>
+                                    <p:selectOneMenu id="listaClas"
+                                                     value="#{crearIndicadorBean.clasificacionSeleccionada}"
+                                                     required="true"
+                                                     requiredMessage="Se debe seleccionar una clasificación."
+                                                     var="clas"
+                                                     converter="clasificacionConverter"
+                                                     filter="true" 
+                                                     filterMatchMode="contains" 
+                                                     styleClass="manymenu-advanced"
+                                                     >
+                                        <f:selectItems value="#{crearIndicadorBean.listaClasificacion}"
+                                                       var="clasificacion"
+                                                       itemLabel="#{clasificacion.nombre}"
+                                                       itemValue="#{clasificacion}"
+                                                       itemDescription="#{clasificacion.descripcion}"/>
+                                        <p:column>
+                                            #{clas.nombre}
+                                        </p:column>
+                                        <p:message for="clasificacion"/>                
+                                    </p:selectOneMenu>
+                                    <p:message for="clasLabel"/>                                     
+                                    <p:message for="listaClas"/>     
+                                    <!---->
+                                    <p:outputLabel class="texto-ver-centrado" id="nIndLabel" value="N° de indicador: *"/>
+                                    <p:inputText 
+                                        value="#{crearIndicadorBean.n_indicador}"
+                                        required="true"
+                                        requiredMessage="Campo n° de indicador es requerido."
+                                        id="nInd"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="nIndLabel"/>                                     
+                                    <p:message for="nInd"/>     
+                                    <!---->     
+                                    <p:outputLabel class="texto-ver-centrado" id="nombreLabel" value="Nombre de indicador: *"/>
+                                    <p:inputText 
+                                        value="#{crearIndicadorBean.nombreIndicador}"
+                                        required="true"
+                                        requiredMessage="Campo nombre de indicador es requerido."
+                                        id="nombre"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="nombreLabel"/>                                     
+                                    <p:message for="nombre"/>     
+                                    <!---->                            
+                                    <p:outputLabel class="texto-ver-centrado" id="descripcionIndicadorLabel" value="Descripción de indicador: *"/>
+                                    <p:inputTextarea 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo descripción de indicador es requerido."
+                                        value="#{crearIndicadorBean.descripcionIndicador}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="descripcionIndicador"                                 
+                                        maxlength="240" 
+                                        rows="8" cols="18">
+                                        <p:ajax process='@this'/>
+                                    </p:inputTextarea>
+                                    <p:message for="descripcionIndicadorLabel"/>                                     
+                                    <p:message for="descripcionIndicador"/>     
+                                    <!---->    
+                                    <p:outputLabel class="texto-ver-centrado" id="aplicaLineamientoLabel" value="Aplica lineamiento: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo aplica lineamiento es requerido."                                
+                                        value="#{crearIndicadorBean.aplicaLineamiento}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="aplicaLineamiento"                                 
+                                        >
+                                        <p:ajax process='@this'/>
+                                    </p:inputText>
+                                    <p:message for="aplicaLineamientoLabel"/>                                     
+                                    <p:message for="aplicaLineamiento"/>     
+                                    <!---->                              
+                                    <p:outputLabel class="texto-ver-centrado" id="aplicaObjetivoLabel" value="Aplica objetivo: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo aplica objetivo es requerido."                                
+                                        value="#{crearIndicadorBean.aplicaObjetivo}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="aplicaObjetivo"                                 
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="aplicaObjetivoLabel"/>                                     
+                                    <p:message for="aplicaObjetivo"/>     
+                                    <!---->                                  
+                                    <p:outputLabel class="texto-ver-centrado" id="descripcionObjetivoLabel" value="Descripción de objetivo: *"/>
+                                    <p:inputTextarea 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo descripción de objetivo es requerido."                                
+                                        value="#{crearIndicadorBean.descripcionObjetivo}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="descripcionObjetivo"                                 
+                                        maxlength="240"
+                                        rows="8" cols="18">
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputTextarea>
+                                    <p:message for="descripcionObjetivoLabel"/>                                     
+                                    <p:message for="descripcionObjetivo"/>     
+                                    <!---->      
+                                    <p:outputLabel class="texto-ver-centrado" id="ajustePDEILabel" value="Ajuste PDEI: *"/>
+                                    <p:selectOneMenu  
+                                        id="ajustePDEI"
+                                        value="#{crearIndicadorBean.ajustePDEI}"
+                                        required="true"
+                                        var="tipo"
+                                        converter="ajustePdeiConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced">
+                                        <p:ajax process='@this'/>
+                                        <f:selectItems value="#{crearIndicadorBean.listaAjustePdei}"
+                                                       var="ajustePdei"
+                                                       itemLabel="#{ajustePdei.ajustePdei}"
+                                                       itemValue="#{ajustePdei}"/>                                
+                                    </p:selectOneMenu>
+                                    <p:message for="ajustePDEILabel"/>                                     
+                                    <p:message for="ajustePDEI"/>                              
+                                    <!---->  
+                                    <p:outputLabel class="texto-ver-centrado" id="unidadRepresentacionLabel" value="Unidad de representación: *"/>
+                                    <p:selectOneMenu
+                                        id="unidadRepresentacion"                            
+                                        value="#{crearIndicadorBean.unidadRepresentacion}"
+                                        required="true"
+                                        var="tipo"
+                                        converter="unidadRepresentacionConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced">
+                                        <p:ajax process='@this'/>  
+                                        <f:selectItems value="#{crearIndicadorBean.listaUnidadRepresentacion}"
+                                                       var="unidadRepresentacion"
+                                                       itemLabel="#{unidadRepresentacion.unidadRepresentacion}"
+                                                       itemValue="#{unidadRepresentacion}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="unidadRepresentacionLabel"/>                                     
+                                    <p:message for="unidadRepresentacion"/>                              
+                                    <!---->  
+                                    <p:outputLabel class="texto-ver-centrado" id="generacionDatosLabel" value="Generación de los datos: *"/>
+                                    <p:selectCheckboxMenu        
+                                        id="generacionDatos"
+                                        value="#{crearIndicadorBean.generacionDatos}"
+                                        required="true"
+                                        converter="generacionDatosConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced"
+                                        multiple = "true">
+                                        <p:ajax process='@this'/>      
+                                        <f:selectItems value="#{crearIndicadorBean.listaGeneracionDatos}"
+                                                       var="genDatos"
+                                                       itemLabel="#{genDatos.generacionDatos}"
+                                                       itemValue="#{genDatos}"/>
+                                    </p:selectCheckboxMenu>
+                                    <p:message for="generacionDatosLabel"/>                                     
+                                    <p:message for="generacionDatos"/>                              
+                                    <!---->                              
+                                    <p:outputLabel class="texto-ver-centrado" id="plazoLabel" value="Plazo: *"/>
+                                    <p:selectOneMenu    
+                                        id="plazo"
+                                        value="#{crearIndicadorBean.plazo}"
+                                        required="true"
+                                        var="tipo"
+                                        converter="plazoConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced">
+                                        <p:ajax process='@this'/>     
+                                        <f:selectItems value="#{crearIndicadorBean.listaPlazo}"
+                                                       var="plazo"
+                                                       itemLabel="#{plazo.plazo}"
+                                                       itemValue="#{plazo}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="plazoLabel"/>                                     
+                                    <p:message for="plazo"/>                              
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="versionLabel" value="Versión: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo versión es requerido."                                
+                                        value="#{crearIndicadorBean.version}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="version"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="versionLabel"/>                                     
+                                    <p:message for="version"/>    
+                                    <!---->     
+                                    <p:outputLabel class="texto-ver-centrado" id="lineaBaseLabel" value="Línea base: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo linea base es requerido."                                
+                                        value="#{crearIndicadorBean.lineaBase}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="lineaBase"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="lineaBaseLabel"/>                                     
+                                    <p:message for="lineaBase"/>
+                                </p:panelGrid>
+                            </p:tab>
+                            <p:tab id="pag2" title="2">
+                                <p:panelGrid class="crear-tipo-indicadores-table" 
+                                             layout="grid"
+                                             styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
+                                             columns="2">  
+                                    <p:outputLabel class="texto-ver-centrado" id="metasLabel" value="Metas: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo metas es requerido."                                 
+                                        value="#{crearIndicadorBean.metas}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="metas"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="metasLabel"/>                                     
+                                    <p:message for="metas"/>   
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="anioCumplimientoLabel" value="Año cumplimiento: *"/>
+                                    <p:selectOneMenu       
+                                        id="anioCumplimiento"
+                                        value="#{crearIndicadorBean.anioCumplimiento}"
+                                        required="true"
+                                        var="tipo"
+                                        converter="anioCumplimientoConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced">
+                                        <p:ajax process='@this'/>   
+                                        <f:selectItems value="#{crearIndicadorBean.listaAnioCumplimiento}"
+                                                       var="anioCumplimiento"
+                                                       itemLabel="#{anioCumplimiento.anioCumplimiento}"
+                                                       itemValue="#{anioCumplimiento}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="anioCumplimientoLabel"/>                                     
+                                    <p:message for="anioCumplimiento"/>   
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="logroLabel" value="% Logro: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo % logro es requerido."                                 
+                                        value="#{crearIndicadorBean.logro}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="logro"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="logroLabel"/>                                     
+                                    <p:message for="logro"/> 
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="frecuenciaMedicionLabel" value="Frecuencia de medición: *"/>
+                                    <p:selectOneMenu        
+                                        id="frecuenciaMedicion"
+                                        value="#{crearIndicadorBean.frecuenciaMedicion}"
+                                        required="true"
+                                        var="tipo"
+                                        converter="frecuenciaMedicionConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced">
+                                        <p:ajax process='@this'/>   
+                                        <f:selectItems value="#{crearIndicadorBean.listaFrecuenciaMedicion}"
+                                                       var="frecuenciaMedicion"
+                                                       itemLabel="#{frecuenciaMedicion.frecuenciaMedicion}"
+                                                       itemValue="#{frecuenciaMedicion}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="frecuenciaMedicionLabel"/>                                     
+                                    <p:message for="frecuenciaMedicion"/>  
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="medioVerificacionLabel" value="Medio de verificación: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo medio de verificación es requerido."                                 
+                                        value="#{crearIndicadorBean.medioVerificacion}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="medioVerificacion"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="medioVerificacionLabel"/>                                     
+                                    <p:message for="medioVerificacion"/>  
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="formaCalculoLabel" value="Forma de cálculo: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo forma de cálculo es requerido."                                 
+                                        value="#{crearIndicadorBean.formaCalculo}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="formaCalculo"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="formaCalculoLabel"/>                                     
+                                    <p:message for="formaCalculo"/>     
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="fuenteInformacionLabel" value="Fuente de información: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo fuente de información es requerido."                                 
+                                        value="#{crearIndicadorBean.fuenteInformacion}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="fuenteInformacion"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="fuenteInformacionLabel"/>                                     
+                                    <p:message for="fuenteInformacion"/>        
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="unidadProveedoraLabel" value="Unidad proveedora: *"/>
+                                    <p:selectCheckboxMenu                     
+                                        id="unidadProveedora"
+                                        value="#{crearIndicadorBean.unidadProveedora}"
+                                        required="true"
+                                        converter="unidadProveedoraConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced"
+                                        multiple = "true">
+                                        <p:ajax process='@this'/>
+                                        <f:selectItems value="#{crearIndicadorBean.listaUnidadProveedora}"
+                                                       var="unidadProv"
+                                                       itemLabel="#{unidadProv.unidadProveedora}"
+                                                       itemValue="#{unidadProv}"/>
+                                    </p:selectCheckboxMenu>                            
+                                    <p:message for="unidadProveedoraLabel"/>                                     
+                                    <p:message for="unidadProveedora"/>      
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="proyectoAsociadoLabel" value="Proyecto asociado: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo proyecto asociado es requerido."                                 
+                                        value="#{crearIndicadorBean.proyectoAsociado}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="proyectoAsociado"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="proyectoAsociadoLabel"/>                                     
+                                    <p:message for="proyectoAsociado"/>           
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="comentarioLabel" value="Comentario: *"/>
+                                    <p:inputTextarea 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo comentario es requerido."                                 
+                                        value="#{crearIndicadorBean.comentario}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="comentario"                                 
+                                        maxlength="240" 
+                                        rows="8" cols="18">
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputTextarea>
+                                    <p:message for="comentarioLabel"/>                                     
+                                    <p:message for="comentario"/>        
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="actividadComprometidaLabel" value="Actividad comprometida: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo actividad comprometida es requerida."                                 
+                                        value="#{crearIndicadorBean.actividadComprometida}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="actividadComprometida"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="actividadComprometidaLabel"/>                                     
+                                    <p:message for="actividadComprometida"/>      
+                                    <!---->                                     
+                                    <p:outputLabel class="texto-ver-centrado" id="estadoActividadLabel" value="Estado de actividad: *"/>
+                                    <p:inputText 
+                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        requiredMessage="Campo estado de actividad es requerido."                                 
+                                        value="#{crearIndicadorBean.estadoActividad}"
+                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        id="estadoActividad"                                
+                                        >
+                                        <p:ajax process='@this'/>                                
+                                    </p:inputText>
+                                    <p:message for="estadoActividadLabel"/>                                     
+                                    <p:message for="estadoActividad"/>
+                                    <!---->     
+                                    <!---->     
+                                    <!---->     
+                                    <p:commandButton value="Crear indicador"   
+                                                     class="ui-button-formulario"     
+                                                     action="#{crearIndicadorBean.crearIndicador}"   
+                                                     update="@form" 
+                                                     process="@this, @form"/>
+                                </p:panelGrid>
+                            </p:tab>
+                        </p:wizard> 
                     </p:panel>
                 </div>       
             </div>
