@@ -93,79 +93,15 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
         super(Indicador.class);
     }
     
+    public List<Indicador> obtenerIndicadores() {
+        return getEntityManager()
+                .createNamedQuery("Indicador.findAll", Indicador.class)
+                .getResultList();
+    }    
+    
     public Indicador buscarIndicadorID(Integer indicadorId) {
         return find(indicadorId);
     }        
-
-    public AjustePdei buscarAjustePdeiID(Integer id) {
-        return getEntityManager().find(AjustePdei.class, id);
-    }    
-    
-    public List<AjustePdei> obtenerAjustePdei(){
-        return getEntityManager()
-                .createNamedQuery("AjustePdei.findAll", AjustePdei.class)
-                .getResultList();    
-    }
-    
-    public UnidadRepresentacion buscarUnidadRepresentacionID(Integer id) {
-        return getEntityManager().find(UnidadRepresentacion.class, id);
-    }        
-    
-    public List<UnidadRepresentacion> obtenerUnidadRepresentacion(){
-        return getEntityManager()
-                .createNamedQuery("UnidadRepresentacion.findAll", UnidadRepresentacion.class)
-                .getResultList();    
-    }
-    
-    public Plazo buscarPlazoID(Integer id) {
-        return getEntityManager().find(Plazo.class, id);
-    }            
-
-    public List<Plazo> obtenerPlazo(){
-        return getEntityManager()
-                .createNamedQuery("Plazo.findAll", Plazo.class)
-                .getResultList();    
-    }
-    
-    public AnioCumplimiento buscarAnioCumplimientoID(Integer id) {
-        return getEntityManager().find(AnioCumplimiento.class, id);
-    }            
-
-    public List<AnioCumplimiento> obtenerAnioCumplimiento(){
-        return getEntityManager()
-                .createNamedQuery("AnioCumplimiento.findAll", AnioCumplimiento.class)
-                .getResultList();    
-    }    
-    
-    public FrecuenciaMedicion buscarFrecuenciaMedicionID(Integer id) {
-        return getEntityManager().find(FrecuenciaMedicion.class, id);
-    }            
-
-    public List<FrecuenciaMedicion> obtenerFrecuenciaMedicion(){
-        return getEntityManager()
-                .createNamedQuery("FrecuenciaMedicion.findAll", FrecuenciaMedicion.class)
-                .getResultList();    
-    }     
-    
-    public GeneracionDatos buscarGeneracionDatosID(Integer id) {
-        return getEntityManager().find(GeneracionDatos.class, id);
-    }            
-
-    public List<GeneracionDatos> obtenerGeneracionDatos(){
-        return getEntityManager()
-                .createNamedQuery("GeneracionDatos.findAll", GeneracionDatos.class)
-                .getResultList();    
-    } 
-    
-    public UnidadProveedora buscarUnidadProveedoraID(Integer id) {
-        return getEntityManager().find(UnidadProveedora.class, id);
-    }            
-
-    public List<UnidadProveedora> obtenerUnidadProveedora(){
-        return getEntityManager()
-                .createNamedQuery("UnidadProveedora.findAll", UnidadProveedora.class)
-                .getResultList();    
-    }     
     
     public IndicadorDTO obtenerIndicadorDTO(Integer indicadorId) {
         List<IndicadorDTO> dtos = getEntityManager()
@@ -173,7 +109,7 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
                 .setParameter("Id", indicadorId)
                 .getResultList();
         return dtos.isEmpty() ? null : dtos.get(0);
-    }
+    }        
     
     public int contar(Map<String, Object> filters) {
         mapJoins.clear(); //limpiar map antes de crear la query
@@ -476,3 +412,4 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
     }
 
 }
+

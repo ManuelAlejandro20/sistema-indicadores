@@ -18,9 +18,9 @@ import javax.inject.Inject;
 
 /**
  *
- * @author aleja
+ * @author diego
  */
-@FacesConverter(value="genConverter", managed=true)
+@FacesConverter(value="generacionDatosConverter", managed=true)
 public class GeneracionDatosConverter implements Converter<GeneracionDatos>{
 
     @Inject

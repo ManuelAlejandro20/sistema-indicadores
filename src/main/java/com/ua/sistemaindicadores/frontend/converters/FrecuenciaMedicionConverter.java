@@ -18,9 +18,9 @@ import javax.inject.Inject;
 
 /**
  *
- * @author aleja
+ * @author diego
  */
-@FacesConverter(value="frecuenciaConverter", managed=true)
+@FacesConverter(value="frecuenciaMedicionConverter", managed=true)
 public class FrecuenciaMedicionConverter implements Converter<FrecuenciaMedicion>{
 
     @Inject

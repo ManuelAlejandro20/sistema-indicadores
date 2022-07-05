@@ -18,9 +18,9 @@ import javax.inject.Inject;
 
 /**
  *
- * @author aleja
+ * @author diego
  */
-@FacesConverter(value="unidadRConverter", managed=true)
+@FacesConverter(value="unidadRepresentacionConverter", managed=true)
 public class UnidadRepresentacionConverter implements Converter<UnidadRepresentacion>{
 
     @Inject
