@@ -291,94 +291,94 @@ public class CrearIndicadorBean implements Serializable {
     }
 
     public void crearIndicador() throws IOException {
-        System.out.println("crear");
-        System.out.println(descripcionIndicador);
-
-        short numVigencia = 0;
-        if (vigencia.equals("VIGENTE")) {
-            numVigencia = 1;
-        }
-
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        nuevoIndicador.setNumIndicador(parseInt(n_indicador));
-        nuevoIndicador.setNombreIndicador(nombreIndicador);
-        nuevoIndicador.setEstado(numVigencia);
-        nuevoIndicador.setDescripcionIndicador(descripcionIndicador);
-        nuevoIndicador.setAplicaLineamiento(aplicaLineamiento);
-        nuevoIndicador.setAplicaObjetivo(aplicaObjetivo);
-        nuevoIndicador.setDescripcionObjetivo(descripcionObjetivo);
-        nuevoIndicador.setVersion(version);
-        nuevoIndicador.setLineaBase(lineaBase);
-        nuevoIndicador.setMetas(metas);
-        nuevoIndicador.setPorcLogro(logro);
-        nuevoIndicador.setMedioVerificacion(medioVerificacion);
-        nuevoIndicador.setFormaCalculo(formaCalculo);
-        nuevoIndicador.setFuenteInformacion(fuenteInformacion);
-        nuevoIndicador.setProyectoAsociado(proyectoAsociado);
-        nuevoIndicador.setComentario(comentario);
-        nuevoIndicador.setActividadComprometida(actividadComprometida);
-        nuevoIndicador.setEstadoActividad(estadoActividad);
-        nuevoIndicador.setFechaCreacion(new Date());
-        nuevoIndicador.setFechaActualizacion(new Date());
-
-        nuevoIndicador.setAjustePdeiId(ajustePDEI);
-        nuevoIndicador.setAnioCumplimientoId(anioCumplimiento);
-        nuevoIndicador.setClasificacionId(clasificacionSeleccionada);
-        nuevoIndicador.setFrecuenciaMedicionId(frecuenciaMedicion);
-        nuevoIndicador.setGeneracionDatosId(generacionDatos[0]);
-        nuevoIndicador.setPlazoId(plazo);
-        nuevoIndicador.setUnidadProveedoraId(unidadProveedora[0]);
-        nuevoIndicador.setUnidadRepresentacionId(unidadRepresentacion);
-
-        nuevoIndicador.setIndicadorAnioCollection(new ArrayList<>()); //TODO
-
-        try {
-            indicadorService.crearIndicador(nuevoIndicador);
-            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
-                    "El indicador " + nombreIndicador + " ha sido agregada correctamente")
-            );
-
-            try {
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
-                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha creado un registro de una nueva clasificación.<br/> "
-                        + "<ul>"
-                        + "<li>Nombre indicador: " + nuevoIndicador.getNombreIndicador() + ".</li>"
-                        //+ "<li>Clasificacion asociada: " + nuevoIndicador.getClasificacionId() + ".</li>"
-                        + "<li>Estado: " + vigencia + ".</li>"
-                        + "<li>Descripción: " + nuevoIndicador.getDescripcionIndicador() + ".</li>"
-                        + "<li>Fecha creación: " + formatter.format(nuevoIndicador.getFechaCreacion()) + ".</li>"
-                        + "</ul>"
-                        + "<br/><br/>"
-                        + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
-                        + "<br/><br/>"
-                        + "<br/><br/>"
-                        + "Saludos cordiales. <br/><br/>"
-                        + "Sistema de Indicadores."
-                );
-            } catch (NotificacionCorreoException ex) {
-
-                context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
-                        "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
-                );
-
-                //En caso de capturar algun error se retorna un mensaje y se guarda en el log el error
-                Logger.getLogger(CrearTipoIndicadorBean.class
-                        .getName()).log(Level.SEVERE, "Ocurrio un error al enviar el correo.", ex);
-            }
-
-            context.getExternalContext().getFlash().setKeepMessages(true);
-            context.getExternalContext()
-                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-indicador.xhtml");
-
-        } catch (EJBException e) {
-
-            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
-                    "El indicador " + nuevoIndicador + " ya existe en los registros")
-            );
-
-        }
+//        System.out.println("crear");
+//        System.out.println(descripcionIndicador);
+//
+//        short numVigencia = 0;
+//        if (vigencia.equals("VIGENTE")) {
+//            numVigencia = 1;
+//        }
+//
+//        FacesContext context = FacesContext.getCurrentInstance();
+//
+//        nuevoIndicador.setNumIndicador(parseInt(n_indicador));
+//        nuevoIndicador.setNombreIndicador(nombreIndicador);
+//        nuevoIndicador.setEstado(numVigencia);
+//        nuevoIndicador.setDescripcionIndicador(descripcionIndicador);
+//        nuevoIndicador.setAplicaLineamiento(aplicaLineamiento);
+//        nuevoIndicador.setAplicaObjetivo(aplicaObjetivo);
+//        nuevoIndicador.setDescripcionObjetivo(descripcionObjetivo);
+//        nuevoIndicador.setVersion(version);
+//        nuevoIndicador.setLineaBase(lineaBase);
+//        nuevoIndicador.setMetas(metas);
+//        nuevoIndicador.setPorcLogro(logro);
+//        nuevoIndicador.setMedioVerificacion(medioVerificacion);
+//        nuevoIndicador.setFormaCalculo(formaCalculo);
+//        nuevoIndicador.setFuenteInformacion(fuenteInformacion);
+//        nuevoIndicador.setProyectoAsociado(proyectoAsociado);
+//        nuevoIndicador.setComentario(comentario);
+//        nuevoIndicador.setActividadComprometida(actividadComprometida);
+//        nuevoIndicador.setEstadoActividad(estadoActividad);
+//        nuevoIndicador.setFechaCreacion(new Date());
+//        nuevoIndicador.setFechaActualizacion(new Date());
+//
+//        nuevoIndicador.setAjustePdeiId(ajustePDEI);
+//        nuevoIndicador.setAnioCumplimientoId(anioCumplimiento);
+//        nuevoIndicador.setClasificacionId(clasificacionSeleccionada);
+//        nuevoIndicador.setFrecuenciaMedicionId(frecuenciaMedicion);
+//        nuevoIndicador.setGeneracionDatosId(generacionDatos[0]);
+//        nuevoIndicador.setPlazoId(plazo);
+//        nuevoIndicador.setUnidadProveedoraId(unidadProveedora[0]);
+//        nuevoIndicador.setUnidadRepresentacionId(unidadRepresentacion);
+//
+//        nuevoIndicador.setIndicadorAnioCollection(new ArrayList<>()); //TODO
+//
+//        try {
+//            indicadorService.crearIndicador(nuevoIndicador);
+//            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
+//                    "El indicador " + nombreIndicador + " ha sido agregada correctamente")
+//            );
+//
+//            try {
+//                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//                formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
+//                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha creado un registro de una nueva clasificación.<br/> "
+//                        + "<ul>"
+//                        + "<li>Nombre indicador: " + nuevoIndicador.getNombreIndicador() + ".</li>"
+//                        //+ "<li>Clasificacion asociada: " + nuevoIndicador.getClasificacionId() + ".</li>"
+//                        + "<li>Estado: " + vigencia + ".</li>"
+//                        + "<li>Descripción: " + nuevoIndicador.getDescripcionIndicador() + ".</li>"
+//                        + "<li>Fecha creación: " + formatter.format(nuevoIndicador.getFechaCreacion()) + ".</li>"
+//                        + "</ul>"
+//                        + "<br/><br/>"
+//                        + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
+//                        + "<br/><br/>"
+//                        + "<br/><br/>"
+//                        + "Saludos cordiales. <br/><br/>"
+//                        + "Sistema de Indicadores."
+//                );
+//            } catch (NotificacionCorreoException ex) {
+//
+//                context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
+//                        "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
+//                );
+//
+//                //En caso de capturar algun error se retorna un mensaje y se guarda en el log el error
+//                Logger.getLogger(CrearTipoIndicadorBean.class
+//                        .getName()).log(Level.SEVERE, "Ocurrio un error al enviar el correo.", ex);
+//            }
+//
+//            context.getExternalContext().getFlash().setKeepMessages(true);
+//            context.getExternalContext()
+//                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-indicador.xhtml");
+//
+//        } catch (EJBException e) {
+//
+//            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
+//                    "El indicador " + nuevoIndicador + " ya existe en los registros")
+//            );
+//
+//        }
     }
 
     public String flujoProceso(FlowEvent event) {
