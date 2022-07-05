@@ -173,11 +173,14 @@
                                     <!---->      
                                     <p:outputLabel class="texto-ver-centrado" id="ajustePDEILabel" value="Ajuste PDEI: *"/>
                                     <p:selectOneMenu  
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo ajuste PDEI es requerido."                                
+                                        id="ajustePDEI"
                                         value="#{crearIndicadorBean.ajustePDEI}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="ajustePDEI">
+                                        required="true"
+                                        var="tipo"
+                                        converter="ajustePdeiConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced">
                                         <p:ajax process='@this'/>
                                         <f:selectItems value="#{crearIndicadorBean.listaAjustePdei}"
                                                        var="ajustePdei"
@@ -188,12 +191,15 @@
                                     <p:message for="ajustePDEI"/>                              
                                     <!---->  
                                     <p:outputLabel class="texto-ver-centrado" id="unidadRepresentacionLabel" value="Unidad de representación: *"/>
-                                    <p:selectOneMenu 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo unidad de representación es requerido."                                
+                                    <p:selectOneMenu
+                                        id="unidadRepresentacion"                            
                                         value="#{crearIndicadorBean.unidadRepresentacion}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="unidadRepresentacion">
+                                        required="true"
+                                        var="tipo"
+                                        converter="unidadRepresentacionConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced">
                                         <p:ajax process='@this'/>  
                                         <f:selectItems value="#{crearIndicadorBean.listaUnidadRepresentacion}"
                                                        var="unidadRepresentacion"
@@ -204,14 +210,14 @@
                                     <p:message for="unidadRepresentacion"/>                              
                                     <!---->  
                                     <p:outputLabel class="texto-ver-centrado" id="generacionDatosLabel" value="Generación de los datos: *"/>
-                                    <p:selectCheckboxMenu 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo generación de los datos es requerido."                                
-                                        value="#{crearIndicadorBean.generacionDatos}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        filter="true"
-                                        filterMatchMode="startsWith"
+                                    <p:selectCheckboxMenu        
                                         id="generacionDatos"
+                                        value="#{crearIndicadorBean.generacionDatos}"
+                                        required="true"
+                                        converter="generacionDatosConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced"
                                         multiple = "true">
                                         <p:ajax process='@this'/>      
                                         <f:selectItems value="#{crearIndicadorBean.listaGeneracionDatos}"
@@ -223,12 +229,15 @@
                                     <p:message for="generacionDatos"/>                              
                                     <!---->                              
                                     <p:outputLabel class="texto-ver-centrado" id="plazoLabel" value="Plazo: *"/>
-                                    <p:selectOneMenu  
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo plazo es requerido."                                
+                                    <p:selectOneMenu    
+                                        id="plazo"
                                         value="#{crearIndicadorBean.plazo}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="plazo">
+                                        required="true"
+                                        var="tipo"
+                                        converter="plazoConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced">
                                         <p:ajax process='@this'/>     
                                         <f:selectItems value="#{crearIndicadorBean.listaPlazo}"
                                                        var="plazo"
@@ -269,155 +278,6 @@
                                 <p:panelGrid class="crear-tipo-indicadores-table" 
                                              layout="grid"
                                              styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
-                                             columns="2">                                
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2020Label" value="2020: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2020 es requerido."                                
-                                        value="#{crearIndicadorBean.anio2020}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2020"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2020Label"/>                                     
-                                    <p:message for="anio2020"/>   
-                                    <!---->                                     
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2021Label" value="2021: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2021 es requerido."                                 
-                                        value="#{crearIndicadorBean.anio2021}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2021"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2021Label"/>                                     
-                                    <p:message for="anio2021"/>   
-                                    <!---->                                     
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2022Label" value="2022: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2022 es requerido."                                 
-                                        value="#{crearIndicadorBean.anio2022}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2022"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2022Label"/>                                     
-                                    <p:message for="anio2022"/>   
-                                    <!---->                                     
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2023Label" value="2023: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2023 es requerido."                                 
-                                        value="#{crearIndicadorBean.anio2023}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2023"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2023Label"/>                                     
-                                    <p:message for="anio2023"/>   
-                                    <!---->                                     
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2024Label" value="2024: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2024 es requerido."                                 
-                                        value="#{crearIndicadorBean.anio2024}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2024"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2024Label"/>                                     
-                                    <p:message for="anio2024"/>   
-                                    <!---->                                     
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2025Label" value="2025: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2025 es requerido."                                 
-                                        value="#{crearIndicadorBean.anio2025}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2025"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2025Label"/>                                     
-                                    <p:message for="anio2025"/>   
-                                    <!---->                                     
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2026Label" value="2026: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2026 es requerido."                                 
-                                        value="#{crearIndicadorBean.anio2026}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2026"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2026Label"/>                                     
-                                    <p:message for="anio2026"/>   
-                                    <!---->                                     
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2027Label" value="2027: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2027 es requerido."                                 
-                                        value="#{crearIndicadorBean.anio2027}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2027"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2027Label"/>                                     
-                                    <p:message for="anio2027"/>   
-                                    <!---->                                     
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2028Label" value="2028: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2028 es requerido."                                 
-                                        value="#{crearIndicadorBean.anio2028}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2028"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2028Label"/>                                     
-                                    <p:message for="anio2028"/>   
-                                    <!---->                                     
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2029Label" value="2029: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2029 es requerido."                                 
-                                        value="#{crearIndicadorBean.anio2029}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2029"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2029Label"/>                                     
-                                    <p:message for="anio2029"/>   
-                                    <!---->                                     
-                                    <p:outputLabel class="texto-ver-centrado" id="anio2030Label" value="2030: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo 2030 es requerido."                                 
-                                        value="#{crearIndicadorBean.anio2030}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anio2030"                                
-                                        >
-                                        <p:ajax process='@this'/>                                
-                                    </p:inputText>
-                                    <p:message for="anio2030Label"/>                                     
-                                    <p:message for="anio2030"/>    
-                                </p:panelGrid>
-                            </p:tab>
-                            <p:tab id="pag3" title="3">
-                                <p:panelGrid class="crear-tipo-indicadores-table" 
-                                             layout="grid"
-                                             styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
                                              columns="2">  
                                     <p:outputLabel class="texto-ver-centrado" id="metasLabel" value="Metas: *"/>
                                     <p:inputText 
@@ -433,12 +293,15 @@
                                     <p:message for="metas"/>   
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="anioCumplimientoLabel" value="Año cumplimiento: *"/>
-                                    <p:selectOneMenu
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo año cumplimiento es requerido."                                 
+                                    <p:selectOneMenu       
+                                        id="anioCumplimiento"
                                         value="#{crearIndicadorBean.anioCumplimiento}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="anioCumplimiento">
+                                        required="true"
+                                        var="tipo"
+                                        converter="anioCumplimientoConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced">
                                         <p:ajax process='@this'/>   
                                         <f:selectItems value="#{crearIndicadorBean.listaAnioCumplimiento}"
                                                        var="anioCumplimiento"
@@ -462,12 +325,15 @@
                                     <p:message for="logro"/> 
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="frecuenciaMedicionLabel" value="Frecuencia de medición: *"/>
-                                    <p:selectOneMenu  
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo frecuencia de medición es requerido."                                 
+                                    <p:selectOneMenu        
+                                        id="frecuenciaMedicion"
                                         value="#{crearIndicadorBean.frecuenciaMedicion}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="frecuenciaMedicion">
+                                        required="true"
+                                        var="tipo"
+                                        converter="frecuenciaMedicionConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced">
                                         <p:ajax process='@this'/>   
                                         <f:selectItems value="#{crearIndicadorBean.listaFrecuenciaMedicion}"
                                                        var="frecuenciaMedicion"
@@ -517,14 +383,14 @@
                                     <p:message for="fuenteInformacion"/>        
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="unidadProveedoraLabel" value="Unidad proveedora: *"/>
-                                    <p:selectCheckboxMenu 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo unidad proveedora es requerido."                                 
-                                        value="#{crearIndicadorBean.unidadProveedora}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                    <p:selectCheckboxMenu                     
                                         id="unidadProveedora"
-                                        filter="true"
-                                        filterMatchMode="startsWith"
+                                        value="#{crearIndicadorBean.unidadProveedora}"
+                                        required="true"
+                                        converter="unidadProveedoraConverter"
+                                        filter="true" 
+                                        filterMatchMode="contains" 
+                                        styleClass="manymenu-advanced"
                                         multiple = "true">
                                         <p:ajax process='@this'/>
                                         <f:selectItems value="#{crearIndicadorBean.listaUnidadProveedora}"

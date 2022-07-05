@@ -198,7 +198,14 @@ public class Indicador implements Serializable {
         this.id = id;
     }
 
-    public Indicador(Integer id, int numIndicador, String nombreIndicador, short estado, String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, Date fechaActualizacion) {
+    public Indicador(Integer id, int numIndicador, String nombreIndicador,
+            short estado, String descripcionIndicador, String aplicaLineamiento,
+            String aplicaObjetivo, String descripcionObjetivo, String version,
+            String lineaBase, String metas, String porcLogro,
+            String medioVerificacion, String formaCalculo,
+            String fuenteInformacion, String proyectoAsociado, String comentario,
+            String actividadComprometida, String estadoActividad,
+            Date fechaCreacion, Date fechaActualizacion) {
         this.id = id;
         this.numIndicador = numIndicador;
         this.nombreIndicador = nombreIndicador;

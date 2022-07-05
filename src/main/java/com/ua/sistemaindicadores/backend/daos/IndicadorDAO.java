@@ -18,6 +18,7 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class IndicadorDAO extends AbstractDAO<Indicador> {
+
     @Inject
     private EntityManagerProvider entityManagerProvider;
 
@@ -35,6 +36,7 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
                 .createNamedQuery("Indicador.findAll", Indicador.class)
                 .getResultList();
     }
+    
 
     public Indicador buscarIndicadorID(Integer id) {
         return find(id);

@@ -80,6 +80,41 @@ public class IndicadorService {
     }
 
     @RolesAllowed({"ADMINISTRADOR"})
+    public AjustePdei buscarAjustePdeiID(Integer id) {
+        return ajustePdeiDAO.buscarAjustePdeiID(id);
+    }
+
+    @RolesAllowed({"ADMINISTRADOR"})
+    public UnidadRepresentacion buscarUnidadRepresentacionID(Integer id) {
+        return unidadRepresentacionDAO.buscarUnidadRepresentacionID(id);
+    }
+
+    @RolesAllowed({"ADMINISTRADOR"})
+    public GeneracionDatos buscarGeneracionDatosID(Integer id) {
+        return generacionDatosDAO.buscarGeneracionDatosID(id);
+    }
+
+    @RolesAllowed({"ADMINISTRADOR"})
+    public Plazo buscarPlazoID(Integer id) {
+        return plazoDAO.buscarPlazoID(id);
+    }
+
+    @RolesAllowed({"ADMINISTRADOR"})
+    public AnioCumplimiento buscarAnioCumplimientoID(Integer id) {
+        return anioCumplimientoDAO.buscarAnioCumplimientoID(id);
+    }
+
+    @RolesAllowed({"ADMINISTRADOR"})
+    public FrecuenciaMedicion buscarFrecuenciaMedicionID(Integer id) {
+        return frecuenciaMedicionDAO.buscarFrecuenciaMedicionID(id);
+    }
+
+    @RolesAllowed({"ADMINISTRADOR"})
+    public UnidadProveedora buscarUnidadProveedoraID(Integer id) {
+        return unidadProveedoraDAO.buscarUnidadProveedoraID(id);
+    }
+
+    @RolesAllowed({"ADMINISTRADOR"})
     public List<UnidadProveedora> obtenerUnidadProveedora() {
         return unidadProveedoraDAO.obtenerUnidadProveedora();
     }

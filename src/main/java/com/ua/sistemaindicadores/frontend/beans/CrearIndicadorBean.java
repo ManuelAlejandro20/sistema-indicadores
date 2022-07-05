@@ -13,16 +13,30 @@ import com.ua.sistemaindicadores.backend.entities.UnidadProveedora;
 import com.ua.sistemaindicadores.backend.entities.AjustePdei;
 import com.ua.sistemaindicadores.backend.entities.AnioCumplimiento;
 import com.ua.sistemaindicadores.backend.entities.FrecuenciaMedicion;
+import com.ua.sistemaindicadores.backend.entities.Indicador;
 import com.ua.sistemaindicadores.backend.entities.Plazo;
 import com.ua.sistemaindicadores.backend.entities.UnidadRepresentacion;
+import com.ua.sistemaindicadores.backend.exceptions.NotificacionCorreoException;
 import com.ua.sistemaindicadores.backend.flags.Flag;
 import com.ua.sistemaindicadores.backend.flags.FlagImpl;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
+import com.ua.sistemaindicadores.backend.services.CorreoService;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
+import java.io.IOException;
 import java.io.Serializable;
+import static java.lang.Integer.parseInt;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,6 +61,8 @@ public class CrearIndicadorBean implements Serializable {
     transient private TipoIndicadorService tipoIndicadorService;
     @Inject
     transient private IndicadorService indicadorService;
+    @Inject
+    transient private CorreoService correoService;
 
     private String vigencia;
 
@@ -59,10 +75,10 @@ public class CrearIndicadorBean implements Serializable {
     private String aplicaLineamiento;
     private String aplicaObjetivo;
     private String descripcionObjetivo;
-    private String ajustePDEI;
-    private String unidadRepresentacion;
-    private String[] generacionDatos;
-    private String plazo;
+    private AjustePdei ajustePDEI;
+    private UnidadRepresentacion unidadRepresentacion;
+    private GeneracionDatos[] generacionDatos;
+    private Plazo plazo;
     private String version;
     private String lineaBase;
     private String anio2020;
@@ -77,13 +93,13 @@ public class CrearIndicadorBean implements Serializable {
     private String anio2029;
     private String anio2030;
     private String metas;
-    private String anioCumplimiento;
+    private AnioCumplimiento anioCumplimiento;
     private String logro;
-    private String frecuenciaMedicion;
+    private FrecuenciaMedicion frecuenciaMedicion;
     private String medioVerificacion;
     private String formaCalculo;
     private String fuenteInformacion;
-    private String[] unidadProveedora;
+    private UnidadProveedora[] unidadProveedora;
     private String proyectoAsociado;
     private String comentario;
     private String actividadComprometida;
@@ -105,11 +121,9 @@ public class CrearIndicadorBean implements Serializable {
     private List<FrecuenciaMedicion> listaFrecuenciaMedicion;
     private List<UnidadRepresentacion> listaUnidadRepresentacion;
 
-    //SELECT seleccionados
-    private List<String> listaUnidadesSeleccionadas;
-    private List<String> listaGeneracionesSeleccionadas;
     private IndicadorTipo indicadorTipoSeleccionado;
     private Clasificacion clasificacionSeleccionada;
+    private Indicador nuevoIndicador;
 
     @PostConstruct
     public void initalize() {
@@ -276,9 +290,95 @@ public class CrearIndicadorBean implements Serializable {
         }
     }
 
-    public void crearIndicador() {
+    public void crearIndicador() throws IOException {
         System.out.println("crear");
         System.out.println(descripcionIndicador);
+
+        short numVigencia = 0;
+        if (vigencia.equals("VIGENTE")) {
+            numVigencia = 1;
+        }
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        nuevoIndicador.setNumIndicador(parseInt(n_indicador));
+        nuevoIndicador.setNombreIndicador(nombreIndicador);
+        nuevoIndicador.setEstado(numVigencia);
+        nuevoIndicador.setDescripcionIndicador(descripcionIndicador);
+        nuevoIndicador.setAplicaLineamiento(aplicaLineamiento);
+        nuevoIndicador.setAplicaObjetivo(aplicaObjetivo);
+        nuevoIndicador.setDescripcionObjetivo(descripcionObjetivo);
+        nuevoIndicador.setVersion(version);
+        nuevoIndicador.setLineaBase(lineaBase);
+        nuevoIndicador.setMetas(metas);
+        nuevoIndicador.setPorcLogro(logro);
+        nuevoIndicador.setMedioVerificacion(medioVerificacion);
+        nuevoIndicador.setFormaCalculo(formaCalculo);
+        nuevoIndicador.setFuenteInformacion(fuenteInformacion);
+        nuevoIndicador.setProyectoAsociado(proyectoAsociado);
+        nuevoIndicador.setComentario(comentario);
+        nuevoIndicador.setActividadComprometida(actividadComprometida);
+        nuevoIndicador.setEstadoActividad(estadoActividad);
+        nuevoIndicador.setFechaCreacion(new Date());
+        nuevoIndicador.setFechaActualizacion(new Date());
+
+        nuevoIndicador.setAjustePdeiId(ajustePDEI);
+        nuevoIndicador.setAnioCumplimientoId(anioCumplimiento);
+        nuevoIndicador.setClasificacionId(clasificacionSeleccionada);
+        nuevoIndicador.setFrecuenciaMedicionId(frecuenciaMedicion);
+        nuevoIndicador.setGeneracionDatosId(generacionDatos[0]);
+        nuevoIndicador.setPlazoId(plazo);
+        nuevoIndicador.setUnidadProveedoraId(unidadProveedora[0]);
+        nuevoIndicador.setUnidadRepresentacionId(unidadRepresentacion);
+
+        nuevoIndicador.setIndicadorAnioCollection(new ArrayList<>()); //TODO
+
+        try {
+            indicadorService.crearIndicador(nuevoIndicador);
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
+                    "El indicador " + nombreIndicador + " ha sido agregada correctamente")
+            );
+
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
+                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha creado un registro de una nueva clasificación.<br/> "
+                        + "<ul>"
+                        + "<li>Nombre indicador: " + nuevoIndicador.getNombreIndicador() + ".</li>"
+                        //+ "<li>Clasificacion asociada: " + nuevoIndicador.getClasificacionId() + ".</li>"
+                        + "<li>Estado: " + vigencia + ".</li>"
+                        + "<li>Descripción: " + nuevoIndicador.getDescripcionIndicador() + ".</li>"
+                        + "<li>Fecha creación: " + formatter.format(nuevoIndicador.getFechaCreacion()) + ".</li>"
+                        + "</ul>"
+                        + "<br/><br/>"
+                        + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
+                        + "<br/><br/>"
+                        + "<br/><br/>"
+                        + "Saludos cordiales. <br/><br/>"
+                        + "Sistema de Indicadores."
+                );
+            } catch (NotificacionCorreoException ex) {
+
+                context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
+                        "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
+                );
+
+                //En caso de capturar algun error se retorna un mensaje y se guarda en el log el error
+                Logger.getLogger(CrearTipoIndicadorBean.class
+                        .getName()).log(Level.SEVERE, "Ocurrio un error al enviar el correo.", ex);
+            }
+
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            context.getExternalContext()
+                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-indicador.xhtml");
+
+        } catch (EJBException e) {
+
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
+                    "El indicador " + nuevoIndicador + " ya existe en los registros")
+            );
+
+        }
     }
 
     public String flujoProceso(FlowEvent event) {
@@ -314,12 +414,28 @@ public class CrearIndicadorBean implements Serializable {
         this.indicadorService = indicadorService;
     }
 
+    public CorreoService getCorreoService() {
+        return correoService;
+    }
+
+    public void setCorreoService(CorreoService correoService) {
+        this.correoService = correoService;
+    }
+
     public String getVigencia() {
         return vigencia;
     }
 
     public void setVigencia(String vigencia) {
         this.vigencia = vigencia;
+    }
+
+    public boolean isSiguiente() {
+        return siguiente;
+    }
+
+    public void setSiguiente(boolean siguiente) {
+        this.siguiente = siguiente;
     }
 
     public String getN_indicador() {
@@ -370,35 +486,35 @@ public class CrearIndicadorBean implements Serializable {
         this.descripcionObjetivo = descripcionObjetivo;
     }
 
-    public String getAjustePDEI() {
+    public AjustePdei getAjustePDEI() {
         return ajustePDEI;
     }
 
-    public void setAjustePDEI(String ajustePDEI) {
+    public void setAjustePDEI(AjustePdei ajustePDEI) {
         this.ajustePDEI = ajustePDEI;
     }
 
-    public String getUnidadRepresentacion() {
+    public UnidadRepresentacion getUnidadRepresentacion() {
         return unidadRepresentacion;
     }
 
-    public void setUnidadRepresentacion(String unidadRepresentacion) {
+    public void setUnidadRepresentacion(UnidadRepresentacion unidadRepresentacion) {
         this.unidadRepresentacion = unidadRepresentacion;
     }
 
-    public String[] getGeneracionDatos() {
+    public GeneracionDatos[] getGeneracionDatos() {
         return generacionDatos;
     }
 
-    public void setGeneracionDatos(String[] generacionDatos) {
+    public void setGeneracionDatos(GeneracionDatos[] generacionDatos) {
         this.generacionDatos = generacionDatos;
     }
 
-    public String getPlazo() {
+    public Plazo getPlazo() {
         return plazo;
     }
 
-    public void setPlazo(String plazo) {
+    public void setPlazo(Plazo plazo) {
         this.plazo = plazo;
     }
 
@@ -514,11 +630,11 @@ public class CrearIndicadorBean implements Serializable {
         this.metas = metas;
     }
 
-    public String getAnioCumplimiento() {
+    public AnioCumplimiento getAnioCumplimiento() {
         return anioCumplimiento;
     }
 
-    public void setAnioCumplimiento(String anioCumplimiento) {
+    public void setAnioCumplimiento(AnioCumplimiento anioCumplimiento) {
         this.anioCumplimiento = anioCumplimiento;
     }
 
@@ -530,11 +646,11 @@ public class CrearIndicadorBean implements Serializable {
         this.logro = logro;
     }
 
-    public String getFrecuenciaMedicion() {
+    public FrecuenciaMedicion getFrecuenciaMedicion() {
         return frecuenciaMedicion;
     }
 
-    public void setFrecuenciaMedicion(String frecuenciaMedicion) {
+    public void setFrecuenciaMedicion(FrecuenciaMedicion frecuenciaMedicion) {
         this.frecuenciaMedicion = frecuenciaMedicion;
     }
 
@@ -562,11 +678,11 @@ public class CrearIndicadorBean implements Serializable {
         this.fuenteInformacion = fuenteInformacion;
     }
 
-    public String[] getUnidadProveedora() {
+    public UnidadProveedora[] getUnidadProveedora() {
         return unidadProveedora;
     }
 
-    public void setUnidadProveedora(String[] unidadProveedora) {
+    public void setUnidadProveedora(UnidadProveedora[] unidadProveedora) {
         this.unidadProveedora = unidadProveedora;
     }
 
@@ -616,6 +732,14 @@ public class CrearIndicadorBean implements Serializable {
 
     public void setFlagsTipoIndicador(Flag flagsTipoIndicador) {
         this.flagsTipoIndicador = flagsTipoIndicador;
+    }
+
+    public Collection<Clasificacion> getListaClasificacion() {
+        return listaClasificacion;
+    }
+
+    public void setListaClasificacion(Collection<Clasificacion> listaClasificacion) {
+        this.listaClasificacion = listaClasificacion;
     }
 
     public List<IndicadorTipo> getListaIndicadorTipo() {
@@ -698,22 +822,6 @@ public class CrearIndicadorBean implements Serializable {
         this.listaUnidadRepresentacion = listaUnidadRepresentacion;
     }
 
-    public List<String> getListaUnidadesSeleccionadas() {
-        return listaUnidadesSeleccionadas;
-    }
-
-    public void setListaUnidadesSeleccionadas(List<String> listaUnidadesSeleccionadas) {
-        this.listaUnidadesSeleccionadas = listaUnidadesSeleccionadas;
-    }
-
-    public List<String> getListaGeneracionesSeleccionadas() {
-        return listaGeneracionesSeleccionadas;
-    }
-
-    public void setListaGeneracionesSeleccionadas(List<String> listaGeneracionesSeleccionadas) {
-        this.listaGeneracionesSeleccionadas = listaGeneracionesSeleccionadas;
-    }
-
     public IndicadorTipo getIndicadorTipoSeleccionado() {
         return indicadorTipoSeleccionado;
     }
@@ -722,20 +830,20 @@ public class CrearIndicadorBean implements Serializable {
         this.indicadorTipoSeleccionado = indicadorTipoSeleccionado;
     }
 
-    public Collection<Clasificacion> getListaClasificacion() {
-        return listaClasificacion;
-    }
-
-    public void setListaClasificacion(Collection<Clasificacion> listaClasificacion) {
-        this.listaClasificacion = listaClasificacion;
-    }
-
     public Clasificacion getClasificacionSeleccionada() {
         return clasificacionSeleccionada;
     }
 
     public void setClasificacionSeleccionada(Clasificacion clasificacionSeleccionada) {
         this.clasificacionSeleccionada = clasificacionSeleccionada;
+    }
+
+    public Indicador getNuevoIndicador() {
+        return nuevoIndicador;
+    }
+
+    public void setNuevoIndicador(Indicador nuevoIndicador) {
+        this.nuevoIndicador = nuevoIndicador;
     }
 
 }
