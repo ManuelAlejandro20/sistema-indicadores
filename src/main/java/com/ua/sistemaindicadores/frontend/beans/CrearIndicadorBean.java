@@ -22,14 +22,19 @@ import com.ua.sistemaindicadores.backend.flags.FlagImpl;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
 import com.ua.sistemaindicadores.backend.services.CorreoService;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
+import com.ua.sistemaindicadores.frontend.classes.Actividad;
+import com.ua.sistemaindicadores.frontend.classes.ActividadMesSemestre;
 import java.io.IOException;
 import java.io.Serializable;
 import static java.lang.Integer.parseInt;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +48,7 @@ import javax.inject.Named;
 import org.omnifaces.util.Ajax;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -62,13 +68,12 @@ public class CrearIndicadorBean implements Serializable {
     @Inject
     transient private IndicadorService indicadorService;
     @Inject
-    transient private CorreoService correoService;
-
-    private String vigencia;
+    transient private CorreoService correoService;   
 
     private boolean siguiente;
 
     //
+    private String vigencia;
     private String n_indicador;
     private String nombreIndicador;
     private String descripcionIndicador;
@@ -121,6 +126,16 @@ public class CrearIndicadorBean implements Serializable {
     private List<FrecuenciaMedicion> listaFrecuenciaMedicion;
     private List<UnidadRepresentacion> listaUnidadRepresentacion;
 
+    private Integer min = 2020;
+    private Integer max = 2030;
+    private Integer minValue = 2020;
+    private Integer maxValue = 2030;
+    private Map<Integer, Actividad> listaActividades;
+    private Map<Integer, ActividadMesSemestre> listaActividadesMesSemestre;
+    
+    private boolean mantenerLogros;    
+    private boolean mantenerLogrosNewStep;    
+    
     private IndicadorTipo indicadorTipoSeleccionado;
     private Clasificacion clasificacionSeleccionada;
     private Indicador nuevoIndicador;
@@ -147,6 +162,12 @@ public class CrearIndicadorBean implements Serializable {
         listaPlazo = indicadorService.obtenerPlazo();
         listaFrecuenciaMedicion = indicadorService.obtenerFrecuenciaMedicion();
         listaUnidadRepresentacion = indicadorService.obtenerUnidadRepresentacion();
+        
+        listaActividades = new LinkedHashMap<Integer, Actividad>();
+        listaActividadesMesSemestre = new LinkedHashMap<Integer, ActividadMesSemestre>();
+        mantenerLogros = false;        
+        mantenerLogrosNewStep = false;        
+        
     }
 
     /**
@@ -154,6 +175,90 @@ public class CrearIndicadorBean implements Serializable {
      */
     public CrearIndicadorBean() {
     }
+    
+    public void limpiarListas(){
+        if(!mantenerLogrosNewStep){
+            listaActividades.clear();
+            listaActividadesMesSemestre.clear();    
+            mantenerLogros = false;        
+        }
+        mantenerLogrosNewStep = false;
+    }
+    
+    public void createList(){
+        if(!mantenerLogros){
+            System.out.println(minValue);
+            System.out.println(maxValue);        
+            System.out.println(frecuenciaMedicion.getFrecuenciaMedicion());
+            System.out.println("----------------------------");
+            switch(frecuenciaMedicion.getFrecuenciaMedicion()){
+                case "Mensual":
+                    for(int i=minValue; i<=maxValue; i++){
+                        listaActividadesMesSemestre.put(i, new ActividadMesSemestre(Arrays.asList(
+                                "Enero",
+                                "Febrero",
+                                "Marzo",
+                                "Abril",
+                                "Mayo",
+                                "Junio",
+                                "Julio",
+                                "Agosto",
+                                "Septiembre",
+                                "Octubre",
+                                "Noviembre",
+                                "Diciembre"                    
+                        )));
+                    }                         
+                    break;
+                case "Semestral":
+                    for(int i=minValue; i<=maxValue; i++){
+                        listaActividadesMesSemestre.put(i, new ActividadMesSemestre(Arrays.asList(
+                                "Semestre 1",
+                                "Semestre 2"             
+                        )));                
+                    }
+                    break;
+                case "Anual":
+                    for(int i=minValue; i<=maxValue; i++){
+                        listaActividades.put(i, new Actividad("",0));
+                    }                       
+                    break;
+                default:
+                    if(maxValue - minValue >= 2){
+                        for(int i=minValue+2; i<=maxValue; i+=2){
+                            listaActividades.put(i, new Actividad("",0));
+                        }
+                    }
+                    break;
+            }       
+        }
+        PrimeFaces.current().executeScript("PF('dialog').show();");
+    }
+
+    public void guardarLogros(){
+        switch(frecuenciaMedicion.getFrecuenciaMedicion()){
+            case "Mensual":
+            case "Semestral":
+                for(int i=minValue; i<=maxValue; i++){
+                    for(String s : listaActividadesMesSemestre.get(i).getActividades().keySet()){
+                        System.out.println(s + " de " + i + ": Actividad:" + listaActividadesMesSemestre.get(i).getActividades().get(s).getNombre() + " Logro: " + listaActividadesMesSemestre.get(i).getActividades().get(s).getLogro());
+                    }                              
+                }          
+                break;
+            case "Anual":
+                for(int i=minValue; i<=maxValue; i++){
+                    System.out.println(i + ": Actividad:" + listaActividades.get(i).getNombre() + " Logro: " + listaActividades.get(i).getLogro());
+                }                       
+                break;
+            default:
+                for(Integer i : listaActividades.keySet()){
+                    System.out.println(i + ": Actividad:" + listaActividades.get(i).getNombre() + " Logro: " + listaActividades.get(i).getLogro());
+                }     
+                break;
+        }        
+        mantenerLogros = true;
+        PrimeFaces.current().executeScript("PF('dialog').hide();");    
+    }    
 
     public void cambiarEstado() {
         if (vigencia.equals("VIGENTE")) {
@@ -214,39 +319,6 @@ public class CrearIndicadorBean implements Serializable {
                     case "lineaBase":
                         lineaBase = null;
                         break;
-                    case "anio2020":
-                        anio2020 = null;
-                        break;
-                    case "anio2021":
-                        anio2021 = null;
-                        break;
-                    case "anio2022":
-                        anio2022 = null;
-                        break;
-                    case "anio2023":
-                        anio2023 = null;
-                        break;
-                    case "anio2024":
-                        anio2024 = null;
-                        break;
-                    case "anio2025":
-                        anio2025 = null;
-                        break;
-                    case "anio2026":
-                        anio2026 = null;
-                        break;
-                    case "anio2027":
-                        anio2027 = null;
-                        break;
-                    case "anio2028":
-                        anio2028 = null;
-                        break;
-                    case "anio2029":
-                        anio2029 = null;
-                        break;
-                    case "anio2030":
-                        anio2030 = null;
-                        break;
                     case "metas":
                         metas = null;
                         break;
@@ -291,7 +363,7 @@ public class CrearIndicadorBean implements Serializable {
     }
 
     public void crearIndicador() throws IOException {
-//        System.out.println("crear");
+        System.out.println("crear");
 //        System.out.println(descripcionIndicador);
 //
 //        short numVigencia = 0;
@@ -382,6 +454,10 @@ public class CrearIndicadorBean implements Serializable {
     }
 
     public String flujoProceso(FlowEvent event) {
+        PrimeFaces.current().resetInputs("form:formulario");
+        if(mantenerLogros){
+            mantenerLogrosNewStep = true;
+        }        
         if (siguiente) {
             siguiente = false; //reset in case user goes back
             return "confirm";
@@ -846,4 +922,70 @@ public class CrearIndicadorBean implements Serializable {
         this.nuevoIndicador = nuevoIndicador;
     }
 
+    public Integer getMin() {
+        return min;
+    }
+
+    public void setMin(Integer min) {
+        this.min = min;
+    }
+
+    public Integer getMax() {
+        return max;
+    }
+
+    public void setMax(Integer max) {
+        this.max = max;
+    }
+
+    public Integer getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(Integer minValue) {
+        this.minValue = minValue;
+    }
+
+    public Integer getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(Integer maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public Map<Integer, Actividad> getListaActividades() {
+        return listaActividades;
+    }
+
+    public void setListaActividades(Map<Integer, Actividad> listaActividades) {
+        this.listaActividades = listaActividades;
+    }
+
+    public Map<Integer, ActividadMesSemestre> getListaActividadesMesSemestre() {
+        return listaActividadesMesSemestre;
+    }
+
+    public void setListaActividadesMesSemestre(Map<Integer, ActividadMesSemestre> listaActividadesMesSemestre) {
+        this.listaActividadesMesSemestre = listaActividadesMesSemestre;
+    }
+
+    public boolean getMantenerLogros() {
+        return mantenerLogros;
+    }
+
+    public void setMantenerLogros(boolean mantenerLogros) {
+        this.mantenerLogros = mantenerLogros;
+    }
+
+    public boolean getMantenerLogrosNewStep() {
+        return mantenerLogrosNewStep;
+    }
+
+    public void setMantenerLogrosNewStep(boolean mantenerLogrosNewStep) {
+        this.mantenerLogrosNewStep = mantenerLogrosNewStep;
+    }
+
+    
+    
 }

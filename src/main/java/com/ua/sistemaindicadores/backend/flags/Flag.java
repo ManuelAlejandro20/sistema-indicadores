@@ -28,17 +28,6 @@ public class Flag {
         hiddenFlags.put("plazo", false);
         hiddenFlags.put("version", false);
         hiddenFlags.put("lineaBase", false);
-        hiddenFlags.put("anio2020", false);
-        hiddenFlags.put("anio2021", false);
-        hiddenFlags.put("anio2022", false);
-        hiddenFlags.put("anio2023", false);
-        hiddenFlags.put("anio2024", false);
-        hiddenFlags.put("anio2025", false);
-        hiddenFlags.put("anio2026", false);
-        hiddenFlags.put("anio2027", false);
-        hiddenFlags.put("anio2028", false);
-        hiddenFlags.put("anio2029", false);
-        hiddenFlags.put("anio2030", false);
         hiddenFlags.put("metas", false);
         hiddenFlags.put("anioCumplimiento", false);
         hiddenFlags.put("logro", false);

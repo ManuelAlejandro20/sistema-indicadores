@@ -24,17 +24,6 @@ import java.util.Map;
     plazo
     version
     lineaBase
-    anio2020
-    anio2021
-    anio2022
-    anio2023
-    anio2024
-    anio2025
-    anio2026
-    anio2027
-    anio2028
-    anio2029
-    anio2030
     metas
     anioCumplimiento
     logro
