@@ -23,7 +23,9 @@ import com.ua.sistemaindicadores.backend.services.ClasificacionService;
 import com.ua.sistemaindicadores.backend.services.CorreoService;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
 import com.ua.sistemaindicadores.frontend.classes.Actividad;
-import com.ua.sistemaindicadores.frontend.classes.ActividadMesSemestre;
+import com.ua.sistemaindicadores.frontend.classes.ActividadAnio;
+import com.ua.sistemaindicadores.frontend.classes.TreeNodeMesSemestre;
+import com.ua.sistemaindicadores.frontend.classes.TreeNodeRow;
 import java.io.IOException;
 import java.io.Serializable;
 import static java.lang.Integer.parseInt;
@@ -33,6 +35,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -41,14 +44,22 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlInputHidden;
+import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.util.Ajax;
 import org.primefaces.PrimeFaces;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.tabview.Tab;
+import org.primefaces.component.treetable.TreeTable;
 import org.primefaces.event.FlowEvent;
-import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 /**
  *
@@ -86,17 +97,6 @@ public class CrearIndicadorBean implements Serializable {
     private Plazo plazo;
     private String version;
     private String lineaBase;
-    private String anio2020;
-    private String anio2021;
-    private String anio2022;
-    private String anio2023;
-    private String anio2024;
-    private String anio2025;
-    private String anio2026;
-    private String anio2027;
-    private String anio2028;
-    private String anio2029;
-    private String anio2030;
     private String metas;
     private AnioCumplimiento anioCumplimiento;
     private String logro;
@@ -130,8 +130,9 @@ public class CrearIndicadorBean implements Serializable {
     private Integer max = 2030;
     private Integer minValue = 2020;
     private Integer maxValue = 2030;
-    private Map<Integer, Actividad> listaActividades;
-    private Map<Integer, ActividadMesSemestre> listaActividadesMesSemestre;
+    
+    private Map<Integer, ActividadAnio> listaActividades;    
+    private Map<Integer, TreeNodeMesSemestre> listaActividadesMesSemestre;
     
     private boolean mantenerLogros;    
     private boolean mantenerLogrosNewStep;    
@@ -163,10 +164,17 @@ public class CrearIndicadorBean implements Serializable {
         listaFrecuenciaMedicion = indicadorService.obtenerFrecuenciaMedicion();
         listaUnidadRepresentacion = indicadorService.obtenerUnidadRepresentacion();
         
-        listaActividades = new LinkedHashMap<Integer, Actividad>();
-        listaActividadesMesSemestre = new LinkedHashMap<Integer, ActividadMesSemestre>();
+        listaActividades = new LinkedHashMap<Integer, ActividadAnio>();        
+        listaActividadesMesSemestre = new LinkedHashMap<Integer, TreeNodeMesSemestre>();
         mantenerLogros = false;        
         mantenerLogrosNewStep = false;        
+        
+        for(int i=minValue; i<=maxValue; i++){
+            listaActividadesMesSemestre.put(i, new TreeNodeMesSemestre(Arrays.asList(
+                    "Semestre 1",
+                    "Semestre 2"             
+            )));                
+        }        
         
     }
 
@@ -178,6 +186,7 @@ public class CrearIndicadorBean implements Serializable {
     
     public void limpiarListas(){
         if(!mantenerLogrosNewStep){
+            logro = null;
             listaActividades.clear();
             listaActividadesMesSemestre.clear();    
             mantenerLogros = false;        
@@ -186,15 +195,38 @@ public class CrearIndicadorBean implements Serializable {
     }
     
     public void createList(){
+        
+        if(anioCumplimiento == null){
+            FacesContext.getCurrentInstance().addMessage("mensaje", 
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
+                    "Debe escoger un año de cumplimiento primero."));        
+            return;
+        }
+        if(metas == null){
+            FacesContext.getCurrentInstance().addMessage("mensaje", 
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
+                    "Debe escoger una meta primero."));                  
+            return;
+        }
+        if(Integer.valueOf(metas) == 0){
+            FacesContext.getCurrentInstance().addMessage("mensaje", 
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
+                    "La cantidad de metas escogidas es 0."));                  
+            return;                   
+        }
+ 
+        if(maxValue != anioCumplimiento.getAnioCumplimiento()){
+            FacesContext.getCurrentInstance().addMessage("mensaje", 
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
+                    "El año de término de evaluación no puede ser superior al año de cumplimiento del indicador."));                  
+            return;
+        }
+                        
         if(!mantenerLogros){
-            System.out.println(minValue);
-            System.out.println(maxValue);        
-            System.out.println(frecuenciaMedicion.getFrecuenciaMedicion());
-            System.out.println("----------------------------");
             switch(frecuenciaMedicion.getFrecuenciaMedicion()){
                 case "Mensual":
                     for(int i=minValue; i<=maxValue; i++){
-                        listaActividadesMesSemestre.put(i, new ActividadMesSemestre(Arrays.asList(
+                        listaActividadesMesSemestre.put(i, new TreeNodeMesSemestre(Arrays.asList(
                                 "Enero",
                                 "Febrero",
                                 "Marzo",
@@ -212,7 +244,7 @@ public class CrearIndicadorBean implements Serializable {
                     break;
                 case "Semestral":
                     for(int i=minValue; i<=maxValue; i++){
-                        listaActividadesMesSemestre.put(i, new ActividadMesSemestre(Arrays.asList(
+                        listaActividadesMesSemestre.put(i, new TreeNodeMesSemestre(Arrays.asList(
                                 "Semestre 1",
                                 "Semestre 2"             
                         )));                
@@ -220,13 +252,13 @@ public class CrearIndicadorBean implements Serializable {
                     break;
                 case "Anual":
                     for(int i=minValue; i<=maxValue; i++){
-                        listaActividades.put(i, new Actividad("",0));
+                        listaActividades.put(i, new ActividadAnio(i));
                     }                       
                     break;
                 default:
                     if(maxValue - minValue >= 2){
                         for(int i=minValue+2; i<=maxValue; i+=2){
-                            listaActividades.put(i, new Actividad("",0));
+                            listaActividades.put(i,  new ActividadAnio(i));
                         }
                     }
                     break;
@@ -234,30 +266,283 @@ public class CrearIndicadorBean implements Serializable {
         }
         PrimeFaces.current().executeScript("PF('dialog').show();");
     }
+    
+    //Funciones para el treetable que despliega las actividades con frecuencia medicion mensual y semestral
+    public void onInputTextMesSemestreEdit(ValueChangeEvent e){   
+                
+        TreeTable treetable = (TreeTable) e.getComponent().getParent().getParent().getParent().getParent();
+        Tab tab = (Tab) treetable.getParent();    
+        HtmlInputHidden hiddenInput = (HtmlInputHidden) treetable.getColumns().get(0).getChildren().get(1);
+        
+        Integer anio = Integer.parseInt(tab.getTitle());        
+        String treeNodeParentName = hiddenInput.getValue().toString();        
+       
+        List<TreeNode> children = listaActividadesMesSemestre.get(anio).getRoot().getChildren();   
+        
+        String oldValue = "";
+        String newValue = "";    
+        
+        if(e.getOldValue() != null){
+            oldValue = e.getOldValue().toString();
+        }
+        if(e.getNewValue() != null){
+            newValue = e.getNewValue().toString();
+        }
+        
+        int incremento = calcularIncremento(oldValue, newValue);
+        
+        calcularPorcentajeLogroMesSemestre(children, treeNodeParentName, incremento);
+        
+    }    
+    
+    public void onChangeSpinnerMesSemestre(ValueChangeEvent e){        
+        TreeTable treetable = (TreeTable) e.getComponent().getParent().getParent().getParent();
+        Tab tab = (Tab) treetable.getParent();    
+        HtmlOutputText text = (HtmlOutputText) treetable.getColumns().get(0).getChildren().get(0);        
+        
+        String treeNodeParentName = text.getValue().toString();
+        Integer anio = Integer.parseInt(tab.getTitle());
+        
+        int oldValue = 1;
+        int newValue = 1;
+        if(e.getOldValue() != null){
+            oldValue = Integer.parseInt(e.getOldValue().toString());
+        }
+        if(e.getNewValue() != null){
+            newValue = Integer.parseInt(e.getNewValue().toString());
+        }            
+        
+        
+        List<TreeNode> children = listaActividadesMesSemestre.get(anio).getRoot().getChildren();
+        
+        TreeNodeRow row;
+        
+        for(TreeNode t: children){
+            row = (TreeNodeRow) t.getData();            
+            if(row.getTitulo().equals(treeNodeParentName)){
+                if(newValue > oldValue){
+                    for(int i=oldValue; i<newValue; i++){
+                        t.getChildren().add(new DefaultTreeNode(new TreeNodeRow(null, null, null, "", treeNodeParentName), t));
+                    }
+                }else if(newValue < oldValue){
+                    for(int i=oldValue; i>newValue; i--){
+                        t.getChildren().remove(i-1);
+                    }                
+                }
+                break;
+            }            
+        }             
+                      
+        calcularPorcentajeLogroMesSemestre(children, treeNodeParentName, 0);
+                                    
+    }
+                     
+    private void calcularPorcentajeLogroMesSemestre(List<TreeNode> children, String treeNodeParentName, int incremento){
+        int actividadesTotales = 1;
+        int actividadesEscritas = 0;        
+        for(TreeNode t: children){
+            TreeNodeRow row = (TreeNodeRow) t.getData();            
+            if(row.getTitulo().equals(treeNodeParentName)){
+                actividadesTotales = t.getChildren().size();
+                for(TreeNode t1 : t.getChildren()){
+                    TreeNodeRow rowActividad = (TreeNodeRow) t1.getData();
+                    if(rowActividad.getNombre() != null){
+                        if(!rowActividad.getNombre().isBlank() && !rowActividad.getNombre().isEmpty()){
+                            actividadesEscritas++;
+                        }
+                    }
+                }         
+                
+                actividadesEscritas += incremento;
+                
+                float actividadesTotales_f = (float) actividadesTotales;
+                float actividadesEscritas_f = (float) actividadesEscritas;
 
-    public void guardarLogros(){
-        switch(frecuenciaMedicion.getFrecuenciaMedicion()){
-            case "Mensual":
-            case "Semestral":
-                for(int i=minValue; i<=maxValue; i++){
-                    for(String s : listaActividadesMesSemestre.get(i).getActividades().keySet()){
-                        System.out.println(s + " de " + i + ": Actividad:" + listaActividadesMesSemestre.get(i).getActividades().get(s).getNombre() + " Logro: " + listaActividadesMesSemestre.get(i).getActividades().get(s).getLogro());
-                    }                              
-                }          
+                float porc = (actividadesEscritas_f / actividadesTotales_f) * 100f;      
+                row.setLogro((int) porc);                                              
                 break;
-            case "Anual":
-                for(int i=minValue; i<=maxValue; i++){
-                    System.out.println(i + ": Actividad:" + listaActividades.get(i).getNombre() + " Logro: " + listaActividades.get(i).getLogro());
-                }                       
-                break;
-            default:
-                for(Integer i : listaActividades.keySet()){
-                    System.out.println(i + ": Actividad:" + listaActividades.get(i).getNombre() + " Logro: " + listaActividades.get(i).getLogro());
-                }     
-                break;
+            }            
+        }               
+    }            
+    
+    //------------------------------------------------
+    
+    //Funciones para el datatable que despliega las actividades con frecuencia medicion anual y bianual
+    public void onInputTextActividadEdit(ValueChangeEvent e){
+        DataTable datatable = (DataTable) e.getComponent().getParent().getParent().getParent();
+        Tab tab = (Tab) datatable.getParent();
+        
+        int anio = Integer.parseInt(tab.getTitle());
+        String oldValue = "";
+        String newValue = "";    
+        
+        if(e.getOldValue() != null){
+            oldValue = e.getOldValue().toString();
+        }
+        if(e.getNewValue() != null){
+            newValue = e.getNewValue().toString();
+        }
+        
+        int incremento = calcularIncremento(oldValue, newValue);
+        
+        calcularPorcentajeLogroAnio(anio, incremento);
+                        
+    }
+    
+    public void onChangeSpinnerActividad(ValueChangeEvent e){
+        DataTable datatable = (DataTable) e.getComponent().getParent().getParent();
+        Tab tab = (Tab) datatable.getParent();
+        
+        int anio = Integer.parseInt(tab.getTitle());
+        int oldValue = 1;
+        int newValue = 1;
+        if(e.getOldValue() != null){
+            oldValue = Integer.parseInt(e.getOldValue().toString());
+        }
+        if(e.getNewValue() != null){
+            newValue = Integer.parseInt(e.getNewValue().toString());
         }        
+        
+        ActividadAnio an = listaActividades.get(anio);
+                
+        if(newValue > oldValue){
+            for(int i=oldValue; i<newValue; i++){                
+                an.getActividades().add(new Actividad(""));
+            }
+        }else if(newValue < oldValue){
+            for(int i=oldValue; i>newValue; i--){                
+                an.getActividades().remove(i-1);                               
+            }
+        }                        
+        
+        calcularPorcentajeLogroAnio(anio, 0);
+                
+    }    
+    
+    public void calcularPorcentajeLogroAnio(Integer anio, Integer incremento){       
+        ActividadAnio an = listaActividades.get(anio);
+        List<Actividad> actividades = an.getActividades();
+                  
+        int actividadesTotales = actividades.size();
+        int actividadesEscritas = 0;
+        
+        for(Actividad a : actividades){
+            if(a.getNombre() != null){
+                if(!a.getNombre().isBlank() && !a.getNombre().isEmpty()){
+                    actividadesEscritas++;
+                }                
+            }                       
+        }
+        
+        actividadesEscritas += incremento;
+       
+        float actividadesTotales_f = (float) actividadesTotales;
+        float actividadesEscritas_f = (float) actividadesEscritas;
+
+        float porc = (actividadesEscritas_f / actividadesTotales_f) * 100f;      
+        an.setLogro((int) porc);                                                                           
+    }
+        
+    //------------------------------------------------
+    
+    //Los datos ingresados en los inputtext tanto del treetable como datatable no se actualizan de inmediato
+    //por lo que se utiliza el valor que habia antes y el valor nuevo ingresado para saber si se agrego o quito un elemento
+    //esto con el fin de calcular el porcentaje
+    public int calcularIncremento(String oldValue, String newValue){
+        int incremento = 0;
+        if(newValue.equals("")){
+            switch(oldValue){
+                //Caso en el que el valor nuevo es vacio y el valor antiguo tambien por lo que no se resta ni se suma nada
+                case "":
+                    break;
+                //Caso en el que el valor nuevo es vacio y el valor antiguo es un texto por lo que se entiende que se borro
+                //el texto, en este caso se debe restar 1 
+                default:
+                    incremento = -1;
+                    break;
+                        
+            }
+        }else{
+            switch(oldValue){
+                //Caso en el que el valor nuevo contiene texto y el valor antiguo esta vacio, esto quiere decir que se 
+                //escribio algo en el inputtext, por lo tanto hay un nuevo elemento
+                case "":
+                    incremento = 1;
+                    break;
+                //Caso en el que el valor nuevo contiene texto y el valor antiguo tambien por lo que no se tiene que 
+                //contemplar que se ha agregado un nuevo texto
+                default:
+                    break;
+                        
+            }
+        }    
+        return incremento;
+    }
+    
+    //------------------------------------------------
+    
+    public void guardarLogros(){       
+        String fm = frecuenciaMedicion.getFrecuenciaMedicion();
+        int metasInt = Integer.parseInt(metas);                     
+        int metasTotalesPeriodo = 0;
+        int actividadesEscritas = 0;
+                                                
+        if(fm.equals("Semestral") || fm.equals("Mensual")){
+            List<TreeNode> childrenList_lvl1;
+            TreeNodeRow row;
+            TreeNodeRow rowChild;
+            for(int i = minValue; i <= maxValue; i++){
+                childrenList_lvl1 = listaActividadesMesSemestre.get(i).getRoot().getChildren();
+                for(TreeNode t: childrenList_lvl1){
+                    row = (TreeNodeRow) t.getData();   
+                    metasTotalesPeriodo += row.getNumActividades();
+                    for(TreeNode t1: t.getChildren()){
+                        rowChild = (TreeNodeRow) t1.getData();
+                        if(rowChild.getNombre() != null){
+                            if(!rowChild.getNombre().isBlank() && !rowChild.getNombre().isEmpty()){
+                                actividadesEscritas++;
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            ActividadAnio an;
+            for(int i = minValue; i <= maxValue; i++){
+                an = listaActividades.get(i);
+                metasTotalesPeriodo += an.getNumActividades();
+                for(Actividad a: an.getActividades()){
+                    if(a.getNombre() != null){
+                        if(!a.getNombre().isBlank() && !a.getNombre().isEmpty()){
+                            actividadesEscritas++;
+                        }
+                    }
+                }               
+            }            
+        }
+        
+        System.out.println(metasInt);
+        System.out.println(metasTotalesPeriodo);
+        System.out.println(actividadesEscritas);
+        
         mantenerLogros = true;
-        PrimeFaces.current().executeScript("PF('dialog').hide();");    
+        
+        if(metasTotalesPeriodo != metasInt){
+            FacesContext.getCurrentInstance().addMessage("mensaje", 
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
+                    "La cantidad de actividades propuestas (" + String.valueOf(metasTotalesPeriodo) + ") no "
+                            + "es igual a la cantidad de metas establecidas (" + String.valueOf(metasInt) + ")."));                  
+            return;            
+        }
+        
+        float actividadesEscritas_f = (float) actividadesEscritas;
+        float metas_f = (float) metasInt;
+
+        float porc = (actividadesEscritas_f / metas_f) * 100f;      
+        logro = String.valueOf((int)porc);
+        
+        PrimeFaces.current().executeScript("PF('dialog').hide();");            
+     
     }    
 
     public void cambiarEstado() {
@@ -363,7 +648,17 @@ public class CrearIndicadorBean implements Serializable {
     }
 
     public void crearIndicador() throws IOException {
+        //Para que al clickear el boton "crear indicador" no se eliminen los logros y el porcentaje calculado
+        mantenerLogrosNewStep = true;
         System.out.println("crear");
+        if(logro == null){
+            FacesContext.getCurrentInstance().addMessage("mensaje", 
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
+                    "Se necesita configurar las activdades y logros."));                  
+            return;
+        }
+                
+        
 //        System.out.println(descripcionIndicador);
 //
 //        short numVigencia = 0;
@@ -608,94 +903,6 @@ public class CrearIndicadorBean implements Serializable {
 
     public void setLineaBase(String lineaBase) {
         this.lineaBase = lineaBase;
-    }
-
-    public String getAnio2020() {
-        return anio2020;
-    }
-
-    public void setAnio2020(String anio2020) {
-        this.anio2020 = anio2020;
-    }
-
-    public String getAnio2021() {
-        return anio2021;
-    }
-
-    public void setAnio2021(String anio2021) {
-        this.anio2021 = anio2021;
-    }
-
-    public String getAnio2022() {
-        return anio2022;
-    }
-
-    public void setAnio2022(String anio2022) {
-        this.anio2022 = anio2022;
-    }
-
-    public String getAnio2023() {
-        return anio2023;
-    }
-
-    public void setAnio2023(String anio2023) {
-        this.anio2023 = anio2023;
-    }
-
-    public String getAnio2024() {
-        return anio2024;
-    }
-
-    public void setAnio2024(String anio2024) {
-        this.anio2024 = anio2024;
-    }
-
-    public String getAnio2025() {
-        return anio2025;
-    }
-
-    public void setAnio2025(String anio2025) {
-        this.anio2025 = anio2025;
-    }
-
-    public String getAnio2026() {
-        return anio2026;
-    }
-
-    public void setAnio2026(String anio2026) {
-        this.anio2026 = anio2026;
-    }
-
-    public String getAnio2027() {
-        return anio2027;
-    }
-
-    public void setAnio2027(String anio2027) {
-        this.anio2027 = anio2027;
-    }
-
-    public String getAnio2028() {
-        return anio2028;
-    }
-
-    public void setAnio2028(String anio2028) {
-        this.anio2028 = anio2028;
-    }
-
-    public String getAnio2029() {
-        return anio2029;
-    }
-
-    public void setAnio2029(String anio2029) {
-        this.anio2029 = anio2029;
-    }
-
-    public String getAnio2030() {
-        return anio2030;
-    }
-
-    public void setAnio2030(String anio2030) {
-        this.anio2030 = anio2030;
     }
 
     public String getMetas() {
@@ -954,19 +1161,19 @@ public class CrearIndicadorBean implements Serializable {
         this.maxValue = maxValue;
     }
 
-    public Map<Integer, Actividad> getListaActividades() {
+    public Map<Integer, ActividadAnio> getListaActividades() {
         return listaActividades;
     }
 
-    public void setListaActividades(Map<Integer, Actividad> listaActividades) {
+    public void setListaActividades(Map<Integer, ActividadAnio> listaActividades) {
         this.listaActividades = listaActividades;
     }
 
-    public Map<Integer, ActividadMesSemestre> getListaActividadesMesSemestre() {
+    public Map<Integer, TreeNodeMesSemestre> getListaActividadesMesSemestre() {
         return listaActividadesMesSemestre;
     }
 
-    public void setListaActividadesMesSemestre(Map<Integer, ActividadMesSemestre> listaActividadesMesSemestre) {
+    public void setListaActividadesMesSemestre(Map<Integer, TreeNodeMesSemestre> listaActividadesMesSemestre) {
         this.listaActividadesMesSemestre = listaActividadesMesSemestre;
     }
 
@@ -984,8 +1191,5 @@ public class CrearIndicadorBean implements Serializable {
 
     public void setMantenerLogrosNewStep(boolean mantenerLogrosNewStep) {
         this.mantenerLogrosNewStep = mantenerLogrosNewStep;
-    }
-
-    
-    
+    }   
 }

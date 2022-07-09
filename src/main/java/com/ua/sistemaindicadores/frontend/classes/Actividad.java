@@ -10,13 +10,10 @@ package com.ua.sistemaindicadores.frontend.classes;
  * @author aleja
  */
 public class Actividad {
-    
     private String nombre;
-    private Integer logro;
 
-    public Actividad(String nombre, Integer logro) {
+    public Actividad(String nombre) {
         this.nombre = nombre;
-        this.logro = logro;
     }
 
     public String getNombre() {
@@ -26,14 +23,7 @@ public class Actividad {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
-    public Integer getLogro() {
-        return logro;
-    }
-
-    public void setLogro(Integer logro) {
-        this.logro = logro;
-    }
+    
     
     
     

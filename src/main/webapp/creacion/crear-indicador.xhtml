@@ -21,7 +21,7 @@
                                   showStepStatus="true"
                                   nextLabel="Siguiente"
                                   backLabel="Anterior"
-                                  >        
+                                  >                                     
                             <p:tab id="pag1" title="1">
                                 <p:panelGrid class="crear-tipo-indicadores-table" 
                                              layout="grid"
@@ -282,14 +282,15 @@
                                              styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid"
                                              columns="2">  
                                     <p:outputLabel class="texto-ver-centrado" id="metasLabel" value="Metas: *"/>
-                                    <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        requiredMessage="Campo metas es requerido."                                 
-                                        value="#{crearIndicadorBean.metas}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        id="metas"                                
-                                        >                                
-                                    </p:inputText>
+                                    <p:inputNumber id="metas"
+                                                   value="#{crearIndicadorBean.metas}"
+                                                   required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"                                                   
+                                                   requiredMessage="Campo metas es requerido."
+                                                   disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                                   minValue="0"
+                                                   decimalPlaces="0"                                                   
+                                                   >                                                               
+                                    </p:inputNumber>                                        
                                     <p:message for="metasLabel"/>                                     
                                     <p:message for="metas"/>   
                                     <!---->                                     
@@ -422,7 +423,7 @@
                                     <p:message for="estadoActividadLabel"/>                                     
                                     <p:message for="estadoActividad"/>
                                 </p:panelGrid>
-                            </p:tab>
+                            </p:tab>                                  
                             <p:tab id="pag3" title="3">
                                 <p:panelGrid class="crear-tipo-indicadores-table" 
                                              layout="grid"
@@ -444,6 +445,7 @@
                                             #{frecuencia.frecuenciaMedicion}
                                         </p:column>     
                                         <p:ajax event="itemSelect" 
+                                                update="@form:logro"
                                                 delay="50"
                                                 listener="#{crearIndicadorBean.limpiarListas()}"
                                                 process="@this, @form"/>                                           
@@ -462,34 +464,35 @@
                                                   maxValue="#{crearIndicadorBean.max}"                                          
                                                   displayTemplate="Inicio en {min} y término en {max}">    
                                                   <p:ajax event="slideEnd" 
+                                                          update="@form:logro"
                                                           listener="#{crearIndicadorBean.limpiarListas()}"/>                                            
                                         </p:slider>
                                         <h:outputText id="displayRange" 
                                                       value="Inicio en #{crearIndicadorBean.minValue} y término en #{crearIndicadorBean.maxValue}"                                                      
                                                       />                                        
                                     </h:panelGrid>
-                                    <p:message for="sliderAnio"/>                                      
+                                    <p:commandButton style="visibility: hidden;" process="@this"/>              
                                     <p:commandButton id="confLogros"                                                     
                                                      widgetVar="logrosButton"
-                                                     class="ui-button-formulario"                                                   
+                                                     class="ui-button-formulario"      
                                                      value="Configurar actividades y logros"
                                                      action="#{crearIndicadorBean.createList()}"
                                                      process="@this, @form"
-                                                     update="@form:panelAnios"/>     
+                                                     update="@form:panelAnios, @form:growl"/>     
                                     <p:outputLabel class="texto-ver-centrado" id="logroLabel" value="% Logro: *"/>
-                                    <p:outputLabel id="logro" value="#{crearIndicadorBean.logro}"/>    
+                                    <p:outputLabel class="texto-ver-centrado" id="logro" value="#{crearIndicadorBean.logro eq null? '' : crearIndicadorBean.logro.concat('%')}"/>    
                                     <p:message for="logroLabel"/>                                     
                                     <p:message for="logro"/>                                          
                                     <!---->     
                                     <!---->     
-                                    <!---->     
+                                    <!---->                                         
                                     <p:commandButton value="Crear indicador"   
                                                      class="ui-button-formulario"     
                                                      action="#{crearIndicadorBean.crearIndicador}"   
                                                      update="@form" 
-                                                     process="@this, @form"/>                                    
+                                                     process="@this, @form"/>                                                                                                         
                                 </p:panelGrid>
-                            </p:tab>                                   
+                            </p:tab>                        
                         </p:wizard> 
                     </p:panel>
                 </div>    
@@ -504,56 +507,82 @@
                                                                                   crearIndicadorBean.listaActividadesMesSemestre.entrySet().toArray()
                                                                                   :  
                                                                                   crearIndicadorBean.listaActividades.entrySet().toArray()}" var="item">
-                    <p:tab title="#{item.key}">                                                                                                            
-                        <p:dataTable id="actividadesMesesSemestre" var="item_2" 
-                                     rendered="#{item.value.class.simpleName eq 'ActividadMesSemestre'}"
-                                     value="#{item.value.actividades.entrySet().toArray()}" 
-                                     editable="true" editMode="cell"
-                                     >
-
-                                <p:column styleClass="align-center">
-                                    <h:outputText value="#{item_2.key} de #{item.key}" />
-                                </p:column>
-                                <p:column headerText="Actividades" styleClass="align-center">
-                                    <p:cellEditor>
-                                            <f:facet name="output">
-                                                <h:outputText value="#{item_2.value.nombre}"/>
-                                            </f:facet>
-                                            <f:facet name="input">
-                                                <p:inputText value="#{item_2.value.nombre}" />
-                                            </f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                <p:column headerText="% Logro" styleClass="align-center">
-                                    <p:cellEditor>
-                                        <f:facet name="output">
-                                            <h:outputText value="#{item_2.value.logro}%"/>
-                                        </f:facet>
-                                        <f:facet name="input">
-                                            <p:inputNumber minValue="0" maxValue="100" decimalPlaces="0"
-                                                            symbol="%" symbolPosition="s"
-                                                            value="#{item_2.value.logro}"/> 
-                                        </f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                        </p:dataTable>                                                                                 
-                        <p:panelGrid rendered="#{item.value.class.simpleName eq 'Actividad'}"  
-                                     layout="grid" columns="1" styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">                                                                                                                   
-                            <p:outputLabel class="label-centered" value="NOMBRE ACTIVIDAD"/> 
-                            <p:inputText value="#{item.value.nombre}"/>   
-                            <p:outputLabel class="label-centered" value="% LOGRO"/>                               
-                            <p:inputNumber minValue="0" maxValue="100" decimalPlaces="0"
-                                            symbol="%" symbolPosition="s"
-                                            value="#{item.value.logro}"/>                             
-                        </p:panelGrid>                           
+                    <p:tab title="#{item.key}">        
+                        <!--Este treetable se desplegara solo si se trata de una frecuencia de medicion mensual o semestral-->
+                        <p:treeTable rendered="#{item.value.class.simpleName eq 'TreeNodeMesSemestre'}" id="treeTable" value="#{item.value.root}" editable="true" editMode="cell" var="item_2">                                                                                                                
+                            <p:column headerText="" style="padding-left: 0px;">
+                                <h:outputText value="#{item_2.titulo}"/>
+                                <h:inputHidden id="parentNodeString" value="#{item_2.parentNodeString}"/>
+                            </p:column>
+                            <p:column headerText="Actividades" styleClass="align-center">
+                                <p:cellEditor rendered="#{item_2.numActividades ne null}">
+                                    <f:facet name="output"><h:outputText value="#{item_2.numActividades}"/></f:facet>
+                                    <f:facet name="input">
+                                        <p:spinner value="#{item_2.numActividades}" min="1" max="50" 
+                                                   valueChangeListener="#{crearIndicadorBean.onChangeSpinnerMesSemestre}">  
+                                            <p:ajax update="@form:panelAnios:treeTable"/>
+                                        </p:spinner>
+                                    </f:facet>
+                                </p:cellEditor>
+                                <p:cellEditor rendered="#{item_2.numActividades eq null}">
+                                    <f:facet name="output"><h:outputText value="#{item_2.nombre}"/></f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText 
+                                            value="#{item_2.nombre}"
+                                            valueChangeListener="#{crearIndicadorBean.onInputTextMesSemestreEdit}">
+                                            <p:ajax update="@form:panelAnios:treeTable"/>
+                                        </p:inputText>´
+                                    </f:facet>
+                                </p:cellEditor>                                
+                            </p:column>
+                            <p:column headerText="% Logro" width="40" styleClass="align-center">
+                                <h:outputText rendered="#{item_2.logro ne null}" value="#{item_2.logro}%"/>
+                                <h:outputText rendered="#{item_2.logro eq null}" value=""/>                           
+                            </p:column>                            
+                        </p:treeTable>       
+                        <!--Este datatable se desplegara solo si se trata de una frecuencia de medicion anual o bianual-->
+                        <p:dataTable rendered="#{item.value.class.simpleName eq 'ActividadAnio'}" 
+                                     var="item_3" 
+                                     value="#{item.value.actividades}" 
+                                     id="dataAnios" editable="true" editMode="cell">
+                            
+                            <f:facet name="header">                  
+                                <p:panelGrid layout="grid" columns="2" 
+                                             styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">                                                                                                                   
+                                    <h:outputText class="texto-ver-centrado" value="Logro: #{item.value.logro}%"/>
+                                    <p:spinner value="#{item.value.numActividades}" min="1" max="50"
+                                               valueChangeListener="#{crearIndicadorBean.onChangeSpinnerActividad}">  
+                                        <p:ajax update="@form:panelAnios:dataAnios"/>                                                                                              
+                                    </p:spinner>                              
+                                </p:panelGrid>                                                                                                                         
+                            </f:facet>                             
+                            
+                            <p:column>
+                                <h:outputText value="#{item.value.actividades.indexOf(item_3) + 1}"/>
+                            </p:column>                            
+                            <p:column headerText="Actividades">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{item_3.nombre}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{item_3.nombre}"
+                                                     valueChangeListener="#{crearIndicadorBean.onInputTextActividadEdit}">
+                                            <p:ajax update="@form:panelAnios:dataAnios"/>                                                     
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                        </p:dataTable>                        
                     </p:tab>  
                 </p:accordionPanel>
                 <f:facet name="footer">
                     <p:commandButton id="guardarLogros"                                                     
                         widgetVar="guardarLogrosButton"
                         class="ui-button-formulario"                                                   
-                        value="Cerrar"
+                        value="Guardar logros y calcular logro indicador"
                         action="#{crearIndicadorBean.guardarLogros()}"
+                        update="@form:growl, @form:logro"
                         process="@this, @form"/>  
                 </f:facet>
             </p:dialog>             
