@@ -21,7 +21,7 @@ public class ActividadAnio {
 
     public ActividadAnio(Integer anio) {
         this.numActividades = 1;
-        this.logro = 100;
+        this.logro = 0;
         this.anio = anio;
         this.actividades = new LinkedList<Actividad>();
         this.actividades.add(new Actividad(""));        
