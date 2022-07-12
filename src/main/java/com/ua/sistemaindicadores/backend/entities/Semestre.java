@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -25,13 +26,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author aleja
  */
 @Entity
-@Table(name = "anio", schema = "indicadores")
+@Table(name = "semestre", schema = "indicadores")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Anio.findAll", query = "SELECT a FROM Anio a"),
-    @NamedQuery(name = "Anio.findById", query = "SELECT a FROM Anio a WHERE a.id = :id"),
-    @NamedQuery(name = "Anio.findByAnio", query = "SELECT a FROM Anio a WHERE a.anio = :anio")})
-public class Anio implements Serializable {
+    @NamedQuery(name = "Semestre.findAll", query = "SELECT s FROM Semestre s"),
+    @NamedQuery(name = "Semestre.findById", query = "SELECT s FROM Semestre s WHERE s.id = :id"),
+    @NamedQuery(name = "Semestre.findBySemestre", query = "SELECT s FROM Semestre s WHERE s.semestre = :semestre")})
+public class Semestre implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,21 +42,22 @@ public class Anio implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "anio")
-    private int anio;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anio")
+    @Size(min = 1, max = 255)
+    @Column(name = "semestre")
+    private String semestre;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "semestre")
     private Collection<IndicadorMesSemestreAnioBianual> indicadorMesSemestreAnioBianualCollection;
 
-    public Anio() {
+    public Semestre() {
     }
 
-    public Anio(Integer id) {
+    public Semestre(Integer id) {
         this.id = id;
     }
 
-    public Anio(Integer id, int anio) {
+    public Semestre(Integer id, String semestre) {
         this.id = id;
-        this.anio = anio;
+        this.semestre = semestre;
     }
 
     public Integer getId() {
@@ -66,12 +68,12 @@ public class Anio implements Serializable {
         this.id = id;
     }
 
-    public int getAnio() {
-        return anio;
+    public String getSemestre() {
+        return semestre;
     }
 
-    public void setAnio(int anio) {
-        this.anio = anio;
+    public void setSemestre(String semestre) {
+        this.semestre = semestre;
     }
 
     @XmlTransient
@@ -93,10 +95,10 @@ public class Anio implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Anio)) {
+        if (!(object instanceof Semestre)) {
             return false;
         }
-        Anio other = (Anio) object;
+        Semestre other = (Semestre) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +107,7 @@ public class Anio implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ua.sistemaindicadores.backend.entities.Anio[ id=" + id + " ]";
+        return "com.ua.sistemaindicadores.backend.entities.Semestre[ id=" + id + " ]";
     }
     
 }

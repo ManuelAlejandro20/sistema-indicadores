@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author aleja
  */
 @Entity
-@Table(name = "anio", schema = "indicadores")
+@Table(name = "bi_anual", schema = "indicadores")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Anio.findAll", query = "SELECT a FROM Anio a"),
-    @NamedQuery(name = "Anio.findById", query = "SELECT a FROM Anio a WHERE a.id = :id"),
-    @NamedQuery(name = "Anio.findByAnio", query = "SELECT a FROM Anio a WHERE a.anio = :anio")})
-public class Anio implements Serializable {
+    @NamedQuery(name = "BiAnual.findAll", query = "SELECT b FROM BiAnual b"),
+    @NamedQuery(name = "BiAnual.findById", query = "SELECT b FROM BiAnual b WHERE b.id = :id"),
+    @NamedQuery(name = "BiAnual.findByAnio", query = "SELECT b FROM BiAnual b WHERE b.anio = :anio")})
+public class BiAnual implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,17 +43,17 @@ public class Anio implements Serializable {
     @NotNull
     @Column(name = "anio")
     private int anio;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anio")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "biAnual")
     private Collection<IndicadorMesSemestreAnioBianual> indicadorMesSemestreAnioBianualCollection;
 
-    public Anio() {
+    public BiAnual() {
     }
 
-    public Anio(Integer id) {
+    public BiAnual(Integer id) {
         this.id = id;
     }
 
-    public Anio(Integer id, int anio) {
+    public BiAnual(Integer id, int anio) {
         this.id = id;
         this.anio = anio;
     }
@@ -93,10 +93,10 @@ public class Anio implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Anio)) {
+        if (!(object instanceof BiAnual)) {
             return false;
         }
-        Anio other = (Anio) object;
+        BiAnual other = (BiAnual) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +105,7 @@ public class Anio implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ua.sistemaindicadores.backend.entities.Anio[ id=" + id + " ]";
+        return "com.ua.sistemaindicadores.backend.entities.BiAnual[ id=" + id + " ]";
     }
     
 }

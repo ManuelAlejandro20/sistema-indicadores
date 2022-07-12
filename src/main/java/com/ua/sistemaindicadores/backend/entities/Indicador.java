@@ -79,8 +79,9 @@ public class Indicador implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "num_indicador")
-    private Integer numIndicador;
+    private String numIndicador;                
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -201,7 +202,7 @@ public class Indicador implements Serializable {
     @ManyToOne(optional = false)
     private UnidadRepresentacion unidadRepresentacionId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "indicador")
-    private Collection<IndicadorAnio> indicadorAnioCollection;
+    private Collection<IndicadorMesSemestreAnioBianual> indicadorMesSemestreAnioBianualCollection;
 
     public Indicador() {
     }
@@ -210,9 +211,8 @@ public class Indicador implements Serializable {
         this.id = id;
     }
 
-    public Indicador(Integer id, Integer numIndicador, String nombreIndicador, Short estado, String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, Date fechaActualizacion) {
+    public Indicador(Integer id, String nombreIndicador, Short estado, String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, String comentario, String actividadComprometida, String estadoActividad, Date fechaCreacion, Date fechaActualizacion, String numIndicador) {
         this.id = id;
-        this.numIndicador = numIndicador;
         this.nombreIndicador = nombreIndicador;
         this.estado = estado;
         this.descripcionIndicador = descripcionIndicador;
@@ -232,6 +232,7 @@ public class Indicador implements Serializable {
         this.estadoActividad = estadoActividad;
         this.fechaCreacion = fechaCreacion;
         this.fechaActualizacion = fechaActualizacion;
+        this.numIndicador = numIndicador;
     }
 
     public Integer getId() {
@@ -240,14 +241,6 @@ public class Indicador implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getNumIndicador() {
-        return numIndicador;
-    }
-
-    public void setNumIndicador(Integer numIndicador) {
-        this.numIndicador = numIndicador;
     }
 
     public String getNombreIndicador() {
@@ -402,6 +395,14 @@ public class Indicador implements Serializable {
         this.fechaActualizacion = fechaActualizacion;
     }
 
+    public String getNumIndicador() {
+        return numIndicador;
+    }
+
+    public void setNumIndicador(String numIndicador) {
+        this.numIndicador = numIndicador;
+    }
+
     @XmlTransient
     public Collection<GeneracionDatos> getGeneracionDatosCollection() {
         return generacionDatosCollection;
@@ -469,12 +470,12 @@ public class Indicador implements Serializable {
     }
 
     @XmlTransient
-    public Collection<IndicadorAnio> getIndicadorAnioCollection() {
-        return indicadorAnioCollection;
+    public Collection<IndicadorMesSemestreAnioBianual> getIndicadorMesSemestreAnioBianualCollection() {
+        return indicadorMesSemestreAnioBianualCollection;
     }
 
-    public void setIndicadorAnioCollection(Collection<IndicadorAnio> indicadorAnioCollection) {
-        this.indicadorAnioCollection = indicadorAnioCollection;
+    public void setIndicadorMesSemestreAnioBianualCollection(Collection<IndicadorMesSemestreAnioBianual> indicadorMesSemestreAnioBianualCollection) {
+        this.indicadorMesSemestreAnioBianualCollection = indicadorMesSemestreAnioBianualCollection;
     }
 
     @Override
