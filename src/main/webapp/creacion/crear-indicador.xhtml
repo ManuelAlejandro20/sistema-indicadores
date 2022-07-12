@@ -574,15 +574,18 @@
                                         <f:facet name="output"><h:outputText value="#{item_2.nombreActividad}"/></f:facet>
                                         <f:facet name="input">
                                             <p:inputText 
-                                                    value="#{item_2.nombreActividad}"
-                                                    >
+                                                    value="#{item_2.nombreActividad}">
+                                                <p:ajax event="change" update="@form:panelAnios:treeTable" 
+                                                        listener="#{crearIndicadorBean.calcularPorcentajeLogroMesSemestre(item.key, item_2.nombrePadre)}"/>                                                  
                                             </p:inputText>´
                                         </f:facet>
                                 </p:cellEditor>                                
                             </p:column>                           
                             <!--Columna 3-->
                             <!--Columna que se renderiza en caso de haber escogido numero de actividades como u de representacion-->
-                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'}" headerText="% Logro" width="40" styleClass="align-center">
+                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
+                                                    or
+                                                  crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" headerText="% Logro" width="40" styleClass="align-center">
                                 <h:outputText rendered="#{item_2.nombrePadre eq null}" value="#{item_2.logro}%"/>
                                 <h:outputText rendered="#{item_2.nombrePadre ne null}" value=""/>
                             </p:column>       
@@ -633,7 +636,7 @@
                                 <p:panelGrid rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" 
                                              layout="grid" columns="2" 
                                              styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">    
-                                    <h:outputText class="texto-ver-centrado" value="% Actividades: "/>
+                                    <h:outputText class="texto-ver-centrado" value="Logro: #{item.value.logro}%"/>
                                     <p:inputNumber id="porcActividades" 
                                                 value="#{item.value.porcActividades}"
                                                 minValue="0"
@@ -675,14 +678,14 @@
                                         <h:outputText value="#{item_3.nombre}"/>
                                     </f:facet>
                                     <f:facet name="input">
-                                        <p:inputText rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'}" 
+                                        <p:inputText rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
+                                                                    or
+                                                                 crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" 
                                                      value="#{item_3.nombre}">
                                             <p:ajax event="change" update="@form:panelAnios:dataAnios"
                                                     listener="#{crearIndicadorBean.calcularPorcentajeLogroAnio(item.key)}"/>   
                                         </p:inputText>
-                                        <p:inputText rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'
-                                                                    or
-                                                                crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" 
+                                        <p:inputText rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" 
                                                      value="#{item_3.nombre}">                                              
                                         </p:inputText>                                        
                                     </f:facet>

@@ -17,7 +17,7 @@ import java.util.Date;
  */
 public class IndicadorDTO {
     private Integer id;
-    private Integer numIndicador;
+    private String numIndicador;
     private String nombreIndicador;
     private Short estado;
     private String descripcionIndicador;
@@ -45,7 +45,7 @@ public class IndicadorDTO {
     private String plazoId;
     private String unidadRepresentacionId; 
 
-    public IndicadorDTO(Integer id, Integer numIndicador, String nombreIndicador, Short estado, 
+    public IndicadorDTO(Integer id, String numIndicador, String nombreIndicador, Short estado, 
             String descripcionIndicador, String aplicaLineamiento, String aplicaObjetivo, 
             String descripcionObjetivo, String version, String lineaBase, String metas, String porcLogro, 
             String medioVerificacion, String formaCalculo, String fuenteInformacion, String proyectoAsociado, 
@@ -93,11 +93,11 @@ public class IndicadorDTO {
         this.id = id;
     }
 
-    public Integer getNumIndicador() {
+    public String getNumIndicador() {
         return numIndicador;
     }
 
-    public void setNumIndicador(Integer numIndicador) {
+    public void setNumIndicador(String numIndicador) {
         this.numIndicador = numIndicador;
     }
 

@@ -36,6 +36,7 @@ public class ActividadAnio {
             actividad = new Actividad("", 0);
         }else{
             this.porcActividades = 1;
+            this.logro = 0;
             actividad = new Actividad("");
         }        
                 

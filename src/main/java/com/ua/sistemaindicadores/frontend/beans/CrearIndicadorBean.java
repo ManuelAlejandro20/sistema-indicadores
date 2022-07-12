@@ -324,12 +324,13 @@ public class CrearIndicadorBean implements Serializable {
         }else{
             float porcentaje = (float) newValue / 100f;
             float actividades = Float.parseFloat(metas) * porcentaje;
-            nuevaActividad = new TreeNodeRow("", nombrePeriodo);
             for(TreeNode t: children){
                 row = (TreeNodeRow) t.getData();            
                 if(row.getNombrePeriodo().equals(nombrePeriodo)){
                     t.getChildren().clear();
+                    row.setLogro(0);
                     for(int i = 0; i < actividades; i++){
+                        nuevaActividad = new TreeNodeRow("", nombrePeriodo);
                         t.getChildren().add(new DefaultTreeNode(nuevaActividad, t));
                     }                        
                     break;
@@ -453,7 +454,8 @@ public class CrearIndicadorBean implements Serializable {
             actividades_i = 1;
         }
         
-        actividades.clear();                
+        actividades.clear();      
+        an.setLogro(0);
         for(int i = 0; i < actividades_i; i++){
             actividades.add(new Actividad(""));
         }                                    

@@ -89,7 +89,6 @@ public class TreeNodeRow {
     }
 
     public void setPorcActividad(Integer porcActividad) {
-        System.out.println(porcActividad);
         if(porcActividad == null){
             porcActividad = 1;
         }

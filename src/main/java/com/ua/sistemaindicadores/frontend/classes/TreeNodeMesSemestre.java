@@ -33,6 +33,7 @@ public class TreeNodeMesSemestre {
                     break;                
                 case "Porcentaje (%)":
                     periodo.setPorcActividad(1);                    
+                    periodo.setLogro(0);
                     break;
                 default:        
                     periodo.setNumActividades(1);

@@ -187,6 +187,7 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
         if (filters != null && !filters.isEmpty()) {
             for (String key : filters.keySet()) {
                 switch (key) {
+                    case NUM_INDICADOR:
                     case NOMBRE_INDICADOR:
                     case DESCRIPCION_INDICADOR:
                     case APLICA_LINEAMIENTO:
@@ -207,15 +208,7 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
                                 p, cb.like(cb.lower(root.get(key)),
                                         cb.lower(cb.literal("%" + filters.get(key).toString() + "%")))
                         );
-                        break;
-                    case NUM_INDICADOR:
-                        p = cb.and(p,
-                                cb.equal(
-                                        root.get(key),
-                                        (Integer) filters.get(key)
-                                )
-                        );
-                        break;                        
+                        break;                   
                     case ESTADO:
                         p = cb.and(p,
                                 cb.equal(

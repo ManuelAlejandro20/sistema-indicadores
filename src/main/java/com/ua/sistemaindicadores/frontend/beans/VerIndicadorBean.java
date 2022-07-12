@@ -899,7 +899,7 @@ public class VerIndicadorBean implements Serializable{
     public void onSeleccionNumIndicadorListener(){        
         try {
             if (numIndicadorSeleccionado != null) {
-                model.setNumIndicador(Integer.valueOf(numIndicadorSeleccionado));
+                model.setNumIndicador(numIndicadorSeleccionado);
             } else {
                 model.setNumIndicador(null);
             }

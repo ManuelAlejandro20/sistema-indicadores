@@ -46,7 +46,7 @@ public class IndicadorLazyDataModel extends LazyDataModel<IndicadorDTO> {
     
     @Inject
     transient private IndicadorService indicadorService;
-    private Integer numIndicador;
+    private String numIndicador;
     private String nombreIndicador;
     private Short estado;
     private String descripcionIndicador;
@@ -299,11 +299,11 @@ public class IndicadorLazyDataModel extends LazyDataModel<IndicadorDTO> {
         this.indicadorService = indicadorService;
     }
 
-    public Integer getNumIndicador() {
+    public String getNumIndicador() {
         return numIndicador;
     }
 
-    public void setNumIndicador(Integer numIndicador) {
+    public void setNumIndicador(String numIndicador) {
         this.numIndicador = numIndicador;
     }
 
