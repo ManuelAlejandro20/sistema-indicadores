@@ -11,46 +11,48 @@ package com.ua.sistemaindicadores.frontend.classes;
  */
 public class TreeNodeRow {
    
-    //Variables que no seran null cuando se traten de filas que contengan actividades
-    private String titulo;
+    private String nombrePeriodo;
     private Integer numActividades;
-    private Integer logro;   
     
-    //No sera null cuando se trate de una actividad
-    private String nombre;
-    private String parentNodeString;
-
-    public TreeNodeRow(String titulo, Integer numActividades, Integer logro, String nombre, String parentNodeString) {
-        this.titulo = titulo;
-        this.numActividades = numActividades;
-        this.logro = logro;
-        this.nombre = nombre;
-        this.parentNodeString = parentNodeString;
-    }   
+    private String nombreActividad;
+    private String nombrePadre;    
     
-    public String getTitulo() {
-        return titulo;
-    }
+    private Integer logro;
+    private Integer monto;
+    private Integer porcActividad;
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }   
+    public TreeNodeRow(String nombrePeriodo){    
+        this.nombrePeriodo = nombrePeriodo;         
+    }
     
-    public String getNombre() {
-        return nombre;
+    public TreeNodeRow(String nombreActividad, String nombrePadre){    
+        this.nombreActividad = nombreActividad;
+        this.nombrePadre = nombrePadre;
+    }    
+
+    public String getNombrePeriodo() {
+        return nombrePeriodo;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombrePeriodo(String nombrePeriodo) {
+        this.nombrePeriodo = nombrePeriodo;
     }
 
-    public Integer getLogro() {
-        return logro;
+    public String getNombreActividad() {
+        return nombreActividad;
     }
 
-    public void setLogro(Integer logro) {
-        this.logro = logro;
+    public void setNombreActividad(String nombreActividad) {
+        this.nombreActividad = nombreActividad;
+    }                 
+
+    public String getNombrePadre() {
+        return nombrePadre;
     }
+
+    public void setNombrePadre(String nombrePadre) {
+        this.nombrePadre = nombrePadre;
+    }        
 
     public Integer getNumActividades() {
         return numActividades;
@@ -61,15 +63,38 @@ public class TreeNodeRow {
             numActividades = 1;
         }
         this.numActividades = numActividades;
-    }    
-
-    public String getParentNodeString() {
-        return parentNodeString;
     }
 
-    public void setParentNodeString(String parentNodeString) {
-        this.parentNodeString = parentNodeString;
+    public Integer getLogro() {
+        return logro;
     }
+
+    public void setLogro(Integer logro) {
+        this.logro = logro;
+    }
+
+    public Integer getMonto() {
+        return monto;
+    }
+
+    public void setMonto(Integer monto) {
+        if(monto == null){
+            monto = 0;
+        }
+        this.monto = monto;
+    }
+
+    public Integer getPorcActividad() {
+        return porcActividad;
+    }
+
+    public void setPorcActividad(Integer porcActividad) {
+        System.out.println(porcActividad);
+        if(porcActividad == null){
+            porcActividad = 1;
+        }
+        this.porcActividad = porcActividad;
+    }          
 
 
     

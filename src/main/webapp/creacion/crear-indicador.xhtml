@@ -204,7 +204,8 @@
                                                        itemValue="#{unidadRepresentacion}"/>
                                         <p:column>
                                             #{uRepr.unidadRepresentacion}
-                                        </p:column>                                          
+                                        </p:column>       
+                                        <p:ajax event="itemSelect" update="@form:metas" listener="#{crearIndicadorBean.cambioMetasURepr()}"/>
                                     </p:selectOneMenu>
                                     <p:message for="unidadRepresentacionLabel"/>                                     
                                     <p:message for="unidadRepresentacion"/>                              
@@ -287,9 +288,12 @@
                                                    required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"                                                   
                                                    requiredMessage="Campo metas es requerido."
                                                    disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                                   symbol="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'? '$' : ''}"
+                                                   thousandSeparator="."
                                                    minValue="0"
                                                    decimalPlaces="0"                                                   
-                                                   >                                                               
+                                                   >                   
+                                        <p:ajax event="change" listener="#{crearIndicadorBean.cambioMetasURepr()}"/>
                                     </p:inputNumber>                                        
                                     <p:message for="metasLabel"/>                                     
                                     <p:message for="metas"/>   
@@ -510,35 +514,94 @@
                     <p:tab title="#{item.key}">        
                         <!--Este treetable se desplegara solo si se trata de una frecuencia de medicion mensual o semestral-->
                         <p:treeTable rendered="#{item.value.class.simpleName eq 'TreeNodeMesSemestre'}" id="treeTable" value="#{item.value.root}" editable="true" editMode="cell" var="item_2">                                                                                                                
+                            <!--Columna 1-->
                             <p:column headerText="" style="padding-left: 0px;">
-                                <h:outputText value="#{item_2.titulo}"/>
-                                <h:inputHidden id="parentNodeString" value="#{item_2.parentNodeString}"/>
+                                <h:outputText value="#{item_2.nombrePeriodo}"/>
+                                <h:inputHidden id="parentNodeString" value="#{item_2.nombrePadre}"/>
                             </p:column>
-                            <p:column headerText="Actividades" styleClass="align-center">
-                                <p:cellEditor rendered="#{item_2.numActividades ne null}">
+                            <!--Columna 2-->
+                            <!--Columna que se renderiza si se escoge numero de actividades o peso como u de representacion-->
+                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
+                                                    or
+                                                  crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" headerText="Actividades" styleClass="align-center">
+                                <p:cellEditor rendered="#{item_2.nombrePadre eq null}">
                                     <f:facet name="output"><h:outputText value="#{item_2.numActividades}"/></f:facet>
                                     <f:facet name="input">
-                                        <p:spinner value="#{item_2.numActividades}" min="1" max="50" 
+                                        <p:spinner value="#{item_2.numActividades}" min="1" max="50"
                                                    valueChangeListener="#{crearIndicadorBean.onChangeSpinnerMesSemestre}">  
+                                            <f:attribute name="anio" value="#{item.key}"/>
+                                            <f:attribute name="nombrePeriodo" value="#{item_2.nombrePeriodo}"/>
                                             <p:ajax update="@form:panelAnios:treeTable"/>
                                         </p:spinner>
                                     </f:facet>
                                 </p:cellEditor>
-                                <p:cellEditor rendered="#{item_2.numActividades eq null}">
-                                    <f:facet name="output"><h:outputText value="#{item_2.nombre}"/></f:facet>
+                                <p:cellEditor rendered="#{item_2.nombrePadre ne null}">
+                                    <f:facet name="output"><h:outputText value="#{item_2.nombreActividad}"/></f:facet>
                                     <f:facet name="input">
                                         <p:inputText 
-                                            value="#{item_2.nombre}"
-                                            valueChangeListener="#{crearIndicadorBean.onInputTextMesSemestreEdit}">
-                                            <p:ajax update="@form:panelAnios:treeTable"/>
+                                            rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'}"
+                                            value="#{item_2.nombreActividad}">
+                                            <p:ajax event="change" update="@form:panelAnios:treeTable" 
+                                                    listener="#{crearIndicadorBean.calcularPorcentajeLogroMesSemestre(item.key, item_2.nombrePadre)}"/>                                            
                                         </p:inputText>´
+                                        <p:inputText 
+                                            rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}"
+                                            value="#{item_2.nombreActividad}">                                        
+                                        </p:inputText>´                                        
                                     </f:facet>
                                 </p:cellEditor>                                
                             </p:column>
-                            <p:column headerText="% Logro" width="40" styleClass="align-center">
-                                <h:outputText rendered="#{item_2.logro ne null}" value="#{item_2.logro}%"/>
-                                <h:outputText rendered="#{item_2.logro eq null}" value=""/>                           
-                            </p:column>                            
+                            <!--Columna que se renderiza si se escoge porcentaje-->                            
+                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" headerText="Actividades" styleClass="align-center">
+                                <p:cellEditor rendered="#{item_2.nombrePadre eq null}">
+                                        <f:facet name="output"><h:outputText value="#{item_2.porcActividad}%"/></f:facet>
+                                        <f:facet name="input">
+                                            <p:inputNumber id="porcActividades" 
+                                                        value="#{item_2.porcActividad}"
+                                                        minValue="0"
+                                                        maxValue="100"
+                                                        decimalPlaces="0"
+                                                        symbol="%"
+                                                        symbolPosition="s"
+                                                        valueChangeListener="#{crearIndicadorBean.onChangeSpinnerMesSemestre}">
+                                                <f:attribute name="anio" value="#{item.key}"/>
+                                                <f:attribute name="nombrePeriodo" value="#{item_2.nombrePeriodo}"/>
+                                                <p:ajax update="@form:panelAnios:treeTable"/>
+                                            </p:inputNumber>   
+                                        </f:facet>
+                                </p:cellEditor>
+                                <p:cellEditor rendered="#{item_2.nombrePadre ne null}">
+                                        <f:facet name="output"><h:outputText value="#{item_2.nombreActividad}"/></f:facet>
+                                        <f:facet name="input">
+                                            <p:inputText 
+                                                    value="#{item_2.nombreActividad}"
+                                                    >
+                                            </p:inputText>´
+                                        </f:facet>
+                                </p:cellEditor>                                
+                            </p:column>                           
+                            <!--Columna 3-->
+                            <!--Columna que se renderiza en caso de haber escogido numero de actividades como u de representacion-->
+                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'}" headerText="% Logro" width="40" styleClass="align-center">
+                                <h:outputText rendered="#{item_2.nombrePadre eq null}" value="#{item_2.logro}%"/>
+                                <h:outputText rendered="#{item_2.nombrePadre ne null}" value=""/>
+                            </p:column>       
+                            <!--Columna que se renderiza en caso de haber escogido peso como u de representacion-->
+                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" headerText="Logro" styleClass="align-center">                        
+                                <h:outputText rendered="#{item_2.nombrePadre eq null}" value="$#{item_2.monto}"/>
+                                <p:cellEditor rendered="#{item_2.nombrePadre ne null}">
+                                    <f:facet name="output"><h:outputText value="$#{item_2.monto}"/></f:facet>
+                                    <f:facet name="input">
+                                        <p:inputNumber id="input2" value="#{item_2.monto}" symbol="$"
+                                                                        minValue="0"
+                                                                        decimalPlaces="0"                                                                          
+                                                                        thousandSeparator=".">
+                                            <p:ajax event="change" update="@form:panelAnios:treeTable"
+                                                    listener="#{crearIndicadorBean.calcularMontoMesSemestre(item.key, item_2.nombrePadre)}"/>            
+                                        </p:inputNumber>
+                                    </f:facet> 
+                                </p:cellEditor>                                                                                                      
+                            </p:column>                             
                         </p:treeTable>       
                         <!--Este datatable se desplegara solo si se trata de una frecuencia de medicion anual o bianual-->
                         <p:dataTable rendered="#{item.value.class.simpleName eq 'ActividadAnio'}" 
@@ -547,29 +610,81 @@
                                      id="dataAnios" editable="true" editMode="cell">
                             
                             <f:facet name="header">                  
-                                <p:panelGrid layout="grid" columns="2" 
+                                <p:panelGrid rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'}" 
+                                             layout="grid" columns="2" 
                                              styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">                                                                                                                   
                                     <h:outputText class="texto-ver-centrado" value="Logro: #{item.value.logro}%"/>
                                     <p:spinner value="#{item.value.numActividades}" min="1" max="50"
-                                               valueChangeListener="#{crearIndicadorBean.onChangeSpinnerActividad}">  
-                                        <p:ajax update="@form:panelAnios:dataAnios"/>                                                                                              
+                                               valueChangeListener="#{crearIndicadorBean.onChangeSpinnerAnio}">  
+                                            <f:attribute name="anio" value="#{item.key}"/>                                       
+                                            <p:ajax update="@form:panelAnios:dataAnios"/>                                                                                               
                                     </p:spinner>                              
-                                </p:panelGrid>                                                                                                                         
+                                </p:panelGrid>       
+                                <p:panelGrid rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" 
+                                             layout="grid" columns="2" 
+                                             styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">                                                                                                                   
+                                    <h:outputText class="texto-ver-centrado" value="$#{item.value.montoProceso}"/>
+                                    <p:spinner value="#{item.value.numActividades}" min="1" max="50"
+                                               valueChangeListener="#{crearIndicadorBean.onChangeSpinnerAnio}">  
+                                            <f:attribute name="anio" value="#{item.key}"/>                                       
+                                            <p:ajax update="@form:panelAnios:dataAnios"/>                                                                                             
+                                    </p:spinner>                              
+                                </p:panelGrid>   
+                                <p:panelGrid rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" 
+                                             layout="grid" columns="2" 
+                                             styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">    
+                                    <h:outputText class="texto-ver-centrado" value="% Actividades: "/>
+                                    <p:inputNumber id="porcActividades" 
+                                                value="#{item.value.porcActividades}"
+                                                minValue="0"
+                                                maxValue="100"
+                                                decimalPlaces="0"
+                                                symbol="%"
+                                                valueChangeListener="#{crearIndicadorBean.onChangeInputPorcAnio}"
+                                                symbolPosition="s">
+                                            <f:attribute name="anio" value="#{item.key}"/>                                       
+                                            <p:ajax update="@form:panelAnios:dataAnios"/> 
+                                    </p:inputNumber>                               
+                                </p:panelGrid>                                   
                             </f:facet>                             
                             
-                            <p:column>
+                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
+                                                    or
+                                                  crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}">
                                 <h:outputText value="#{item.value.actividades.indexOf(item_3) + 1}"/>
-                            </p:column>                            
+                            </p:column> 
+                            <p:column headerText="Montos" rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="$#{item_3.montoActividad}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputNumber id="input2" value="#{item_3.montoActividad}" symbol="$"
+                                                                        minValue="0"
+                                                                        decimalPlaces="0"                                                                          
+                                                                        thousandSeparator=".">
+                                            <p:ajax event="change" update="@form:panelAnios:dataAnios"
+                                                    listener="#{crearIndicadorBean.calcularMontoAnio(item.key)}"/>           
+                                        </p:inputNumber>                                    
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>                                 
                             <p:column headerText="Actividades">
                                 <p:cellEditor>
                                     <f:facet name="output">
                                         <h:outputText value="#{item_3.nombre}"/>
                                     </f:facet>
                                     <f:facet name="input">
-                                        <p:inputText value="#{item_3.nombre}"
-                                                     valueChangeListener="#{crearIndicadorBean.onInputTextActividadEdit}">
-                                            <p:ajax update="@form:panelAnios:dataAnios"/>                                                     
+                                        <p:inputText rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'}" 
+                                                     value="#{item_3.nombre}">
+                                            <p:ajax event="change" update="@form:panelAnios:dataAnios"
+                                                    listener="#{crearIndicadorBean.calcularPorcentajeLogroAnio(item.key)}"/>   
                                         </p:inputText>
+                                        <p:inputText rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'
+                                                                    or
+                                                                crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" 
+                                                     value="#{item_3.nombre}">                                              
+                                        </p:inputText>                                        
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>

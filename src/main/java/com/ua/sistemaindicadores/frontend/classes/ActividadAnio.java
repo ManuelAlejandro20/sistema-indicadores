@@ -17,16 +17,33 @@ public class ActividadAnio {
     private Integer numActividades;
     private Integer logro;
     private Integer anio;
+    
+    private Integer montoProceso;
+    private Integer porcActividades;
+    
     private List<Actividad> actividades;
 
-    public ActividadAnio(Integer anio) {
-        this.numActividades = 1;
-        this.logro = 0;
+    public ActividadAnio(Integer anio, String uRepr) {
+        Actividad actividad;
+        if(uRepr.equals("Número Actividades")){
+            this.logro = 0;
+            this.numActividades = 1;
+            actividad = new Actividad("");
+        }
+        else if(uRepr.equals("Peso ($)")){
+            this.montoProceso = 0;
+            this.numActividades = 1;
+            actividad = new Actividad("", 0);
+        }else{
+            this.porcActividades = 1;
+            actividad = new Actividad("");
+        }        
+                
         this.anio = anio;
         this.actividades = new LinkedList<Actividad>();
-        this.actividades.add(new Actividad(""));        
+        this.actividades.add(actividad);        
     }    
-
+    
     public Integer getNumActividades() {
         return numActividades;
     }
@@ -61,4 +78,26 @@ public class ActividadAnio {
     public void setActividades(List<Actividad> actividades) {
         this.actividades = actividades;
     }         
+
+    public Integer getMontoProceso() {
+        return montoProceso;
+    }
+
+    public void setMontoProceso(Integer montoProceso) {        
+        this.montoProceso = montoProceso;
+    }
+
+    public Integer getPorcActividades() {
+        return porcActividades;
+    }
+
+    public void setPorcActividades(Integer porcActividades) {
+        if(porcActividades == null){
+            porcActividades = 1;
+        }
+        this.porcActividades = porcActividades;
+    }
+
+    
+
 }

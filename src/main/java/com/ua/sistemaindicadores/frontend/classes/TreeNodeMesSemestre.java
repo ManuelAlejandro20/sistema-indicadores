@@ -16,13 +16,31 @@ import org.primefaces.model.TreeNode;
 public class TreeNodeMesSemestre {
     private TreeNode root;
     
-    public TreeNodeMesSemestre(List<String> keys) {  
+    public TreeNodeMesSemestre(List<String> keys, String uRepr) {  
         this.root = new DefaultTreeNode("Root Node", null);
+        
         TreeNode key;
-        TreeNode primeraActividad;
+        TreeNode primeraFila;        
+        
         for(String s : keys){     
-            key = new DefaultTreeNode(new TreeNodeRow(s, 1, 0, null, null), this.root);
-            primeraActividad = new DefaultTreeNode(new TreeNodeRow(null, null, null, "", s), key);
+            TreeNodeRow periodo = new TreeNodeRow(s);
+            TreeNodeRow primeraActividad = new TreeNodeRow("", s);
+            switch(uRepr){
+                case "Peso ($)":        
+                    periodo.setNumActividades(1);
+                    periodo.setMonto(0);
+                    primeraActividad.setMonto(0);
+                    break;                
+                case "Porcentaje (%)":
+                    periodo.setPorcActividad(1);                    
+                    break;
+                default:        
+                    periodo.setNumActividades(1);
+                    periodo.setLogro(0);                  
+                    break;
+            }
+            key = new DefaultTreeNode(periodo, this.root);
+            primeraFila = new DefaultTreeNode(primeraActividad, key);              
         }                       
     }
     

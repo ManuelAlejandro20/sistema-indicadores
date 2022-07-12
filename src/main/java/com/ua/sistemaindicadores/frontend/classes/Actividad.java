@@ -11,10 +11,16 @@ package com.ua.sistemaindicadores.frontend.classes;
  */
 public class Actividad {
     private String nombre;
+    private Integer montoActividad;
 
     public Actividad(String nombre) {
         this.nombre = nombre;
     }
+    
+    public Actividad(String nombre, Integer montoActividad) {
+        this.nombre = nombre;
+        this.montoActividad = montoActividad;
+    }    
 
     public String getNombre() {
         return nombre;
@@ -22,6 +28,17 @@ public class Actividad {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Integer getMontoActividad() {
+        return montoActividad;
+    }
+
+    public void setMontoActividad(Integer montoActividad) {
+        if(montoActividad == null){
+            montoActividad = 0;
+        }
+        this.montoActividad = montoActividad;
     }
     
     
