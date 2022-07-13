@@ -71,10 +71,18 @@ public class EditarTipoIndicadorBean implements Serializable {
         
         Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String id = params.get("i");
- 
+        
+        int id_int = 0;
+        
+        try{
+            id_int = Integer.valueOf(id);
+        }catch(Exception e){
+            id = null;
+        }
+                 
         //El id es nulo cuando cargamos la pagina pero no brindamos ningun parametro
         if(id != null){
-            it = tipoIndicadorService.buscarTipoIndicadorID(Integer.valueOf(id));
+            it = tipoIndicadorService.buscarTipoIndicadorID(id_int);
         
             //it es nulo cuando el id leido no existe en la bd
             if(it != null){

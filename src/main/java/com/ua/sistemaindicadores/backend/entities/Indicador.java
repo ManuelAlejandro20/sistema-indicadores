@@ -80,11 +80,6 @@ public class Indicador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "num_indicador")
-    private String numIndicador;                
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
     @Column(name = "nombre_indicador")
     private String nombreIndicador;
     @Basic(optional = false)
@@ -176,13 +171,21 @@ public class Indicador implements Serializable {
     @Column(name = "fecha_actualizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaActualizacion;
-    @ManyToMany(mappedBy = "indicadorCollection", fetch = FetchType.EAGER)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "num_indicador")
+    private String numIndicador; 
+    @JoinTable(name = "generacion_datos_indicador", schema="indicadores", joinColumns = {
+        @JoinColumn(name = "id_indicador", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_generacion_datos", referencedColumnName = "id")})    
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<GeneracionDatos> generacionDatosCollection;
     @JoinTable(name = "unidad_proveedora_indicador", schema="indicadores", joinColumns = {
         @JoinColumn(name = "id_indicador", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "id_unidad_proveedora", referencedColumnName = "id")})
     @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<UnidadProveedora> unidadProveedoraCollection;
+    private Set<UnidadProveedora> unidadProveedoraCollection;
     @JoinColumn(name = "ajuste_pdei_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private AjustePdei ajustePdeiId;
@@ -201,7 +204,7 @@ public class Indicador implements Serializable {
     @JoinColumn(name = "unidad_representacion_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private UnidadRepresentacion unidadRepresentacionId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "indicador")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "indicadorId", fetch = FetchType.EAGER)
     private Collection<IndicadorMesSemestreAnioBianual> indicadorMesSemestreAnioBianualCollection;
 
     public Indicador() {
@@ -417,7 +420,7 @@ public class Indicador implements Serializable {
         return unidadProveedoraCollection;
     }
 
-    public void setUnidadProveedoraCollection(Collection<UnidadProveedora> unidadProveedoraCollection) {
+    public void setUnidadProveedoraCollection(Set<UnidadProveedora> unidadProveedoraCollection) {
         this.unidadProveedoraCollection = unidadProveedoraCollection;
     }
 

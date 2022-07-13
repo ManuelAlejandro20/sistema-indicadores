@@ -17,8 +17,6 @@ import javax.ejb.Stateless;
 @Stateless
 public class UnidadRepresentacionDAO extends AbstractDAO<UnidadRepresentacion> {
 
-    public static final String KEY_UNIDADREPRESENTACION = "unidadRepresentacion";
-
     @Inject
     private EntityManagerProvider entityManagerProvider;
 
@@ -30,14 +28,6 @@ public class UnidadRepresentacionDAO extends AbstractDAO<UnidadRepresentacion> {
 
     public UnidadRepresentacionDAO() {
         super(UnidadRepresentacion.class);
-    }
-
-    public boolean checkGeneracionDatosExists(String unidadRepresentacion) {
-        List<UnidadRepresentacion> ti = getEntityManager()
-                .createNamedQuery("UnidadRepresentacion.checkUnidadRepresentacionExists", UnidadRepresentacion.class)
-                .setParameter("unidadRepresentacion", unidadRepresentacion)
-                .getResultList();
-        return !ti.isEmpty();
     }
 
     public List<UnidadRepresentacion> obtenerUnidadRepresentacion() {

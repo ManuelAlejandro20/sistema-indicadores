@@ -17,8 +17,6 @@ import javax.ejb.Stateless;
 @Stateless
 public class FrecuenciaMedicionDAO extends AbstractDAO<FrecuenciaMedicion> {
 
-    public static final String KEY_FRECUENCIAMEDICION = "frecuenciaMedicion";
-
     @Inject
     private EntityManagerProvider entityManagerProvider;
 
@@ -30,14 +28,6 @@ public class FrecuenciaMedicionDAO extends AbstractDAO<FrecuenciaMedicion> {
 
     public FrecuenciaMedicionDAO() {
         super(FrecuenciaMedicion.class);
-    }
-
-    public boolean checkFrecuenciaMedicionExists(String frecuenciaMedicion) {
-        List<FrecuenciaMedicion> ti = getEntityManager()
-                .createNamedQuery("FrecuenciaMedicion.checkFrecuenciaMedicionExists", FrecuenciaMedicion.class)
-                .setParameter("frecuenciaMedicion", frecuenciaMedicion)
-                .getResultList();
-        return !ti.isEmpty();
     }
 
     public List<FrecuenciaMedicion> obtenerFrecuenciaMedicion() {

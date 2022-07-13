@@ -77,10 +77,18 @@ public class EditarClasificacionBean implements Serializable {
     public void cargarDatos() {
         Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String id = params.get("i");
+        
+        int id_int = 0;
+        
+        try{
+            id_int = Integer.valueOf(id);
+        }catch(Exception e){
+            id = null;
+        }        
  
         //El id es nulo cuando cargamos la pagina pero no brindamos ningun parametro
         if(id != null){
-            clas = clasificacionService.buscarClasificacionID(Integer.valueOf(id));
+            clas = clasificacionService.buscarClasificacionID(id_int);
                 
             //clas es nulo cuando el id leido no existe en la bd
             if(clas != null){

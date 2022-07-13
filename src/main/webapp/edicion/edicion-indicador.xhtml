@@ -6,8 +6,9 @@
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">    
         <f:metadata>
-            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.CrearIndicadorBean"/>
-        </f:metadata>            
+            <f:importConstants type="com.ua.sistemaindicadores.frontend.beans.EditarIndicadorBean"/>
+            <f:event type="preRenderView" listener="#{editarIndicadorBean.cargarDatos}"/>
+        </f:metadata>        
         <div class="ui-g-12 ui-g-title align-center">
             <h2 class="border-bottom-orange align-center">Administración de Indicadores</h2>   
         </div>
@@ -16,8 +17,8 @@
             <div class="ui-g-12 ui-md-3"></div>
             <div class="ui-g-12 ui-md-6 ui-g-nopad">
                 <div class="card card-creacion-tipo-indicador">                                              
-                    <p:panel id="formulario" class="formulario" header="CREAR INDICADOR">
-                        <p:wizard flowListener="#{crearIndicadorBean.flujoProceso}"
+                    <p:panel id="formulario" class="formulario" header="EDITAR INDICADOR">
+                        <p:wizard flowListener="#{editarIndicadorBean.flujoProceso}"
                                   showStepStatus="true"
                                   nextLabel="Siguiente"
                                   backLabel="Anterior"
@@ -30,12 +31,12 @@
                                     <!---->
                                     <p:outputLabel class="texto-ver-centrado" id="vigenciaLabel" value="Vigencia: *"/>  
                                     <p:selectOneMenu
-                                        value="#{crearIndicadorBean.vigencia}" 
+                                        value="#{editarIndicadorBean.vigencia}" 
                                         id="vigencia" required="true">
                                         <f:selectItem itemLabel="Vigente" itemValue="VIGENTE"/>
                                         <f:selectItem itemLabel="No Vigente" itemValue="NO VIGENTE"/>
                                         <p:ajax event="itemSelect"
-                                                listener="#{crearIndicadorBean.cambiarEstado}"
+                                                listener="#{editarIndicadorBean.cambiarEstado}"
                                                 process="@this"
                                                 update="@form:listaTipo, @form:listaClas"/>       
                                     </p:selectOneMenu>
@@ -43,7 +44,7 @@
                                     <p:message for="vigencia"/>     
                                     <p:outputLabel class="texto-ver-centrado" id="listaTipoLabel" value="Tipo indicador: *"/>
                                     <p:selectOneMenu id="listaTipo"
-                                                     value="#{crearIndicadorBean.indicadorTipoSeleccionado}"
+                                                     value="#{editarIndicadorBean.indicadorTipoSeleccionado}"
                                                      required="true"
                                                      requiredMessage="Se debe selccionar un tipo de indicador."
                                                      var="tipo"
@@ -52,7 +53,7 @@
                                                      filterMatchMode="contains" 
                                                      styleClass="manymenu-advanced"
                                                      >
-                                        <f:selectItems value="#{crearIndicadorBean.listaIndicadorTipo}"
+                                        <f:selectItems value="#{editarIndicadorBean.listaIndicadorTipo}"
                                                        var="indTipo"
                                                        itemLabel="#{indTipo.nombre}"
                                                        itemValue="#{indTipo}"
@@ -62,7 +63,7 @@
                                         </p:column>
                                         <p:message for="indTipo"/>                
                                         <p:ajax event="itemSelect"
-                                                listener="#{crearIndicadorBean.cambiarTipoIndicador}"
+                                                listener="#{editarIndicadorBean.cambiarTipoIndicador}"
                                                 process="@this"
                                                 update="@form:listaClas"/>                                  
                                     </p:selectOneMenu>
@@ -71,7 +72,7 @@
                                     <!---->
                                     <p:outputLabel class="texto-ver-centrado" id="clasLabel" value="Clasificación: *"/>
                                     <p:selectOneMenu id="listaClas"
-                                                     value="#{crearIndicadorBean.clasificacionSeleccionada}"
+                                                     value="#{editarIndicadorBean.clasificacionSeleccionada}"
                                                      required="true"
                                                      requiredMessage="Se debe seleccionar una clasificación."
                                                      var="clas"
@@ -80,7 +81,7 @@
                                                      filterMatchMode="contains" 
                                                      styleClass="manymenu-advanced"
                                                      >
-                                        <f:selectItems value="#{crearIndicadorBean.listaClasificacion}"
+                                        <f:selectItems value="#{editarIndicadorBean.listaClasificacion}"
                                                        var="clasificacion"
                                                        itemLabel="#{clasificacion.nombre}"
                                                        itemValue="#{clasificacion}"
@@ -95,7 +96,7 @@
                                     <!---->
                                     <p:outputLabel class="texto-ver-centrado" id="nIndLabel" value="N° de indicador: *"/>
                                     <p:inputText 
-                                        value="#{crearIndicadorBean.n_indicador}"
+                                        value="#{editarIndicadorBean.n_indicador}"
                                         required="true"
                                         requiredMessage="Campo n° de indicador es requerido."
                                         id="nInd"                                
@@ -106,7 +107,7 @@
                                     <!---->     
                                     <p:outputLabel class="texto-ver-centrado" id="nombreLabel" value="Nombre de indicador: *"/>
                                     <p:inputText 
-                                        value="#{crearIndicadorBean.nombreIndicador}"
+                                        value="#{editarIndicadorBean.nombreIndicador}"
                                         required="true"
                                         requiredMessage="Campo nombre de indicador es requerido."
                                         id="nombre"                                
@@ -117,10 +118,10 @@
                                     <!---->                            
                                     <p:outputLabel class="texto-ver-centrado" id="descripcionIndicadorLabel" value="Descripción de indicador: *"/>
                                     <p:inputTextarea 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo descripción de indicador es requerido."
-                                        value="#{crearIndicadorBean.descripcionIndicador}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.descripcionIndicador}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="descripcionIndicador"                                 
                                         maxlength="240" 
                                         rows="8" cols="18">
@@ -130,10 +131,10 @@
                                     <!---->    
                                     <p:outputLabel class="texto-ver-centrado" id="aplicaLineamientoLabel" value="Aplica lineamiento: *"/>
                                     <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo aplica lineamiento es requerido."                                
-                                        value="#{crearIndicadorBean.aplicaLineamiento}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.aplicaLineamiento}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="aplicaLineamiento"                                 
                                         >
                                     </p:inputText>
@@ -142,10 +143,10 @@
                                     <!---->                              
                                     <p:outputLabel class="texto-ver-centrado" id="aplicaObjetivoLabel" value="Aplica objetivo: *"/>
                                     <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo aplica objetivo es requerido."                                
-                                        value="#{crearIndicadorBean.aplicaObjetivo}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.aplicaObjetivo}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="aplicaObjetivo"                                 
                                         >                     
                                     </p:inputText>
@@ -154,10 +155,10 @@
                                     <!---->                                  
                                     <p:outputLabel class="texto-ver-centrado" id="descripcionObjetivoLabel" value="Descripción de objetivo: *"/>
                                     <p:inputTextarea 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo descripción de objetivo es requerido."                                
-                                        value="#{crearIndicadorBean.descripcionObjetivo}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.descripcionObjetivo}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="descripcionObjetivo"                                 
                                         maxlength="240"
                                         rows="8" cols="18">                         
@@ -168,15 +169,15 @@
                                     <p:outputLabel class="texto-ver-centrado" id="ajustePDEILabel" value="Ajuste PDEI: *"/>
                                     <p:selectOneMenu  
                                         id="ajustePDEI"
-                                        value="#{crearIndicadorBean.ajustePDEI}"
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.ajustePDEI}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo ajuste PDEI es requerido."
                                         var="ajustePDEI"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         converter="ajusteConverter"
                                         styleClass="manymenu-advanced">
                                         <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                                        <f:selectItems value="#{crearIndicadorBean.listaAjustePdei}"
+                                        <f:selectItems value="#{editarIndicadorBean.listaAjustePdei}"
                                                        var="ajustePdei"
                                                        itemLabel="#{ajustePdei.ajustePdei}"
                                                        itemValue="#{ajustePdei}"/>         
@@ -190,22 +191,22 @@
                                     <p:outputLabel class="texto-ver-centrado" id="unidadRepresentacionLabel" value="Unidad de representación: *"/>
                                     <p:selectOneMenu
                                         id="unidadRepresentacion"                            
-                                        value="#{crearIndicadorBean.unidadRepresentacion}"
+                                        value="#{editarIndicadorBean.unidadRepresentacion}"
                                         requiredMessage="Campo unidad de representación es requerido."
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         var="uRepr"
                                         converter="unidadRepresentacionConverter" 
                                         styleClass="manymenu-advanced"> 
                                         <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                                        <f:selectItems value="#{crearIndicadorBean.listaUnidadRepresentacion}"
+                                        <f:selectItems value="#{editarIndicadorBean.listaUnidadRepresentacion}"
                                                        var="unidadRepresentacion"
                                                        itemLabel="#{unidadRepresentacion.unidadRepresentacion}"
                                                        itemValue="#{unidadRepresentacion}"/>
                                         <p:column>
                                             #{uRepr.unidadRepresentacion}
                                         </p:column>       
-                                        <p:ajax event="itemSelect" update="@form:metas" listener="#{crearIndicadorBean.cambioMetasURepr()}"/>
+                                        <p:ajax event="itemSelect" update="@form:metas" listener="#{editarIndicadorBean.cambioMetasURepr()}"/>
                                     </p:selectOneMenu>
                                     <p:message for="unidadRepresentacionLabel"/>                                     
                                     <p:message for="unidadRepresentacion"/>                              
@@ -213,16 +214,16 @@
                                     <p:outputLabel class="texto-ver-centrado" id="generacionDatosLabel" value="Generación de los datos: *"/>
                                     <p:selectCheckboxMenu        
                                         id="generacionDatos"
-                                        value="#{crearIndicadorBean.generacionDatos}"
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.generacionDatos}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo generación de datos es requerido."     
                                         converter="generacionDatosConverter"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         filter="true" 
                                         filterMatchMode="contains" 
                                         styleClass="manymenu-advanced"
                                         multiple = "true">
-                                        <f:selectItems value="#{crearIndicadorBean.listaGeneracionDatos}"
+                                        <f:selectItems value="#{editarIndicadorBean.listaGeneracionDatos}"
                                                        var="genDatos"
                                                        itemLabel="#{genDatos.generacionDatos}"
                                                        itemValue="#{genDatos}"/>
@@ -233,15 +234,15 @@
                                     <p:outputLabel class="texto-ver-centrado" id="plazoLabel" value="Plazo: *"/>
                                     <p:selectOneMenu    
                                         id="plazo"
-                                        value="#{crearIndicadorBean.plazo}"
+                                        value="#{editarIndicadorBean.plazo}"
                                         requiredMessage="Campo plazo es requerido."
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         var="plazo"
                                         converter="plazoConverter"
                                         styleClass="manymenu-advanced">
                                         <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                                        <f:selectItems value="#{crearIndicadorBean.listaPlazo}"
+                                        <f:selectItems value="#{editarIndicadorBean.listaPlazo}"
                                                        var="plazo"
                                                        itemLabel="#{plazo.plazo}"
                                                        itemValue="#{plazo}"/>
@@ -254,10 +255,10 @@
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="versionLabel" value="Versión: *"/>
                                     <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo versión es requerido."                                
-                                        value="#{crearIndicadorBean.version}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.version}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="version"                                
                                         >                       
                                     </p:inputText>
@@ -266,10 +267,10 @@
                                     <!---->     
                                     <p:outputLabel class="texto-ver-centrado" id="lineaBaseLabel" value="Línea base: *"/>
                                     <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo linea base es requerido."                                
-                                        value="#{crearIndicadorBean.lineaBase}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.lineaBase}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="lineaBase"                                
                                         >                  
                                     </p:inputText>
@@ -284,16 +285,16 @@
                                              columns="2">  
                                     <p:outputLabel class="texto-ver-centrado" id="metasLabel" value="Metas: *"/>
                                     <p:inputNumber id="metas"
-                                                   value="#{crearIndicadorBean.metas}"
-                                                   required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"                                                   
+                                                   value="#{editarIndicadorBean.metas}"
+                                                   required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"                                                   
                                                    requiredMessage="Campo metas es requerido."
-                                                   disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                                   symbol="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'? '$' : ''}"
+                                                   disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                                   symbol="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'? '$' : ''}"
                                                    thousandSeparator="."
                                                    minValue="0"
                                                    decimalPlaces="0"                                                   
                                                    >                   
-                                        <p:ajax event="change" listener="#{crearIndicadorBean.cambioMetasURepr()}"/>
+                                        <p:ajax event="change" listener="#{editarIndicadorBean.cambioMetasURepr()}"/>
                                     </p:inputNumber>                                        
                                     <p:message for="metasLabel"/>                                     
                                     <p:message for="metas"/>   
@@ -301,17 +302,17 @@
                                     <p:outputLabel class="texto-ver-centrado" id="anioCumplimientoLabel" value="Año cumplimiento: *"/>
                                     <p:selectOneMenu       
                                         id="anioCumplimiento"
-                                        value="#{crearIndicadorBean.anioCumplimiento}"
+                                        value="#{editarIndicadorBean.anioCumplimiento}"
                                         requiredMessage="Campo año de cumplimiento es requerido."
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         var="anioCum"
                                         converter="anioCumplimientoConverter"
                                         filter="true" 
                                         filterMatchMode="contains" 
                                         styleClass="manymenu-advanced">   
                                         <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                                        <f:selectItems value="#{crearIndicadorBean.listaAnioCumplimiento}"
+                                        <f:selectItems value="#{editarIndicadorBean.listaAnioCumplimiento}"
                                                        var="anioCumplimiento"
                                                        itemLabel="#{anioCumplimiento.anioCumplimiento}"
                                                        itemValue="#{anioCumplimiento}"/>
@@ -324,10 +325,10 @@
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="medioVerificacionLabel" value="Medio de verificación: *"/>
                                     <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo medio de verificación es requerido."                                 
-                                        value="#{crearIndicadorBean.medioVerificacion}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.medioVerificacion}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="medioVerificacion"                                
                                         >                                
                                     </p:inputText>
@@ -336,10 +337,10 @@
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="formaCalculoLabel" value="Forma de cálculo: *"/>
                                     <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo forma de cálculo es requerido."                                 
-                                        value="#{crearIndicadorBean.formaCalculo}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.formaCalculo}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="formaCalculo"                                
                                         >                             
                                     </p:inputText>
@@ -348,10 +349,10 @@
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="fuenteInformacionLabel" value="Fuente de información: *"/>
                                     <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo fuente de información es requerido."                                 
-                                        value="#{crearIndicadorBean.fuenteInformacion}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.fuenteInformacion}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="fuenteInformacion"                                
                                         >                       
                                     </p:inputText>
@@ -361,16 +362,16 @@
                                     <p:outputLabel class="texto-ver-centrado" id="unidadProveedoraLabel" value="Unidad proveedora: *"/>
                                     <p:selectCheckboxMenu                     
                                         id="unidadProveedora"
-                                        value="#{crearIndicadorBean.unidadProveedora}"
+                                        value="#{editarIndicadorBean.unidadProveedora}"
                                         requiredMessage="Campo unidad proveedora es requerido."
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"    
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"    
                                         converter="unidadProveedoraConverter"
                                         filter="true" 
                                         filterMatchMode="contains" 
                                         styleClass="manymenu-advanced"
                                         multiple = "true">
-                                        <f:selectItems value="#{crearIndicadorBean.listaUnidadProveedora}"
+                                        <f:selectItems value="#{editarIndicadorBean.listaUnidadProveedora}"
                                                        var="unidadProv"
                                                        itemLabel="#{unidadProv.unidadProveedora}"
                                                        itemValue="#{unidadProv}"/>
@@ -380,10 +381,10 @@
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="proyectoAsociadoLabel" value="Proyecto asociado: *"/>
                                     <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo proyecto asociado es requerido."                                 
-                                        value="#{crearIndicadorBean.proyectoAsociado}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.proyectoAsociado}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="proyectoAsociado"                                
                                         >                            
                                     </p:inputText>
@@ -392,10 +393,10 @@
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="comentarioLabel" value="Comentario: *"/>
                                     <p:inputTextarea 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo comentario es requerido."                                 
-                                        value="#{crearIndicadorBean.comentario}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.comentario}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="comentario"                                 
                                         maxlength="240" 
                                         rows="8" cols="18">
@@ -405,10 +406,10 @@
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="actividadComprometidaLabel" value="Actividad comprometida: *"/>
                                     <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo actividad comprometida es requerida."                                 
-                                        value="#{crearIndicadorBean.actividadComprometida}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.actividadComprometida}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="actividadComprometida"                                
                                         >                            
                                     </p:inputText>
@@ -417,10 +418,10 @@
                                     <!---->                                     
                                     <p:outputLabel class="texto-ver-centrado" id="estadoActividadLabel" value="Estado de actividad: *"/>
                                     <p:inputText 
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         requiredMessage="Campo estado de actividad es requerido."                                 
-                                        value="#{crearIndicadorBean.estadoActividad}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        value="#{editarIndicadorBean.estadoActividad}"
+                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                         id="estadoActividad"                                
                                         >                              
                                     </p:inputText>
@@ -436,12 +437,12 @@
                                     <p:outputLabel class="texto-ver-centrado" id="frecuenciaMedicionLabel" value="Frecuencia de medición: *"/>
                                     <p:selectOneMenu        
                                         id="frecuenciaMedicion"
-                                        value="#{crearIndicadorBean.frecuenciaMedicion}"
+                                        value="#{editarIndicadorBean.frecuenciaMedicion}"
                                         required="true"
                                         var="frecuencia"
                                         converter="frecuenciaMedicionConverter"
                                         styleClass="manymenu-advanced">   
-                                        <f:selectItems value="#{crearIndicadorBean.listaFrecuenciaMedicion}"
+                                        <f:selectItems value="#{editarIndicadorBean.listaFrecuenciaMedicion}"
                                                        var="frecuenciaMedicion"
                                                        itemLabel="#{frecuenciaMedicion.frecuenciaMedicion}"
                                                        itemValue="#{frecuenciaMedicion}"/>
@@ -451,7 +452,7 @@
                                         <p:ajax event="itemSelect" 
                                                 update="@form:logro"
                                                 delay="50"
-                                                listener="#{crearIndicadorBean.limpiarListas()}"
+                                                listener="#{editarIndicadorBean.limpiarListas()}"
                                                 process="@this, @form"/>                                           
                                     </p:selectOneMenu>
                                     <p:message for="frecuenciaMedicionLabel"/>                                     
@@ -462,17 +463,17 @@
                                                   widgetVar="sliderAnio"
                                                   for="minAnioValue,maxAnioValue" 
                                                   display="displayRange" 
-                                                  onSlideEnd="#{crearIndicadorBean.limpiarListas()}"
+                                                  onSlideEnd="#{editarIndicadorBean.limpiarListas()}"
                                                   range="true"
-                                                  minValue="#{crearIndicadorBean.min}"  
-                                                  maxValue="#{crearIndicadorBean.max}"                                          
+                                                  minValue="#{editarIndicadorBean.min}"  
+                                                  maxValue="#{editarIndicadorBean.max}"                                          
                                                   displayTemplate="Inicio en {min} y término en {max}">    
                                                   <p:ajax event="slideEnd" 
                                                           update="@form:logro"
-                                                          listener="#{crearIndicadorBean.limpiarListas()}"/>                                            
+                                                          listener="#{editarIndicadorBean.limpiarListas()}"/>                                            
                                         </p:slider>
                                         <h:outputText id="displayRange" 
-                                                      value="Inicio en #{crearIndicadorBean.minValue} y término en #{crearIndicadorBean.maxValue}"                                                      
+                                                      value="Inicio en #{editarIndicadorBean.minValue} y término en #{editarIndicadorBean.maxValue}"                                                      
                                                       />                                        
                                     </h:panelGrid>
                                     <p:commandButton style="visibility: hidden;" process="@this"/>              
@@ -480,40 +481,40 @@
                                                      widgetVar="logrosButton"
                                                      class="ui-button-formulario"      
                                                      value="Configurar actividades y logros"
-                                                     action="#{crearIndicadorBean.createList()}"
+                                                     action="#{editarIndicadorBean.createList()}"
                                                      process="@this, @form"
                                                      update="@form:panelAnios, @form:growl"/>     
                                     <p:outputLabel class="texto-ver-centrado" id="logroLabel" value="% Logro: *"/>
-                                    <p:outputLabel class="texto-ver-centrado" id="logro" value="#{crearIndicadorBean.logro eq null? '' : crearIndicadorBean.logro.concat('%')}"/>    
+                                    <p:outputLabel class="texto-ver-centrado" id="logro" value="#{editarIndicadorBean.logro eq null? '' : editarIndicadorBean.logro.concat('%')}"/>    
                                     <p:message for="logroLabel"/>                                     
                                     <p:message for="logro"/>                                          
-                                    <!---->     
-                                    <!---->     
-                                    <!---->                                         
-                                    <p:commandButton widgetVar="crearButton" 
-                                                     value="Crear indicador"   
+                                         
+                                         
+                                                                             
+<!--                                    <p:commandButton widgetVar="editarButton" 
+                                                     value="Editar indicador"   
                                                      class="ui-button-formulario"     
-                                                     action="#{crearIndicadorBean.crearIndicador}"   
-                                                     onclick="PF('crearButton').disable()"
-                                                     disabled="#{crearIndicadorBean.disabled}"                                                     
+                                                     action="#{editarIndicadorBean.editarIndicador}"   
+                                                     onclick="PF('editarButton').disable()"
+                                                     disabled="#{editarIndicadorBean.disabled}"                                                     
                                                      update="@form" 
-                                                     process="@this, @form"/>                                                                                                         
+                                                     process="@this, @form"/>                                                                                                         -->
                                 </p:panelGrid>
                             </p:tab>                        
                         </p:wizard> 
                     </p:panel>
                 </div>    
-                <h:inputHidden id="minAnioValue" value="#{crearIndicadorBean.minValue}"/>
-                <h:inputHidden id="maxAnioValue" value="#{crearIndicadorBean.maxValue}"/>   
+                <h:inputHidden id="minAnioValue" value="#{editarIndicadorBean.minValue}"/>
+                <h:inputHidden id="maxAnioValue" value="#{editarIndicadorBean.maxValue}"/>   
             </div>
             <div class="ui-g-12 ui-md-3"></div>
             <p:dialog id="dialogWindow" header="Actividades y logros"  widgetVar="dialog" minWidth="340" width="340" minHeight="320" height="360" showEffect="fade" modal="true" resizable="false">
-                <p:accordionPanel id="panelAnios" widgetVar="panelAnios" value="#{crearIndicadorBean.frecuenciaMedicion.frecuenciaMedicion eq 'Mensual' 
+                <p:accordionPanel id="panelAnios" widgetVar="panelAnios" value="#{editarIndicadorBean.frecuenciaMedicion.frecuenciaMedicion eq 'Mensual' 
                                                                                   or
-                                                                                  crearIndicadorBean.frecuenciaMedicion.frecuenciaMedicion eq 'Semestral'?
-                                                                                  crearIndicadorBean.listaActividadesMesSemestre.entrySet().toArray()
+                                                                                  editarIndicadorBean.frecuenciaMedicion.frecuenciaMedicion eq 'Semestral'?
+                                                                                  editarIndicadorBean.listaActividadesMesSemestre.entrySet().toArray()
                                                                                   :  
-                                                                                  crearIndicadorBean.listaActividades.entrySet().toArray()}" var="item">
+                                                                                  editarIndicadorBean.listaActividades.entrySet().toArray()}" var="item">
                     <p:tab title="#{item.key}">        
                         <!--Este treetable se desplegara solo si se trata de una frecuencia de medicion mensual o semestral-->
                         <p:treeTable rendered="#{item.value.class.simpleName eq 'TreeNodeMesSemestre'}" id="treeTable" value="#{item.value.root}" editable="true" editMode="cell" var="item_2">                                                                                                                
@@ -524,14 +525,14 @@
                             </p:column>
                             <!--Columna 2-->
                             <!--Columna que se renderiza si se escoge numero de actividades o peso como u de representacion-->
-                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
+                            <p:column rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
                                                     or
-                                                  crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" headerText="Actividades" styleClass="align-center">
+                                                  editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" headerText="Actividades" styleClass="align-center">
                                 <p:cellEditor rendered="#{item_2.nombrePadre eq null}">
                                     <f:facet name="output"><h:outputText value="#{item_2.numActividades}"/></f:facet>
                                     <f:facet name="input">
                                         <p:spinner value="#{item_2.numActividades}" min="1" max="50"
-                                                   valueChangeListener="#{crearIndicadorBean.onChangeSpinnerMesSemestre}">  
+                                                   valueChangeListener="#{editarIndicadorBean.onChangeSpinnerMesSemestre}">  
                                             <f:attribute name="anio" value="#{item.key}"/>
                                             <f:attribute name="nombrePeriodo" value="#{item_2.nombrePeriodo}"/>
                                             <p:ajax update="@form:panelAnios:treeTable"/>
@@ -542,20 +543,20 @@
                                     <f:facet name="output"><h:outputText value="#{item_2.nombreActividad}"/></f:facet>
                                     <f:facet name="input">
                                         <p:inputText 
-                                            rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'}"
+                                            rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'}"
                                             value="#{item_2.nombreActividad}">
                                             <p:ajax event="change" update="@form:panelAnios:treeTable" 
-                                                    listener="#{crearIndicadorBean.calcularPorcentajeLogroMesSemestre(item.key, item_2.nombrePadre)}"/>                                            
+                                                    listener="#{editarIndicadorBean.calcularPorcentajeLogroMesSemestre(item.key, item_2.nombrePadre)}"/>                                            
                                         </p:inputText>´
                                         <p:inputText 
-                                            rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}"
+                                            rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}"
                                             value="#{item_2.nombreActividad}">                                        
                                         </p:inputText>´                                        
                                     </f:facet>
                                 </p:cellEditor>                                
                             </p:column>
                             <!--Columna que se renderiza si se escoge porcentaje-->                            
-                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" headerText="Actividades" styleClass="align-center">
+                            <p:column rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" headerText="Actividades" styleClass="align-center">
                                 <p:cellEditor rendered="#{item_2.nombrePadre eq null}">
                                         <f:facet name="output"><h:outputText value="#{item_2.porcActividad}%"/></f:facet>
                                         <f:facet name="input">
@@ -566,7 +567,7 @@
                                                         decimalPlaces="0"
                                                         symbol="%"
                                                         symbolPosition="s"
-                                                        valueChangeListener="#{crearIndicadorBean.onChangeSpinnerMesSemestre}">
+                                                        valueChangeListener="#{editarIndicadorBean.onChangeSpinnerMesSemestre}">
                                                 <f:attribute name="anio" value="#{item.key}"/>
                                                 <f:attribute name="nombrePeriodo" value="#{item_2.nombrePeriodo}"/>
                                                 <p:ajax update="@form:panelAnios:treeTable"/>
@@ -579,21 +580,21 @@
                                             <p:inputText 
                                                     value="#{item_2.nombreActividad}">
                                                 <p:ajax event="change" update="@form:panelAnios:treeTable" 
-                                                        listener="#{crearIndicadorBean.calcularPorcentajeLogroMesSemestre(item.key, item_2.nombrePadre)}"/>                                                  
+                                                        listener="#{editarIndicadorBean.calcularPorcentajeLogroMesSemestre(item.key, item_2.nombrePadre)}"/>                                                  
                                             </p:inputText>´
                                         </f:facet>
                                 </p:cellEditor>                                
                             </p:column>                           
                             <!--Columna 3-->
                             <!--Columna que se renderiza en caso de haber escogido numero de actividades como u de representacion-->
-                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
+                            <p:column rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
                                                     or
-                                                  crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" headerText="% Logro" width="40" styleClass="align-center">
+                                                  editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" headerText="% Logro" width="40" styleClass="align-center">
                                 <h:outputText rendered="#{item_2.nombrePadre eq null}" value="#{item_2.logro}%"/>
                                 <h:outputText rendered="#{item_2.nombrePadre ne null}" value=""/>
                             </p:column>       
                             <!--Columna que se renderiza en caso de haber escogido peso como u de representacion-->
-                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" headerText="Logro" styleClass="align-center">                        
+                            <p:column rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" headerText="Logro" styleClass="align-center">                        
                                 <h:outputText rendered="#{item_2.nombrePadre eq null}" value="$#{item_2.monto}"/>
                                 <p:cellEditor rendered="#{item_2.nombrePadre ne null}">
                                     <f:facet name="output"><h:outputText value="$#{item_2.monto}"/></f:facet>
@@ -603,7 +604,7 @@
                                                                         decimalPlaces="0"                                                                          
                                                                         thousandSeparator=".">
                                             <p:ajax event="change" update="@form:panelAnios:treeTable"
-                                                    listener="#{crearIndicadorBean.calcularMontoMesSemestre(item.key, item_2.nombrePadre)}"/>            
+                                                    listener="#{editarIndicadorBean.calcularMontoMesSemestre(item.key, item_2.nombrePadre)}"/>            
                                         </p:inputNumber>
                                     </f:facet> 
                                 </p:cellEditor>                                                                                                      
@@ -616,27 +617,27 @@
                                      id="dataAnios" editable="true" editMode="cell">
                             
                             <f:facet name="header">                  
-                                <p:panelGrid rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'}" 
+                                <p:panelGrid rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'}" 
                                              layout="grid" columns="2" 
                                              styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">                                                                                                                   
                                     <h:outputText class="texto-ver-centrado" value="Logro: #{item.value.logro}%"/>
                                     <p:spinner value="#{item.value.numActividades}" min="1" max="50"
-                                               valueChangeListener="#{crearIndicadorBean.onChangeSpinnerAnio}">  
+                                               valueChangeListener="#{editarIndicadorBean.onChangeSpinnerAnio}">  
                                             <f:attribute name="anio" value="#{item.key}"/>                                       
                                             <p:ajax update="@form:panelAnios:dataAnios"/>                                                                                               
                                     </p:spinner>                              
                                 </p:panelGrid>       
-                                <p:panelGrid rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" 
+                                <p:panelGrid rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" 
                                              layout="grid" columns="2" 
                                              styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">                                                                                                                   
                                     <h:outputText class="texto-ver-centrado" value="$#{item.value.montoProceso}"/>
                                     <p:spinner value="#{item.value.numActividades}" min="1" max="50"
-                                               valueChangeListener="#{crearIndicadorBean.onChangeSpinnerAnio}">  
+                                               valueChangeListener="#{editarIndicadorBean.onChangeSpinnerAnio}">  
                                             <f:attribute name="anio" value="#{item.key}"/>                                       
                                             <p:ajax update="@form:panelAnios:dataAnios"/>                                                                                             
                                     </p:spinner>                              
                                 </p:panelGrid>   
-                                <p:panelGrid rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" 
+                                <p:panelGrid rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" 
                                              layout="grid" columns="2" 
                                              styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">    
                                     <h:outputText class="texto-ver-centrado" value="Logro: #{item.value.logro}%"/>
@@ -646,7 +647,7 @@
                                                 maxValue="100"
                                                 decimalPlaces="0"
                                                 symbol="%"
-                                                valueChangeListener="#{crearIndicadorBean.onChangeInputPorcAnio}"
+                                                valueChangeListener="#{editarIndicadorBean.onChangeInputPorcAnio}"
                                                 symbolPosition="s">
                                             <f:attribute name="anio" value="#{item.key}"/>                                       
                                             <p:ajax update="@form:panelAnios:dataAnios"/> 
@@ -654,12 +655,12 @@
                                 </p:panelGrid>                                   
                             </f:facet>                             
                             
-                            <p:column rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
+                            <p:column rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
                                                     or
-                                                  crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}">
+                                                  editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}">
                                 <h:outputText value="#{item.value.actividades.indexOf(item_3) + 1}"/>
                             </p:column> 
-                            <p:column headerText="Montos" rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}">
+                            <p:column headerText="Montos" rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}">
                                 <p:cellEditor>
                                     <f:facet name="output">
                                         <h:outputText value="$#{item_3.montoActividad}"/>
@@ -670,7 +671,7 @@
                                                                         decimalPlaces="0"                                                                          
                                                                         thousandSeparator=".">
                                             <p:ajax event="change" update="@form:panelAnios:dataAnios"
-                                                    listener="#{crearIndicadorBean.calcularMontoAnio(item.key)}"/>           
+                                                    listener="#{editarIndicadorBean.calcularMontoAnio(item.key)}"/>           
                                         </p:inputNumber>                                    
                                     </f:facet>
                                 </p:cellEditor>
@@ -681,14 +682,14 @@
                                         <h:outputText value="#{item_3.nombre}"/>
                                     </f:facet>
                                     <f:facet name="input">
-                                        <p:inputText rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
+                                        <p:inputText rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Número Actividades'
                                                                     or
-                                                                 crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" 
+                                                                 editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Porcentaje (%)'}" 
                                                      value="#{item_3.nombre}">
                                             <p:ajax event="change" update="@form:panelAnios:dataAnios"
-                                                    listener="#{crearIndicadorBean.calcularPorcentajeLogroAnio(item.key)}"/>   
+                                                    listener="#{editarIndicadorBean.calcularPorcentajeLogroAnio(item.key)}"/>   
                                         </p:inputText>
-                                        <p:inputText rendered="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" 
+                                        <p:inputText rendered="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'}" 
                                                      value="#{item_3.nombre}">                                              
                                         </p:inputText>                                        
                                     </f:facet>
@@ -702,7 +703,7 @@
                         widgetVar="guardarLogrosButton"
                         class="ui-button-formulario"                                                   
                         value="Guardar logros y calcular logro indicador"
-                        action="#{crearIndicadorBean.guardarLogros()}"
+                        action="#{editarIndicadorBean.guardarLogros()}"
                         update="@form:growl, @form:logro"
                         process="@this, @form"/>  
                 </f:facet>

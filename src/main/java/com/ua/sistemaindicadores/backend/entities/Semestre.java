@@ -45,7 +45,7 @@ public class Semestre implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "semestre")
     private String semestre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "semestre")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "semestreId")
     private Collection<IndicadorMesSemestreAnioBianual> indicadorMesSemestreAnioBianualCollection;
 
     public Semestre() {

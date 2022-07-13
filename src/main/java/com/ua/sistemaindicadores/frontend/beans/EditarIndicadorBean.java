@@ -73,9 +73,9 @@ import org.primefaces.model.TreeNode;
  *
  * @author aleja
  */
-@Named(value = "crearIndicadorBean")
+@Named(value = "editarIndicadorBean")
 @ViewScoped
-public class CrearIndicadorBean implements Serializable {
+public class EditarIndicadorBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final String direccionSI = "http://localhost:8080/SistemaIndicadores-1.0-SNAPSHOT/faces/inicio/inicio.xhtml";
@@ -136,8 +136,8 @@ public class CrearIndicadorBean implements Serializable {
 
     private Integer min = 2020;
     private Integer max = 2030;
-    private Integer minValue = 2020;
-    private Integer maxValue = 2030;
+    private Integer minValue;
+    private Integer maxValue;
     
     private Map<Integer, ActividadAnio> listaActividades;    
     private Map<Integer, TreeNodeMesSemestre> listaActividadesMesSemestre;
@@ -147,25 +147,20 @@ public class CrearIndicadorBean implements Serializable {
     
     private IndicadorTipo indicadorTipoSeleccionado;
     private Clasificacion clasificacionSeleccionada;
-    private Indicador nuevoIndicador;
+    private Indicador indicadorCargado;
 
     private boolean disabled;
     
     @PostConstruct
     public void initalize() {
-        System.out.println("Inicio Bean Crear Indicador");
+        System.out.println("Inicio Bean Editar Indicador");
         disabled = false;
-        nuevoIndicador = new Indicador();
         flagImpl = new FlagImpl();
         listaIndicadorTipoVigente = tipoIndicadorService.obtenerTiposIndicadoresByEstado(Short.valueOf("1"));
         listaIndicadorTipoNoVigente = tipoIndicadorService.obtenerTiposIndicadoresByEstado(Short.valueOf("0"));
-        listaIndicadorTipo = listaIndicadorTipoVigente;
+        
         if (listaIndicadorTipo != null) {
-            indicadorTipoSeleccionado = listaIndicadorTipo.get(0);
-            flagsTipoIndicador = flagImpl.getFlagsTipoIndicador(indicadorTipoSeleccionado.getNombre());
-            listaClasificacion = indicadorTipoSeleccionado.getClasificacionCollection();
-            clasificacionSeleccionada = listaClasificacion.iterator().next();
-
+            flagsTipoIndicador = flagImpl.getFlagsTipoIndicador(indicadorTipoSeleccionado.getNombre());            
         }
         // Se obtienen los select
         listaUnidadProveedora = indicadorService.obtenerUnidadProveedora();
@@ -178,23 +173,98 @@ public class CrearIndicadorBean implements Serializable {
         
         listaActividades = new LinkedHashMap<Integer, ActividadAnio>();        
         listaActividadesMesSemestre = new LinkedHashMap<Integer, TreeNodeMesSemestre>();
-        mantenerLogros = false;        
-        mantenerLogrosNewStep = false;        
-        
-        for(int i=minValue; i<=maxValue; i++){
-            listaActividadesMesSemestre.put(i, new TreeNodeMesSemestre(Arrays.asList(
-                    "Semestre 1",
-                    "Semestre 2"             
-            ), ""));                
-        }        
+        mantenerLogros = true;        
+        mantenerLogrosNewStep = true;        
+           
         
     }
 
     /**
      * Creates a new instance of convenioBean
      */
-    public CrearIndicadorBean() {
+    public EditarIndicadorBean() {
     }
+    
+    public void cargarDatos(){     
+        
+        Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String id = params.get("i");
+        
+        int id_int = 0;
+        
+        try{
+            id_int = Integer.valueOf(id);
+        }catch(Exception e){
+            id = null;
+        }        
+ 
+        //El id es nulo cuando cargamos la pagina pero no brindamos ningun parametro
+        if(id != null){
+            indicadorCargado = indicadorService.buscarIndicadorID(id_int);
+        
+            //it es nulo cuando el id leido no existe en la bd
+            if(indicadorCargado != null){ 
+                clasificacionSeleccionada = indicadorCargado.getClasificacionId();                
+                indicadorTipoSeleccionado = clasificacionSeleccionada.getIndicadorTipoId();                
+                n_indicador = indicadorCargado.getNumIndicador();
+                nombreIndicador = indicadorCargado.getNombreIndicador();
+                descripcionIndicador = indicadorCargado.getDescripcionIndicador();
+                aplicaLineamiento = indicadorCargado.getAplicaLineamiento();
+                aplicaObjetivo = indicadorCargado.getAplicaObjetivo();
+                descripcionObjetivo = indicadorCargado.getDescripcionObjetivo();
+                ajustePDEI = indicadorCargado.getAjustePdeiId();
+                unidadRepresentacion = indicadorCargado.getUnidadRepresentacionId();
+                Collection<GeneracionDatos> cgd = indicadorCargado.getGeneracionDatosCollection();
+                generacionDatos = cgd.toArray(new GeneracionDatos[cgd.size()]);
+                plazo = indicadorCargado.getPlazoId();
+                version = indicadorCargado.getVersion();
+                lineaBase = indicadorCargado.getLineaBase();
+                metas = indicadorCargado.getMetas();
+                anioCumplimiento = indicadorCargado.getAnioCumplimientoId();
+                logro = indicadorCargado.getPorcLogro();
+                frecuenciaMedicion = indicadorCargado.getFrecuenciaMedicionId();
+                medioVerificacion = indicadorCargado.getMedioVerificacion();
+                formaCalculo = indicadorCargado.getFormaCalculo();
+                fuenteInformacion = indicadorCargado.getFuenteInformacion();
+                Collection<UnidadProveedora> cup = indicadorCargado.getUnidadProveedoraCollection();
+                unidadProveedora = cup.toArray(new UnidadProveedora[cup.size()]);
+                proyectoAsociado = indicadorCargado.getProyectoAsociado();
+                comentario = indicadorCargado.getComentario();
+                actividadComprometida = indicadorCargado.getComentario();
+                estadoActividad = indicadorCargado.getEstadoActividad();
+
+                if(indicadorCargado.getEstado() == 1){
+                    vigencia = "VIGENTE";
+                    listaIndicadorTipo = listaIndicadorTipoVigente;
+                }else{
+                    vigencia = "NO VIGENTE";
+                    listaIndicadorTipo = listaIndicadorTipoNoVigente;
+                }
+            
+                listaClasificacion = indicadorTipoSeleccionado.getClasificacionCollection();
+                
+                Collection<IndicadorMesSemestreAnioBianual> coleccionActividades = indicadorCargado.getIndicadorMesSemestreAnioBianualCollection();
+                
+                minValue = 0;
+                
+                for(IndicadorMesSemestreAnioBianual i : coleccionActividades){
+                    if(minValue == 0){
+                        minValue = i.getAnioId().getAnio();
+                    }
+                    maxValue = i.getAnioId().getAnio();                   
+                }
+                
+                String fm = frecuenciaMedicion.getFrecuenciaMedicion();
+                
+                if(fm.equals("Mensual") || fm.equals("Semestral")){
+                    TreeNode root = new DefaultTreeNode("Root Node", null);
+                }
+                
+                
+            }            
+        
+        }                       
+    }    
     
     public void limpiarListas(){
         if(!mantenerLogrosNewStep){
@@ -700,7 +770,7 @@ public class CrearIndicadorBean implements Serializable {
         }
     }
 
-    public void crearIndicador() throws IOException {
+    public void editarIndicador() throws IOException {
         //Para que al clickear el boton "crear indicador" no se eliminen los logros y el porcentaje calculado
         mantenerLogrosNewStep = true;
         System.out.println("crear");
@@ -712,177 +782,177 @@ public class CrearIndicadorBean implements Serializable {
         }
                 
         
-        short numVigencia = 0;
-        if (vigencia.equals("VIGENTE")) {
-            numVigencia = 1;
-        }
-
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        nuevoIndicador.setNumIndicador(n_indicador);
-        nuevoIndicador.setNombreIndicador(nombreIndicador);
-        nuevoIndicador.setEstado(numVigencia);
-        nuevoIndicador.setDescripcionIndicador(descripcionIndicador);
-        nuevoIndicador.setAplicaLineamiento(aplicaLineamiento);
-        nuevoIndicador.setAplicaObjetivo(aplicaObjetivo);
-        nuevoIndicador.setDescripcionObjetivo(descripcionObjetivo);
-        nuevoIndicador.setVersion(version);
-        nuevoIndicador.setLineaBase(lineaBase);
-        nuevoIndicador.setMetas(metas);
-        nuevoIndicador.setPorcLogro(logro);
-        nuevoIndicador.setMedioVerificacion(medioVerificacion);
-        nuevoIndicador.setFormaCalculo(formaCalculo);
-        nuevoIndicador.setFuenteInformacion(fuenteInformacion);
-        nuevoIndicador.setProyectoAsociado(proyectoAsociado);
-        nuevoIndicador.setComentario(comentario);
-        nuevoIndicador.setActividadComprometida(actividadComprometida);
-        nuevoIndicador.setEstadoActividad(estadoActividad);
-        nuevoIndicador.setFechaCreacion(new Date());
-        nuevoIndicador.setFechaActualizacion(new Date());
-
-        nuevoIndicador.setAjustePdeiId(ajustePDEI);
-        nuevoIndicador.setAnioCumplimientoId(anioCumplimiento);
-        nuevoIndicador.setClasificacionId(clasificacionSeleccionada);
-        nuevoIndicador.setFrecuenciaMedicionId(frecuenciaMedicion);        
-        nuevoIndicador.setPlazoId(plazo);
-        nuevoIndicador.setUnidadRepresentacionId(unidadRepresentacion);
-
-        Set<GeneracionDatos> setGeneracionDatos = new HashSet<GeneracionDatos>();      
-        Set<UnidadProveedora> setUnidadProveedora = new HashSet<UnidadProveedora>();      
-        
-        Collections.addAll(setGeneracionDatos, generacionDatos);
-        Collections.addAll(setUnidadProveedora, unidadProveedora);
-        
-        nuevoIndicador.setGeneracionDatosCollection(setGeneracionDatos);
-        nuevoIndicador.setUnidadProveedoraCollection(setUnidadProveedora);
-        
-        Collection<IndicadorMesSemestreAnioBianual> collectionActividades = new LinkedList<IndicadorMesSemestreAnioBianual>();        
-        IndicadorMesSemestreAnioBianual actividadIMSAB = new IndicadorMesSemestreAnioBianual();
-                    
-        String uRepr = unidadRepresentacion.getUnidadRepresentacion();
-        String fm = frecuenciaMedicion.getFrecuenciaMedicion();
-        
-        Anio anio;
-        BiAnual bianual;
-        Mes mes;
-        Semestre semestre;          
-        int flag = 0;        
-        
-        if(fm.equals("Mensual") || fm.equals("Semestral")){
-            TreeNode root;
-            List<TreeNode> childrenPeriodo;
-            List<TreeNode> childrenActividades;
-            TreeNodeRow periodo;
-            TreeNodeRow actividad;                                
-            bianual = indicadorService.buscarBianualByAnio(0);
-            for(int i = minValue; i <= maxValue; i++){
-                root = listaActividadesMesSemestre.get(i).getRoot();
-                childrenPeriodo = root.getChildren();
-                anio = indicadorService.buscarAnioByAnio(i);
-                for(TreeNode t: childrenPeriodo){
-                    periodo = (TreeNodeRow) t.getData();
-                    if(fm.equals("Mensual")){
-                        mes = indicadorService.buscarMesByMes(periodo.getNombrePeriodo());
-                        semestre = indicadorService.buscarSemestreBySemestre("No Aplica");
-                        flag = 3;                                
-                    }else{
-                        mes = indicadorService.buscarMesByMes("No Aplica");
-                        semestre = indicadorService.buscarSemestreBySemestre(periodo.getNombrePeriodo());
-                        flag = 4;
-                    }
-                                                                                 
-                    childrenActividades = t.getChildren();                                        
-                    
-                    for(TreeNode t1: childrenActividades){                        
-                        actividadIMSAB = new IndicadorMesSemestreAnioBianual();              
-                        actividad = (TreeNodeRow) t1.getData();
-                                                                   
-                        actividadIMSAB.setAnioId(anio);
-                        actividadIMSAB.setBianualId(bianual);
-                        actividadIMSAB.setMesId(mes);
-                        actividadIMSAB.setSemestreId(semestre);
-                        actividadIMSAB.setIndicadorId(nuevoIndicador);
-
-                        actividadIMSAB.setCantActividadesPeriodo(periodo.getNumActividades());
-                        actividadIMSAB.setPorcActividadesPeriodo(periodo.getPorcActividad());
-                        actividadIMSAB.setLogroPeriodo(periodo.getLogro());
-                        actividadIMSAB.setMontoPeriodo(periodo.getMonto());
-
-                        actividadIMSAB.setLogroIndicador(Integer.valueOf(logro));
-                        actividadIMSAB.setMeta(Integer.valueOf(metas));                    
-                        actividadIMSAB.setFlag(flag);
-                                                                        
-                        actividadIMSAB.setMonto(actividad.getMonto());                                                  
-                        actividadIMSAB.setNombre("Sin datos");
-                        
-                        if(actividad.getNombreActividad() != null){
-                            if(!actividad.getNombreActividad().isBlank() && !actividad.getNombreActividad().isEmpty()){
-                                actividadIMSAB.setNombre(actividad.getNombreActividad());                                              
-                            }                
-                        }  
-                                                
-                        collectionActividades.add(actividadIMSAB);                        
-                    }
-                    
-                }
-            }
-        }else{                       
-            ActividadAnio actividadAnio;
-            Actividad actividad;
-            List<Actividad> actividadesLista;
-            mes = indicadorService.buscarMesByMes("No Aplica");
-            semestre = indicadorService.buscarSemestreBySemestre("No Aplica");
-            bianual = indicadorService.buscarBianualByAnio(0);
-            
-            if(fm.equals("Anual")){
-                flag = 1;
-            }else{
-                flag = 2;
-            }                                    
-            
-            for(Integer i : listaActividades.keySet()){
-                actividadAnio = listaActividades.get(i);
-                actividadesLista = actividadAnio.getActividades();                                
-                anio = indicadorService.buscarAnioByAnio(i);                                                         
-                for(Actividad a : actividadesLista){
-                    actividadIMSAB = new IndicadorMesSemestreAnioBianual();              
-
-                    actividadIMSAB.setAnioId(anio);
-                    actividadIMSAB.setBianualId(bianual);
-                    actividadIMSAB.setMesId(mes);
-                    actividadIMSAB.setSemestreId(semestre);
-                    actividadIMSAB.setIndicadorId(nuevoIndicador);
-
-                    actividadIMSAB.setCantActividadesPeriodo(actividadAnio.getNumActividades());
-                    actividadIMSAB.setPorcActividadesPeriodo(actividadAnio.getPorcActividades());
-                    actividadIMSAB.setLogroPeriodo(actividadAnio.getLogro());
-                    actividadIMSAB.setMontoPeriodo(actividadAnio.getMontoProceso());
-
-                    actividadIMSAB.setLogroIndicador(Integer.valueOf(logro));
-                    actividadIMSAB.setMeta(Integer.valueOf(metas));                    
-                    actividadIMSAB.setFlag(flag);
-
-                    actividadIMSAB.setMonto(a.getMontoActividad());                                                  
-                    actividadIMSAB.setNombre("Sin datos");
-
-                    if(a.getNombre() != null){
-                        if(!a.getNombre().isBlank() && !a.getNombre().isEmpty()){
-                            actividadIMSAB.setNombre(a.getNombre());                                              
-                        }                
-                    }  
-
-                    collectionActividades.add(actividadIMSAB);                        
-                }                
-            }           
-        }        
-        
-        nuevoIndicador.setIndicadorMesSemestreAnioBianualCollection(collectionActividades);
-        
-        try {
-            indicadorService.crearIndicador(nuevoIndicador);
-            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
-                    "El indicador " + nombreIndicador + " ha sido agregada correctamente")
-            );
+//        short numVigencia = 0;
+//        if (vigencia.equals("VIGENTE")) {
+//            numVigencia = 1;
+//        }
+//
+//        FacesContext context = FacesContext.getCurrentInstance();
+//
+//        nuevoIndicador.setNumIndicador(n_indicador);
+//        nuevoIndicador.setNombreIndicador(nombreIndicador);
+//        nuevoIndicador.setEstado(numVigencia);
+//        nuevoIndicador.setDescripcionIndicador(descripcionIndicador);
+//        nuevoIndicador.setAplicaLineamiento(aplicaLineamiento);
+//        nuevoIndicador.setAplicaObjetivo(aplicaObjetivo);
+//        nuevoIndicador.setDescripcionObjetivo(descripcionObjetivo);
+//        nuevoIndicador.setVersion(version);
+//        nuevoIndicador.setLineaBase(lineaBase);
+//        nuevoIndicador.setMetas(metas);
+//        nuevoIndicador.setPorcLogro(logro);
+//        nuevoIndicador.setMedioVerificacion(medioVerificacion);
+//        nuevoIndicador.setFormaCalculo(formaCalculo);
+//        nuevoIndicador.setFuenteInformacion(fuenteInformacion);
+//        nuevoIndicador.setProyectoAsociado(proyectoAsociado);
+//        nuevoIndicador.setComentario(comentario);
+//        nuevoIndicador.setActividadComprometida(actividadComprometida);
+//        nuevoIndicador.setEstadoActividad(estadoActividad);
+//        nuevoIndicador.setFechaCreacion(new Date());
+//        nuevoIndicador.setFechaActualizacion(new Date());
+//
+//        nuevoIndicador.setAjustePdeiId(ajustePDEI);
+//        nuevoIndicador.setAnioCumplimientoId(anioCumplimiento);
+//        nuevoIndicador.setClasificacionId(clasificacionSeleccionada);
+//        nuevoIndicador.setFrecuenciaMedicionId(frecuenciaMedicion);        
+//        nuevoIndicador.setPlazoId(plazo);
+//        nuevoIndicador.setUnidadRepresentacionId(unidadRepresentacion);
+//
+//        Set<GeneracionDatos> setGeneracionDatos = new HashSet<GeneracionDatos>();      
+//        Set<UnidadProveedora> setUnidadProveedora = new HashSet<UnidadProveedora>();      
+//        
+//        Collections.addAll(setGeneracionDatos, generacionDatos);
+//        Collections.addAll(setUnidadProveedora, unidadProveedora);
+//        
+//        nuevoIndicador.setGeneracionDatosCollection(setGeneracionDatos);
+//        nuevoIndicador.setUnidadProveedoraCollection(setUnidadProveedora);
+//        
+//        Collection<IndicadorMesSemestreAnioBianual> collectionActividades = new LinkedList<IndicadorMesSemestreAnioBianual>();        
+//        IndicadorMesSemestreAnioBianual actividadIMSAB = new IndicadorMesSemestreAnioBianual();
+//                    
+//        String uRepr = unidadRepresentacion.getUnidadRepresentacion();
+//        String fm = frecuenciaMedicion.getFrecuenciaMedicion();
+//        
+//        Anio anio;
+//        BiAnual bianual;
+//        Mes mes;
+//        Semestre semestre;          
+//        int flag = 0;        
+//        
+//        if(fm.equals("Mensual") || fm.equals("Semestral")){
+//            TreeNode root;
+//            List<TreeNode> childrenPeriodo;
+//            List<TreeNode> childrenActividades;
+//            TreeNodeRow periodo;
+//            TreeNodeRow actividad;                                
+//            bianual = indicadorService.buscarBianualByAnio(0);
+//            for(int i = minValue; i <= maxValue; i++){
+//                root = listaActividadesMesSemestre.get(i).getRoot();
+//                childrenPeriodo = root.getChildren();
+//                anio = indicadorService.buscarAnioByAnio(i);
+//                for(TreeNode t: childrenPeriodo){
+//                    periodo = (TreeNodeRow) t.getData();
+//                    if(fm.equals("Mensual")){
+//                        mes = indicadorService.buscarMesByMes(periodo.getNombrePeriodo());
+//                        semestre = indicadorService.buscarSemestreBySemestre("No Aplica");
+//                        flag = 3;                                
+//                    }else{
+//                        mes = indicadorService.buscarMesByMes("No Aplica");
+//                        semestre = indicadorService.buscarSemestreBySemestre(periodo.getNombrePeriodo());
+//                        flag = 4;
+//                    }
+//                                                                                 
+//                    childrenActividades = t.getChildren();                                        
+//                    
+//                    for(TreeNode t1: childrenActividades){                        
+//                        actividadIMSAB = new IndicadorMesSemestreAnioBianual();              
+//                        actividad = (TreeNodeRow) t1.getData();
+//                                                                   
+//                        actividadIMSAB.setAnioId(anio);
+//                        actividadIMSAB.setBianualId(bianual);
+//                        actividadIMSAB.setMesId(mes);
+//                        actividadIMSAB.setSemestreId(semestre);
+//                        actividadIMSAB.setIndicadorId(nuevoIndicador);
+//
+//                        actividadIMSAB.setCantActividadesPeriodo(periodo.getNumActividades());
+//                        actividadIMSAB.setPorcActividadesPeriodo(periodo.getPorcActividad());
+//                        actividadIMSAB.setLogroPeriodo(periodo.getLogro());
+//                        actividadIMSAB.setMontoPeriodo(periodo.getMonto());
+//
+//                        actividadIMSAB.setLogroIndicador(Integer.valueOf(logro));
+//                        actividadIMSAB.setMeta(Integer.valueOf(metas));                    
+//                        actividadIMSAB.setFlag(flag);
+//                                                                        
+//                        actividadIMSAB.setMonto(actividad.getMonto());                                                  
+//                        actividadIMSAB.setNombre("Sin datos");
+//                        
+//                        if(actividad.getNombreActividad() != null){
+//                            if(!actividad.getNombreActividad().isBlank() && !actividad.getNombreActividad().isEmpty()){
+//                                actividadIMSAB.setNombre(actividad.getNombreActividad());                                              
+//                            }                
+//                        }  
+//                                                
+//                        collectionActividades.add(actividadIMSAB);                        
+//                    }
+//                    
+//                }
+//            }
+//        }else{                       
+//            ActividadAnio actividadAnio;
+//            Actividad actividad;
+//            List<Actividad> actividadesLista;
+//            mes = indicadorService.buscarMesByMes("No Aplica");
+//            semestre = indicadorService.buscarSemestreBySemestre("No Aplica");
+//            bianual = indicadorService.buscarBianualByAnio(0);
+//            
+//            if(fm.equals("Anual")){
+//                flag = 1;
+//            }else{
+//                flag = 2;
+//            }                                    
+//            
+//            for(Integer i : listaActividades.keySet()){
+//                actividadAnio = listaActividades.get(i);
+//                actividadesLista = actividadAnio.getActividades();                                
+//                anio = indicadorService.buscarAnioByAnio(i);                                                         
+//                for(Actividad a : actividadesLista){
+//                    actividadIMSAB = new IndicadorMesSemestreAnioBianual();              
+//
+//                    actividadIMSAB.setAnioId(anio);
+//                    actividadIMSAB.setBianualId(bianual);
+//                    actividadIMSAB.setMesId(mes);
+//                    actividadIMSAB.setSemestreId(semestre);
+//                    actividadIMSAB.setIndicadorId(nuevoIndicador);
+//
+//                    actividadIMSAB.setCantActividadesPeriodo(actividadAnio.getNumActividades());
+//                    actividadIMSAB.setPorcActividadesPeriodo(actividadAnio.getPorcActividades());
+//                    actividadIMSAB.setLogroPeriodo(actividadAnio.getLogro());
+//                    actividadIMSAB.setMontoPeriodo(actividadAnio.getMontoProceso());
+//
+//                    actividadIMSAB.setLogroIndicador(Integer.valueOf(logro));
+//                    actividadIMSAB.setMeta(Integer.valueOf(metas));                    
+//                    actividadIMSAB.setFlag(flag);
+//
+//                    actividadIMSAB.setMonto(a.getMontoActividad());                                                  
+//                    actividadIMSAB.setNombre("Sin datos");
+//
+//                    if(a.getNombre() != null){
+//                        if(!a.getNombre().isBlank() && !a.getNombre().isEmpty()){
+//                            actividadIMSAB.setNombre(a.getNombre());                                              
+//                        }                
+//                    }  
+//
+//                    collectionActividades.add(actividadIMSAB);                        
+//                }                
+//            }           
+//        }        
+//        
+//        nuevoIndicador.setIndicadorMesSemestreAnioBianualCollection(collectionActividades);
+//        
+//        try {
+//            indicadorService.crearIndicador(nuevoIndicador);
+//            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
+//                    "El indicador " + nombreIndicador + " ha sido agregada correctamente")
+//            );
 
 //            try {
 //                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -913,17 +983,17 @@ public class CrearIndicadorBean implements Serializable {
 //                        .getName()).log(Level.SEVERE, "Ocurrio un error al enviar el correo.", ex);
 //            }
 
-            context.getExternalContext().getFlash().setKeepMessages(true);
-            context.getExternalContext()
-                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-indicador.xhtml");
-
-        } catch (EJBException e) {
-
-            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
-                    "El indicador " + nuevoIndicador + " ya existe en los registros")
-            );
-
-        }
+//            context.getExternalContext().getFlash().setKeepMessages(true);
+//            context.getExternalContext()
+//                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-indicador.xhtml");
+//
+//        } catch (EJBException e) {
+//
+//            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
+//                    "El indicador " + nuevoIndicador + " ya existe en los registros")
+//            );
+//
+//        }
     }
 
     public String flujoProceso(FlowEvent event) {
@@ -1299,12 +1369,12 @@ public class CrearIndicadorBean implements Serializable {
         this.clasificacionSeleccionada = clasificacionSeleccionada;
     }
 
-    public Indicador getNuevoIndicador() {
-        return nuevoIndicador;
+    public Indicador getIndicadorCargado() {
+        return indicadorCargado;
     }
 
-    public void setNuevoIndicador(Indicador nuevoIndicador) {
-        this.nuevoIndicador = nuevoIndicador;
+    public void setIndicadorCargado(Indicador indicadorCargado) {
+        this.indicadorCargado = indicadorCargado;
     }
 
     public Integer getMin() {

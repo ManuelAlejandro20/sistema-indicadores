@@ -43,7 +43,7 @@ public class Anio implements Serializable {
     @NotNull
     @Column(name = "anio")
     private int anio;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anio")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anioId")
     private Collection<IndicadorMesSemestreAnioBianual> indicadorMesSemestreAnioBianualCollection;
 
     public Anio() {

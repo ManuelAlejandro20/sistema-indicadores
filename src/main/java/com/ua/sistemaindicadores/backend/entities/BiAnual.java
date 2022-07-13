@@ -43,7 +43,7 @@ public class BiAnual implements Serializable {
     @NotNull
     @Column(name = "anio")
     private int anio;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "biAnual")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bianualId")
     private Collection<IndicadorMesSemestreAnioBianual> indicadorMesSemestreAnioBianualCollection;
 
     public BiAnual() {

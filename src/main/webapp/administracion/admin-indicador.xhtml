@@ -735,9 +735,10 @@
                           toggleable="false"                          
                           styleClass="align-center">
                     <p:button
-                        outcome="/indicadores/ver-info-indicador.xhtml"
+                        outcome="/edicion/edicion-indicador.xhtml"
                         class="btn btn-info"
                         icon="fa fa-edit">
+                        <f:param name="i" value="#{indicadorDTO.id}" />
                     </p:button>
                 </p:column>                
             </p:dataTable>                             

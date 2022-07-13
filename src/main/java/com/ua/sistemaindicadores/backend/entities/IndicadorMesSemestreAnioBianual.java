@@ -8,8 +8,10 @@ package com.ua.sistemaindicadores.backend.entities;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -28,11 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findAll", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i"),
-    @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findByIndicadorId", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.indicadorMesSemestreAnioBianualPK.indicadorId = :indicadorId"),
-    @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findByAnioId", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.indicadorMesSemestreAnioBianualPK.anioId = :anioId"),
-    @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findByBianualId", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.indicadorMesSemestreAnioBianualPK.bianualId = :bianualId"),
-    @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findByMesId", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.indicadorMesSemestreAnioBianualPK.mesId = :mesId"),
-    @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findBySemestreId", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.indicadorMesSemestreAnioBianualPK.semestreId = :semestreId"),
+    @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findById", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.id = :id"),
     @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findByNombre", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.nombre = :nombre"),
     @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findByMonto", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.monto = :monto"),
     @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findByCantActividadesPeriodo", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.cantActividadesPeriodo = :cantActividadesPeriodo"),
@@ -45,8 +43,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class IndicadorMesSemestreAnioBianual implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected IndicadorMesSemestreAnioBianualPK indicadorMesSemestreAnioBianualPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -72,46 +73,42 @@ public class IndicadorMesSemestreAnioBianual implements Serializable {
     private int meta;
     @Column(name = "flag")
     private Integer flag;
-    @JoinColumn(name = "anio_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "anio_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Anio anio;
-    @JoinColumn(name = "bianual_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Anio anioId;
+    @JoinColumn(name = "bianual_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private BiAnual biAnual;
-    @JoinColumn(name = "indicador_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private BiAnual bianualId;
+    @JoinColumn(name = "indicador_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Indicador indicador;
-    @JoinColumn(name = "mes_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Indicador indicadorId;
+    @JoinColumn(name = "mes_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Mes mes;
-    @JoinColumn(name = "semestre_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Mes mesId;
+    @JoinColumn(name = "semestre_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Semestre semestre;
+    private Semestre semestreId;
 
     public IndicadorMesSemestreAnioBianual() {
     }
 
-    public IndicadorMesSemestreAnioBianual(IndicadorMesSemestreAnioBianualPK indicadorMesSemestreAnioBianualPK) {
-        this.indicadorMesSemestreAnioBianualPK = indicadorMesSemestreAnioBianualPK;
+    public IndicadorMesSemestreAnioBianual(Integer id) {
+        this.id = id;
     }
 
-    public IndicadorMesSemestreAnioBianual(IndicadorMesSemestreAnioBianualPK indicadorMesSemestreAnioBianualPK, String nombre, int logroIndicador, int meta) {
-        this.indicadorMesSemestreAnioBianualPK = indicadorMesSemestreAnioBianualPK;
+    public IndicadorMesSemestreAnioBianual(Integer id, String nombre, int logroIndicador, int meta) {
+        this.id = id;
         this.nombre = nombre;
         this.logroIndicador = logroIndicador;
         this.meta = meta;
     }
 
-    public IndicadorMesSemestreAnioBianual(int indicadorId, int anioId, int bianualId, int mesId, int semestreId) {
-        this.indicadorMesSemestreAnioBianualPK = new IndicadorMesSemestreAnioBianualPK(indicadorId, anioId, bianualId, mesId, semestreId);
+    public Integer getId() {
+        return id;
     }
 
-    public IndicadorMesSemestreAnioBianualPK getIndicadorMesSemestreAnioBianualPK() {
-        return indicadorMesSemestreAnioBianualPK;
-    }
-
-    public void setIndicadorMesSemestreAnioBianualPK(IndicadorMesSemestreAnioBianualPK indicadorMesSemestreAnioBianualPK) {
-        this.indicadorMesSemestreAnioBianualPK = indicadorMesSemestreAnioBianualPK;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -186,50 +183,50 @@ public class IndicadorMesSemestreAnioBianual implements Serializable {
         this.flag = flag;
     }
 
-    public Anio getAnio() {
-        return anio;
+    public Anio getAnioId() {
+        return anioId;
     }
 
-    public void setAnio(Anio anio) {
-        this.anio = anio;
+    public void setAnioId(Anio anioId) {
+        this.anioId = anioId;
     }
 
-    public BiAnual getBiAnual() {
-        return biAnual;
+    public BiAnual getBianualId() {
+        return bianualId;
     }
 
-    public void setBiAnual(BiAnual biAnual) {
-        this.biAnual = biAnual;
+    public void setBianualId(BiAnual bianualId) {
+        this.bianualId = bianualId;
     }
 
-    public Indicador getIndicador() {
-        return indicador;
+    public Indicador getIndicadorId() {
+        return indicadorId;
     }
 
-    public void setIndicador(Indicador indicador) {
-        this.indicador = indicador;
+    public void setIndicadorId(Indicador indicadorId) {
+        this.indicadorId = indicadorId;
     }
 
-    public Mes getMes() {
-        return mes;
+    public Mes getMesId() {
+        return mesId;
     }
 
-    public void setMes(Mes mes) {
-        this.mes = mes;
+    public void setMesId(Mes mesId) {
+        this.mesId = mesId;
     }
 
-    public Semestre getSemestre() {
-        return semestre;
+    public Semestre getSemestreId() {
+        return semestreId;
     }
 
-    public void setSemestre(Semestre semestre) {
-        this.semestre = semestre;
+    public void setSemestreId(Semestre semestreId) {
+        this.semestreId = semestreId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (indicadorMesSemestreAnioBianualPK != null ? indicadorMesSemestreAnioBianualPK.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -240,7 +237,7 @@ public class IndicadorMesSemestreAnioBianual implements Serializable {
             return false;
         }
         IndicadorMesSemestreAnioBianual other = (IndicadorMesSemestreAnioBianual) object;
-        if ((this.indicadorMesSemestreAnioBianualPK == null && other.indicadorMesSemestreAnioBianualPK != null) || (this.indicadorMesSemestreAnioBianualPK != null && !this.indicadorMesSemestreAnioBianualPK.equals(other.indicadorMesSemestreAnioBianualPK))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -248,7 +245,7 @@ public class IndicadorMesSemestreAnioBianual implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ua.sistemaindicadores.backend.entities.IndicadorMesSemestreAnioBianual[ indicadorMesSemestreAnioBianualPK=" + indicadorMesSemestreAnioBianualPK + " ]";
+        return "com.ua.sistemaindicadores.backend.entities.IndicadorMesSemestreAnioBianual[ id=" + id + " ]";
     }
     
 }

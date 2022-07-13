@@ -15,12 +15,20 @@ import com.ua.sistemaindicadores.backend.entities.GeneracionDatos;
 import com.ua.sistemaindicadores.backend.daos.AjustePdeiDAO;
 import com.ua.sistemaindicadores.backend.entities.AjustePdei;
 import com.ua.sistemaindicadores.backend.daos.AnioCumplimientoDAO;
+import com.ua.sistemaindicadores.backend.daos.AnioDAO;
+import com.ua.sistemaindicadores.backend.daos.BianualDAO;
 import com.ua.sistemaindicadores.backend.entities.AnioCumplimiento;
 import com.ua.sistemaindicadores.backend.daos.PlazoDAO;
 import com.ua.sistemaindicadores.backend.entities.Plazo;
 import com.ua.sistemaindicadores.backend.daos.FrecuenciaMedicionDAO;
+import com.ua.sistemaindicadores.backend.daos.MesDAO;
+import com.ua.sistemaindicadores.backend.daos.SemestreDAO;
 import com.ua.sistemaindicadores.backend.entities.FrecuenciaMedicion;
 import com.ua.sistemaindicadores.backend.daos.UnidadRepresentacionDAO;
+import com.ua.sistemaindicadores.backend.entities.Anio;
+import com.ua.sistemaindicadores.backend.entities.BiAnual;
+import com.ua.sistemaindicadores.backend.entities.Mes;
+import com.ua.sistemaindicadores.backend.entities.Semestre;
 import com.ua.sistemaindicadores.backend.entities.UnidadRepresentacion;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -54,6 +62,15 @@ public class IndicadorService {
     private FrecuenciaMedicionDAO frecuenciaMedicionDAO;
     @Inject
     private UnidadRepresentacionDAO unidadRepresentacionDAO;    
+    
+    @Inject
+    private AnioDAO anioDAO;        
+    @Inject
+    private BianualDAO bianualDAO;        
+    @Inject
+    private MesDAO mesDAO;        
+    @Inject
+    private SemestreDAO semestreDAO;        
 
     @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO"})
     public void crearIndicador(Indicador indicador) {
@@ -161,5 +178,52 @@ public class IndicadorService {
     @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<UnidadRepresentacion> obtenerUnidadRepresentacion() {
         return unidadRepresentacionDAO.obtenerUnidadRepresentacion();
+    }
+    
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public Anio buscarAnioByAnio(Integer anio) {
+        return anioDAO.buscarAnioByAnio(anio);
     }    
+        
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public List<Anio> obtenerAnio() {
+        return anioDAO.obtenerAnio();
+    }
+    
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public BiAnual buscarBianualByAnio(Integer anio) {
+        return bianualDAO.buscarBianualByAnio(anio);
+    }    
+        
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public List<BiAnual> obtenerBianual() {
+        return bianualDAO.obtenerBianual();
+    }    
+    
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public Mes buscarMesByMes(String mes) {
+        return mesDAO.buscarMesByMes(mes);
+    }    
+        
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public List<Mes> obtenerMes() {
+        return mesDAO.obtenerMes();
+    }    
+    
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public Semestre buscarSemestreBySemestre(String semestre) {
+        return semestreDAO.buscarSemestreBySemestre(semestre);
+    }    
+        
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public List<Semestre> obtenerSemestre() {
+        return semestreDAO.obtenerSemestre();
+    }    
+    
+    
+    
+    
+    
+    
+    
 }

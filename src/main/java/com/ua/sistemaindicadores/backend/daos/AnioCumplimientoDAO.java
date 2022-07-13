@@ -32,14 +32,6 @@ public class AnioCumplimientoDAO extends AbstractDAO<AnioCumplimiento> {
         super(AnioCumplimiento.class);
     }
 
-    public boolean checkAnioCumplimientoExists(String anioCumplimiento) {
-        List<AnioCumplimiento> ti = getEntityManager()
-                .createNamedQuery("AnioCumplimiento.checkAnioCumplimientoExists", AnioCumplimiento.class)
-                .setParameter("anioCumplimiento", anioCumplimiento)
-                .getResultList();
-        return !ti.isEmpty();
-    }
-
     public List<AnioCumplimiento> obtenerAnioCumplimiento() {
         return getEntityManager()
                 .createNamedQuery("AnioCumplimiento.findAll", AnioCumplimiento.class)

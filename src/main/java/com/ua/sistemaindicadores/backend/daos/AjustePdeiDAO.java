@@ -18,8 +18,6 @@ import javax.ejb.Stateless;
 @Stateless
 public class AjustePdeiDAO extends AbstractDAO<AjustePdei> {
 
-    public static final String KEY_AJUSTEPDEI = "ajustePdei";
-
     @Inject
     private EntityManagerProvider entityManagerProvider;
 
@@ -31,14 +29,6 @@ public class AjustePdeiDAO extends AbstractDAO<AjustePdei> {
 
     public AjustePdeiDAO() {
         super(AjustePdei.class);
-    }
-
-    public boolean checkAjustePdeiExists(String ajustePdei) {
-        List<AjustePdei> ti = getEntityManager()
-                .createNamedQuery("AjustePdei.checkAjustePdeiExists", AjustePdei.class)
-                .setParameter("ajustePdei", ajustePdei)
-                .getResultList();
-        return !ti.isEmpty();
     }
 
     public List<AjustePdei> obtenerAjustePdei() {

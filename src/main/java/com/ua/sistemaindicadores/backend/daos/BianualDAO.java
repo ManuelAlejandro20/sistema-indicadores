@@ -5,46 +5,45 @@
  */
 package com.ua.sistemaindicadores.backend.daos;
 
-import com.ua.sistemaindicadores.backend.entities.Plazo;
+import com.ua.sistemaindicadores.backend.entities.BiAnual;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.inject.Inject;
 import javax.ejb.Stateless;
 /**
  *
- * @author diego
+ * @author aleja
  */
 @Stateless
-public class PlazoDAO extends AbstractDAO<Plazo> {
+public class BianualDAO extends AbstractDAO<BiAnual> {
 
     @Inject
     private EntityManagerProvider entityManagerProvider;
-
 
     @Override
     protected EntityManager getEntityManager() {
         return entityManagerProvider.getEntityManager();
     }
 
-    public PlazoDAO() {
-        super(Plazo.class);
+    public BianualDAO() {
+        super(BiAnual.class);
     }
 
-    public List<Plazo> obtenerPlazo() {
+    public List<BiAnual> obtenerBianual() {
         return getEntityManager()
-                .createNamedQuery("Plazo.findAll", Plazo.class)
+                .createNamedQuery("BiAnual.findAll", BiAnual.class)
                 .getResultList();
     }
 
-    public Plazo buscarPlazoPlazo(String plazo) {
-        List<Plazo> ti = getEntityManager()
-                .createNamedQuery("Plazo.findByPlazo", Plazo.class)
-                .setParameter("plazo", plazo)
+    public BiAnual buscarBianualByAnio(Integer anio) {
+        List<BiAnual> ti = getEntityManager()
+                .createNamedQuery("BiAnual.findByAnio", BiAnual.class)
+                .setParameter("anio", anio)
                 .getResultList();
         return ti.isEmpty() ? null : ti.get(0);
     }
 
-    public Plazo buscarPlazoID(Integer id) {
+    public BiAnual buscarAnioID(Integer id) {
         return find(id);
     }
 }

@@ -45,7 +45,7 @@ public class Mes implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "mes")
     private String mes;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mes")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mesId")
     private Collection<IndicadorMesSemestreAnioBianual> indicadorMesSemestreAnioBianualCollection;
 
     public Mes() {
