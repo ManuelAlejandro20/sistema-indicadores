@@ -12,6 +12,7 @@ import com.ua.sistemaindicadores.backend.entities.Clasificacion;
 import com.ua.sistemaindicadores.backend.entities.FrecuenciaMedicion;
 import com.ua.sistemaindicadores.backend.entities.GeneracionDatos;
 import com.ua.sistemaindicadores.backend.entities.Indicador;
+import com.ua.sistemaindicadores.backend.entities.IndicadorMesSemestreAnioBianual;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.entities.Plazo;
 import com.ua.sistemaindicadores.backend.entities.UnidadProveedora;
@@ -20,13 +21,18 @@ import com.ua.sistemaindicadores.backend.models.IndicadorLazyDataModel;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
 import com.ua.sistemaindicadores.backend.services.IndicadorService;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
+import com.ua.sistemaindicadores.frontend.classes.ActividadAnio;
+import com.ua.sistemaindicadores.frontend.classes.TreeNodeMesSemestre;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -126,8 +132,16 @@ public class VerIndicadorBean implements Serializable{
     
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     
+    //
+    
     private Indicador indicadorSeleccionado;
     private String mensajeVerInfoIndicador;
+    
+    private Integer inicioEvaluacion;
+    private Integer terminoEvaluacion;
+    
+    private Map<Integer, ActividadAnio> listaActividades;    
+    private Map<Integer, TreeNodeMesSemestre> listaActividadesMesSemestre;
     
     @PostConstruct
     public void initalize(){        
@@ -313,6 +327,66 @@ public class VerIndicadorBean implements Serializable{
             }
             if(indicadorSeleccionado != null){
                 mensajeVerInfoIndicador = "Información completa de indicador " + indicadorSeleccionado.getNombreIndicador();                        
+            
+                LinkedHashSet<IndicadorMesSemestreAnioBianual> actividadesAsociadas =  new LinkedHashSet<IndicadorMesSemestreAnioBianual>(indicadorSeleccionado.getIndicadorMesSemestreAnioBianualCollection());                                                
+                LinkedList<IndicadorMesSemestreAnioBianual> linkedActividadesAsociadas = new LinkedList<IndicadorMesSemestreAnioBianual>(actividadesAsociadas);
+                linkedActividadesAsociadas.sort(Comparator.comparing(IndicadorMesSemestreAnioBianual::getId));
+                                
+                inicioEvaluacion = 9999;
+                terminoEvaluacion = indicadorSeleccionado.getAnioCumplimientoId().getAnioCumplimiento();
+                
+                for(IndicadorMesSemestreAnioBianual i : actividadesAsociadas){
+                    if(i.getAnioId().getAnio() < inicioEvaluacion){
+                        inicioEvaluacion = i.getAnioId().getAnio();
+                    }
+                }
+                
+                String fm = indicadorSeleccionado.getFrecuenciaMedicionId().getFrecuenciaMedicion();
+                listaActividades = new LinkedHashMap<Integer, ActividadAnio>();    
+                listaActividadesMesSemestre = new LinkedHashMap<Integer, TreeNodeMesSemestre>();                
+                               
+                switch(fm){
+                    case "Mensual":
+                        for(int i=inicioEvaluacion; i<=terminoEvaluacion; i++){
+                            listaActividadesMesSemestre.put(i, new TreeNodeMesSemestre(i, Arrays.asList(
+                                    "Enero",
+                                    "Febrero",
+                                    "Marzo",
+                                    "Abril",
+                                    "Mayo",
+                                    "Junio",
+                                    "Julio",
+                                    "Agosto",
+                                    "Septiembre",
+                                    "Octubre",
+                                    "Noviembre",
+                                    "Diciembre"                    
+                            ), indicadorSeleccionado.getUnidadRepresentacionId().getUnidadRepresentacion(), linkedActividadesAsociadas));
+                        }                         
+                        break;
+                    case "Semestral":
+                        for(int i=inicioEvaluacion; i<=terminoEvaluacion; i++){
+                            listaActividadesMesSemestre.put(i, new TreeNodeMesSemestre(i, Arrays.asList(
+                                    "Semestre 1",
+                                    "Semestre 2"             
+                            ), indicadorSeleccionado.getUnidadRepresentacionId().getUnidadRepresentacion(), linkedActividadesAsociadas));                
+                        }
+                        break;
+                    case "Anual":
+                        for(int i=inicioEvaluacion; i<=terminoEvaluacion; i++){
+                            listaActividades.put(i, new ActividadAnio(i, indicadorSeleccionado.getUnidadRepresentacionId().getUnidadRepresentacion(),
+                                    linkedActividadesAsociadas));
+                        }                       
+                        break;
+                    default:
+                        inicioEvaluacion -= 2;
+                        for(int i=inicioEvaluacion+2; i<=terminoEvaluacion; i+=2){
+                            listaActividades.put(i,  new ActividadAnio(i, indicadorSeleccionado.getUnidadRepresentacionId().getUnidadRepresentacion(),
+                            linkedActividadesAsociadas));
+                        }
+                        break;
+                }                  
+            
             }else{
                 mensajeVerInfoIndicador = "No hay datos sobre este indicador";                                        
             }
@@ -1304,5 +1378,39 @@ public class VerIndicadorBean implements Serializable{
     public void setMensajeVerInfoIndicador(String mensajeVerInfoIndicador) {
         this.mensajeVerInfoIndicador = mensajeVerInfoIndicador;
     }
+
+    public Integer getInicioEvaluacion() {
+        return inicioEvaluacion;
+    }
+
+    public void setInicioEvaluacion(Integer inicioEvaluacion) {
+        this.inicioEvaluacion = inicioEvaluacion;
+    }
+
+    public Integer getTerminoEvaluacion() {
+        return terminoEvaluacion;
+    }
+
+    public void setTerminoEvaluacion(Integer terminoEvaluacion) {
+        this.terminoEvaluacion = terminoEvaluacion;
+    }
+
+    public Map<Integer, ActividadAnio> getListaActividades() {
+        return listaActividades;
+    }
+
+    public void setListaActividades(Map<Integer, ActividadAnio> listaActividades) {
+        this.listaActividades = listaActividades;
+    }
+
+    public Map<Integer, TreeNodeMesSemestre> getListaActividadesMesSemestre() {
+        return listaActividadesMesSemestre;
+    }
+
+    public void setListaActividadesMesSemestre(Map<Integer, TreeNodeMesSemestre> listaActividadesMesSemestre) {
+        this.listaActividadesMesSemestre = listaActividadesMesSemestre;
+    }
       
+    
+    
 }

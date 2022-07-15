@@ -19,15 +19,10 @@ import java.util.Map;
     aplicaObjetivo
     descripcionObjetivo
     ajustePDEI
-    unidadRepresentacion
     generacionDatos
     plazo
     version
     lineaBase
-    metas
-    anioCumplimiento
-    logro
-    frecuenciaMedicion
     medioVerificacion
     formaCalculo
     fuenteInformacion

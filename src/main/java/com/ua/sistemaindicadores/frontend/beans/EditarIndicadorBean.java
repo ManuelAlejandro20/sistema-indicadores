@@ -39,9 +39,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -212,11 +214,20 @@ public class EditarIndicadorBean implements Serializable {
                 aplicaLineamiento = indicadorCargado.getAplicaLineamiento();
                 aplicaObjetivo = indicadorCargado.getAplicaObjetivo();
                 descripcionObjetivo = indicadorCargado.getDescripcionObjetivo();
+                
                 ajustePDEI = indicadorCargado.getAjustePdeiId();
+                if(ajustePDEI.getAjustePdei().equals("No Aplica")){
+                    ajustePDEI = null;
+                }
+
+                plazo = indicadorCargado.getPlazoId();
+                if(plazo.getPlazo().equals("No Aplica")){
+                    plazo = null;
+                }                      
+                
                 unidadRepresentacion = indicadorCargado.getUnidadRepresentacionId();
                 Collection<GeneracionDatos> cgd = indicadorCargado.getGeneracionDatosCollection();
-                generacionDatos = cgd.toArray(new GeneracionDatos[cgd.size()]);
-                plazo = indicadorCargado.getPlazoId();
+                generacionDatos = cgd.toArray(new GeneracionDatos[cgd.size()]);                
                 version = indicadorCargado.getVersion();
                 lineaBase = indicadorCargado.getLineaBase();
                 metas = indicadorCargado.getMetas();
@@ -243,24 +254,62 @@ public class EditarIndicadorBean implements Serializable {
             
                 listaClasificacion = indicadorTipoSeleccionado.getClasificacionCollection();
                 
-                Collection<IndicadorMesSemestreAnioBianual> coleccionActividades = indicadorCargado.getIndicadorMesSemestreAnioBianualCollection();
+                LinkedHashSet<IndicadorMesSemestreAnioBianual> actividadesAsociadas =  new LinkedHashSet<IndicadorMesSemestreAnioBianual>(indicadorCargado.getIndicadorMesSemestreAnioBianualCollection());                                                
+                LinkedList<IndicadorMesSemestreAnioBianual> linkedActividadesAsociadas = new LinkedList<IndicadorMesSemestreAnioBianual>(actividadesAsociadas);
+                linkedActividadesAsociadas.sort(Comparator.comparing(IndicadorMesSemestreAnioBianual::getId));
+                                
+                minValue = 9999;
+                maxValue = indicadorCargado.getAnioCumplimientoId().getAnioCumplimiento();
                 
-                minValue = 0;
-                
-                for(IndicadorMesSemestreAnioBianual i : coleccionActividades){
-                    if(minValue == 0){
+                for(IndicadorMesSemestreAnioBianual i : actividadesAsociadas){
+                    if(i.getAnioId().getAnio() < minValue){
                         minValue = i.getAnioId().getAnio();
                     }
-                    maxValue = i.getAnioId().getAnio();                   
                 }
                 
                 String fm = frecuenciaMedicion.getFrecuenciaMedicion();
-                
-                if(fm.equals("Mensual") || fm.equals("Semestral")){
-                    TreeNode root = new DefaultTreeNode("Root Node", null);
-                }
-                
-                
+                               
+                switch(fm){
+                    case "Mensual":
+                        for(int i=minValue; i<=maxValue; i++){
+                            listaActividadesMesSemestre.put(i, new TreeNodeMesSemestre(i, Arrays.asList(
+                                    "Enero",
+                                    "Febrero",
+                                    "Marzo",
+                                    "Abril",
+                                    "Mayo",
+                                    "Junio",
+                                    "Julio",
+                                    "Agosto",
+                                    "Septiembre",
+                                    "Octubre",
+                                    "Noviembre",
+                                    "Diciembre"                    
+                            ), unidadRepresentacion.getUnidadRepresentacion(), linkedActividadesAsociadas));
+                        }                         
+                        break;
+                    case "Semestral":
+                        for(int i=minValue; i<=maxValue; i++){
+                            listaActividadesMesSemestre.put(i, new TreeNodeMesSemestre(i, Arrays.asList(
+                                    "Semestre 1",
+                                    "Semestre 2"             
+                            ), unidadRepresentacion.getUnidadRepresentacion(), linkedActividadesAsociadas));                
+                        }
+                        break;
+                    case "Anual":
+                        for(int i=minValue; i<=maxValue; i++){
+                            listaActividades.put(i, new ActividadAnio(i, unidadRepresentacion.getUnidadRepresentacion(),
+                                    linkedActividadesAsociadas));
+                        }                       
+                        break;
+                    default:
+                        minValue -= 2;
+                        for(int i=minValue+2; i<=maxValue; i+=2){
+                            listaActividades.put(i,  new ActividadAnio(i, unidadRepresentacion.getUnidadRepresentacion(),
+                            linkedActividadesAsociadas));
+                        }
+                        break;
+                }                                                                   
             }            
         
         }                       
@@ -712,11 +761,8 @@ public class EditarIndicadorBean implements Serializable {
                     case "ajustePDEI":
                         ajustePDEI = null;
                         break;
-                    case "unidadRepresentacion":
-                        unidadRepresentacion = null;
-                        break;
                     case "generacionDatos":
-                        generacionDatos = null;
+                        generacionDatos = new GeneracionDatos[0];
                         break;
                     case "plazo":
                         plazo = null;
@@ -726,18 +772,6 @@ public class EditarIndicadorBean implements Serializable {
                         break;
                     case "lineaBase":
                         lineaBase = null;
-                        break;
-                    case "metas":
-                        metas = null;
-                        break;
-                    case "anioCumplimiento":
-                        anioCumplimiento = null;
-                        break;
-                    case "logro":
-                        logro = null;
-                        break;
-                    case "frecuenciaMedicion":
-                        frecuenciaMedicion = null;
                         break;
                     case "medioVerificacion":
                         medioVerificacion = null;
@@ -749,7 +783,7 @@ public class EditarIndicadorBean implements Serializable {
                         fuenteInformacion = null;
                         break;
                     case "unidadProveedora":
-                        unidadProveedora = null;
+                        unidadProveedora = new UnidadProveedora[0];
                         break;
                     case "proyectoAsociado":
                         proyectoAsociado = null;
@@ -771,7 +805,7 @@ public class EditarIndicadorBean implements Serializable {
     }
 
     public void editarIndicador() throws IOException {
-        //Para que al clickear el boton "crear indicador" no se eliminen los logros y el porcentaje calculado
+        //Para que al clickear el boton "editar indicador" no se eliminen los logros y el porcentaje calculado
         mantenerLogrosNewStep = true;
         System.out.println("crear");
         if(logro == null){
@@ -780,220 +814,342 @@ public class EditarIndicadorBean implements Serializable {
                     "Se necesita configurar las activdades y logros."));                  
             return;
         }
-                
+                                                
+        short numVigencia = 0;
+        if (vigencia.equals("VIGENTE")) {
+            numVigencia = 1;
+        }
         
-//        short numVigencia = 0;
-//        if (vigencia.equals("VIGENTE")) {
-//            numVigencia = 1;
-//        }
-//
-//        FacesContext context = FacesContext.getCurrentInstance();
-//
-//        nuevoIndicador.setNumIndicador(n_indicador);
-//        nuevoIndicador.setNombreIndicador(nombreIndicador);
-//        nuevoIndicador.setEstado(numVigencia);
-//        nuevoIndicador.setDescripcionIndicador(descripcionIndicador);
-//        nuevoIndicador.setAplicaLineamiento(aplicaLineamiento);
-//        nuevoIndicador.setAplicaObjetivo(aplicaObjetivo);
-//        nuevoIndicador.setDescripcionObjetivo(descripcionObjetivo);
-//        nuevoIndicador.setVersion(version);
-//        nuevoIndicador.setLineaBase(lineaBase);
-//        nuevoIndicador.setMetas(metas);
-//        nuevoIndicador.setPorcLogro(logro);
-//        nuevoIndicador.setMedioVerificacion(medioVerificacion);
-//        nuevoIndicador.setFormaCalculo(formaCalculo);
-//        nuevoIndicador.setFuenteInformacion(fuenteInformacion);
-//        nuevoIndicador.setProyectoAsociado(proyectoAsociado);
-//        nuevoIndicador.setComentario(comentario);
-//        nuevoIndicador.setActividadComprometida(actividadComprometida);
-//        nuevoIndicador.setEstadoActividad(estadoActividad);
-//        nuevoIndicador.setFechaCreacion(new Date());
-//        nuevoIndicador.setFechaActualizacion(new Date());
-//
-//        nuevoIndicador.setAjustePdeiId(ajustePDEI);
-//        nuevoIndicador.setAnioCumplimientoId(anioCumplimiento);
-//        nuevoIndicador.setClasificacionId(clasificacionSeleccionada);
-//        nuevoIndicador.setFrecuenciaMedicionId(frecuenciaMedicion);        
-//        nuevoIndicador.setPlazoId(plazo);
-//        nuevoIndicador.setUnidadRepresentacionId(unidadRepresentacion);
-//
-//        Set<GeneracionDatos> setGeneracionDatos = new HashSet<GeneracionDatos>();      
-//        Set<UnidadProveedora> setUnidadProveedora = new HashSet<UnidadProveedora>();      
-//        
-//        Collections.addAll(setGeneracionDatos, generacionDatos);
-//        Collections.addAll(setUnidadProveedora, unidadProveedora);
-//        
-//        nuevoIndicador.setGeneracionDatosCollection(setGeneracionDatos);
-//        nuevoIndicador.setUnidadProveedoraCollection(setUnidadProveedora);
-//        
-//        Collection<IndicadorMesSemestreAnioBianual> collectionActividades = new LinkedList<IndicadorMesSemestreAnioBianual>();        
-//        IndicadorMesSemestreAnioBianual actividadIMSAB = new IndicadorMesSemestreAnioBianual();
-//                    
-//        String uRepr = unidadRepresentacion.getUnidadRepresentacion();
-//        String fm = frecuenciaMedicion.getFrecuenciaMedicion();
-//        
-//        Anio anio;
-//        BiAnual bianual;
-//        Mes mes;
-//        Semestre semestre;          
-//        int flag = 0;        
-//        
-//        if(fm.equals("Mensual") || fm.equals("Semestral")){
-//            TreeNode root;
-//            List<TreeNode> childrenPeriodo;
-//            List<TreeNode> childrenActividades;
-//            TreeNodeRow periodo;
-//            TreeNodeRow actividad;                                
-//            bianual = indicadorService.buscarBianualByAnio(0);
-//            for(int i = minValue; i <= maxValue; i++){
-//                root = listaActividadesMesSemestre.get(i).getRoot();
-//                childrenPeriodo = root.getChildren();
-//                anio = indicadorService.buscarAnioByAnio(i);
-//                for(TreeNode t: childrenPeriodo){
-//                    periodo = (TreeNodeRow) t.getData();
-//                    if(fm.equals("Mensual")){
-//                        mes = indicadorService.buscarMesByMes(periodo.getNombrePeriodo());
-//                        semestre = indicadorService.buscarSemestreBySemestre("No Aplica");
-//                        flag = 3;                                
-//                    }else{
-//                        mes = indicadorService.buscarMesByMes("No Aplica");
-//                        semestre = indicadorService.buscarSemestreBySemestre(periodo.getNombrePeriodo());
-//                        flag = 4;
-//                    }
-//                                                                                 
-//                    childrenActividades = t.getChildren();                                        
-//                    
-//                    for(TreeNode t1: childrenActividades){                        
-//                        actividadIMSAB = new IndicadorMesSemestreAnioBianual();              
-//                        actividad = (TreeNodeRow) t1.getData();
-//                                                                   
-//                        actividadIMSAB.setAnioId(anio);
-//                        actividadIMSAB.setBianualId(bianual);
-//                        actividadIMSAB.setMesId(mes);
-//                        actividadIMSAB.setSemestreId(semestre);
-//                        actividadIMSAB.setIndicadorId(nuevoIndicador);
-//
-//                        actividadIMSAB.setCantActividadesPeriodo(periodo.getNumActividades());
-//                        actividadIMSAB.setPorcActividadesPeriodo(periodo.getPorcActividad());
-//                        actividadIMSAB.setLogroPeriodo(periodo.getLogro());
-//                        actividadIMSAB.setMontoPeriodo(periodo.getMonto());
-//
-//                        actividadIMSAB.setLogroIndicador(Integer.valueOf(logro));
-//                        actividadIMSAB.setMeta(Integer.valueOf(metas));                    
-//                        actividadIMSAB.setFlag(flag);
-//                                                                        
-//                        actividadIMSAB.setMonto(actividad.getMonto());                                                  
-//                        actividadIMSAB.setNombre("Sin datos");
-//                        
-//                        if(actividad.getNombreActividad() != null){
-//                            if(!actividad.getNombreActividad().isBlank() && !actividad.getNombreActividad().isEmpty()){
-//                                actividadIMSAB.setNombre(actividad.getNombreActividad());                                              
-//                            }                
-//                        }  
-//                                                
-//                        collectionActividades.add(actividadIMSAB);                        
-//                    }
-//                    
-//                }
-//            }
-//        }else{                       
-//            ActividadAnio actividadAnio;
-//            Actividad actividad;
-//            List<Actividad> actividadesLista;
-//            mes = indicadorService.buscarMesByMes("No Aplica");
-//            semestre = indicadorService.buscarSemestreBySemestre("No Aplica");
-//            bianual = indicadorService.buscarBianualByAnio(0);
-//            
-//            if(fm.equals("Anual")){
-//                flag = 1;
-//            }else{
-//                flag = 2;
-//            }                                    
-//            
-//            for(Integer i : listaActividades.keySet()){
-//                actividadAnio = listaActividades.get(i);
-//                actividadesLista = actividadAnio.getActividades();                                
-//                anio = indicadorService.buscarAnioByAnio(i);                                                         
-//                for(Actividad a : actividadesLista){
-//                    actividadIMSAB = new IndicadorMesSemestreAnioBianual();              
-//
-//                    actividadIMSAB.setAnioId(anio);
-//                    actividadIMSAB.setBianualId(bianual);
-//                    actividadIMSAB.setMesId(mes);
-//                    actividadIMSAB.setSemestreId(semestre);
-//                    actividadIMSAB.setIndicadorId(nuevoIndicador);
-//
-//                    actividadIMSAB.setCantActividadesPeriodo(actividadAnio.getNumActividades());
-//                    actividadIMSAB.setPorcActividadesPeriodo(actividadAnio.getPorcActividades());
-//                    actividadIMSAB.setLogroPeriodo(actividadAnio.getLogro());
-//                    actividadIMSAB.setMontoPeriodo(actividadAnio.getMontoProceso());
-//
-//                    actividadIMSAB.setLogroIndicador(Integer.valueOf(logro));
-//                    actividadIMSAB.setMeta(Integer.valueOf(metas));                    
-//                    actividadIMSAB.setFlag(flag);
-//
-//                    actividadIMSAB.setMonto(a.getMontoActividad());                                                  
-//                    actividadIMSAB.setNombre("Sin datos");
-//
-//                    if(a.getNombre() != null){
-//                        if(!a.getNombre().isBlank() && !a.getNombre().isEmpty()){
-//                            actividadIMSAB.setNombre(a.getNombre());                                              
-//                        }                
-//                    }  
-//
-//                    collectionActividades.add(actividadIMSAB);                        
-//                }                
-//            }           
-//        }        
-//        
-//        nuevoIndicador.setIndicadorMesSemestreAnioBianualCollection(collectionActividades);
-//        
-//        try {
-//            indicadorService.crearIndicador(nuevoIndicador);
-//            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
-//                    "El indicador " + nombreIndicador + " ha sido agregada correctamente")
-//            );
+        Clasificacion clasificacionSeleccionadaAntiguo = indicadorCargado.getClasificacionId();
+        IndicadorTipo indicadorTipoSeleccionadoAntiguo = clasificacionSeleccionadaAntiguo.getIndicadorTipoId();
+        String n_indicadorAntiguo = indicadorCargado.getNumIndicador();
+        String nombreIndicadorAntiguo = indicadorCargado.getNombreIndicador();
+        String estadoAntiguo = (indicadorCargado.getEstado() == 1)? "VIGENTE" : "NO VIGENTE";
+        String descripcionIndicadorAntiguo = indicadorCargado.getDescripcionIndicador();
+        String aplicaLineamientoAntiguo = indicadorCargado.getAplicaLineamiento();
+        String aplicaObjetivoAntiguo = indicadorCargado.getAplicaObjetivo();
+        String descripcionObjetivoAntiguo = indicadorCargado.getDescripcionObjetivo();
+        AjustePdei ajustePDEIAntiguo = indicadorCargado.getAjustePdeiId();
+        UnidadRepresentacion unidadRepresentacionAntiguo = indicadorCargado.getUnidadRepresentacionId();
+        Collection<GeneracionDatos> cgd = indicadorCargado.getGeneracionDatosCollection();
+        GeneracionDatos[] generacionDatosAntiguo = cgd.toArray(new GeneracionDatos[cgd.size()]);
+        Plazo plazoAntiguo = indicadorCargado.getPlazoId();
+        String versionAntiguo = indicadorCargado.getVersion();
+        String lineaBaseAntiguo = indicadorCargado.getLineaBase();
+        String metasAntiguo = indicadorCargado.getMetas();
+        AnioCumplimiento anioCumplimientoAntiguo = indicadorCargado.getAnioCumplimientoId();
+        String logroAntiguo = indicadorCargado.getPorcLogro();
+        FrecuenciaMedicion frecuenciaMedicionAntiguo = indicadorCargado.getFrecuenciaMedicionId();
+        String medioVerificacionAntiguo = indicadorCargado.getMedioVerificacion();
+        String formaCalculoAntiguo = indicadorCargado.getFormaCalculo();
+        String fuenteInformacionAntiguo = indicadorCargado.getFuenteInformacion();
+        Collection<UnidadProveedora> cup = indicadorCargado.getUnidadProveedoraCollection();
+        UnidadProveedora[] unidadProveedoraAntiguo = cup.toArray(new UnidadProveedora[cup.size()]);;
+        String proyectoAsociadoAntiguo = indicadorCargado.getProyectoAsociado();
+        String comentarioAntiguo = indicadorCargado.getComentario();
+        String actividadComprometidaAntiguo = indicadorCargado.getActividadComprometida();
+        String estadoActividadAntiguo = indicadorCargado.getEstadoActividad();
+             
+        FacesContext context = FacesContext.getCurrentInstance();        
+        
+        descripcionIndicador = (descripcionIndicador == null ? "Sin dato" : descripcionIndicador);
+        aplicaLineamiento = (aplicaLineamiento == null ? "Sin dato" : aplicaLineamiento);
+        aplicaObjetivo = (aplicaObjetivo == null ? "Sin dato" : aplicaObjetivo);
+        descripcionObjetivo = (descripcionObjetivo == null ? "Sin dato" : descripcionObjetivo);
+        version = (version == null ? "Sin dato" : version);
+        lineaBase = (lineaBase == null ? "Sin dato" : lineaBase);
+        medioVerificacion = (medioVerificacion == null ? "Sin dato" : medioVerificacion);
+        formaCalculo = (formaCalculo == null ? "Sin dato" : formaCalculo);
+        fuenteInformacion = (fuenteInformacion == null ? "Sin dato" : fuenteInformacion);
+        proyectoAsociado = (proyectoAsociado == null ? "Sin dato" : proyectoAsociado);
+        comentario = (comentario == null ? "Sin dato" : comentario);
+        actividadComprometida = (actividadComprometida == null ? "Sin dato" : actividadComprometida);
+        estadoActividad = (estadoActividad == null ? "Sin dato" : estadoActividad);
+        ajustePDEI = (ajustePDEI == null ? indicadorService.buscarAjustePdeiID(3) : ajustePDEI);
+        plazo = (plazo == null ? indicadorService.buscarPlazoID(4) : plazo);        
+        
+        indicadorCargado.setNumIndicador(n_indicador);
+        indicadorCargado.setNombreIndicador(nombreIndicador);
+        indicadorCargado.setEstado(numVigencia);
+        indicadorCargado.setDescripcionIndicador(descripcionIndicador);
+        indicadorCargado.setAplicaLineamiento(aplicaLineamiento);
+        indicadorCargado.setAplicaObjetivo(aplicaObjetivo);
+        indicadorCargado.setDescripcionObjetivo(descripcionObjetivo);
+        indicadorCargado.setVersion(version);
+        indicadorCargado.setLineaBase(lineaBase);
+        indicadorCargado.setMetas(metas);
+        indicadorCargado.setPorcLogro(logro);
+        indicadorCargado.setMedioVerificacion(medioVerificacion);
+        indicadorCargado.setFormaCalculo(formaCalculo);
+        indicadorCargado.setFuenteInformacion(fuenteInformacion);
+        indicadorCargado.setProyectoAsociado(proyectoAsociado);
+        indicadorCargado.setComentario(comentario);
+        indicadorCargado.setActividadComprometida(actividadComprometida);
+        indicadorCargado.setEstadoActividad(estadoActividad);
+        indicadorCargado.setFechaActualizacion(new Date());
 
-//            try {
-//                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//                formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
-//                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha creado un registro de una nueva clasificación.<br/> "
-//                        + "<ul>"
-//                        + "<li>Nombre indicador: " + nuevoIndicador.getNombreIndicador() + ".</li>"
-//                        //+ "<li>Clasificacion asociada: " + nuevoIndicador.getClasificacionId() + ".</li>"
-//                        + "<li>Estado: " + vigencia + ".</li>"
-//                        + "<li>Descripción: " + nuevoIndicador.getDescripcionIndicador() + ".</li>"
-//                        + "<li>Fecha creación: " + formatter.format(nuevoIndicador.getFechaCreacion()) + ".</li>"
-//                        + "</ul>"
-//                        + "<br/><br/>"
-//                        + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
-//                        + "<br/><br/>"
-//                        + "<br/><br/>"
-//                        + "Saludos cordiales. <br/><br/>"
-//                        + "Sistema de Indicadores."
-//                );
-//            } catch (NotificacionCorreoException ex) {
-//
-//                context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
-//                        "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
-//                );
-//
-//                //En caso de capturar algun error se retorna un mensaje y se guarda en el log el error
-//                Logger.getLogger(CrearTipoIndicadorBean.class
-//                        .getName()).log(Level.SEVERE, "Ocurrio un error al enviar el correo.", ex);
-//            }
+        indicadorCargado.setAjustePdeiId(ajustePDEI);       
+        indicadorCargado.setPlazoId(plazo);                           
+        indicadorCargado.setAnioCumplimientoId(anioCumplimiento);
+        indicadorCargado.setClasificacionId(clasificacionSeleccionada);
+        indicadorCargado.setFrecuenciaMedicionId(frecuenciaMedicion);        
+        indicadorCargado.setUnidadRepresentacionId(unidadRepresentacion);
 
-//            context.getExternalContext().getFlash().setKeepMessages(true);
-//            context.getExternalContext()
-//                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-indicador.xhtml");
-//
-//        } catch (EJBException e) {
-//
-//            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
-//                    "El indicador " + nuevoIndicador + " ya existe en los registros")
-//            );
-//
-//        }
+        Set<GeneracionDatos> setGeneracionDatos = new HashSet<GeneracionDatos>();      
+        Set<UnidadProveedora> setUnidadProveedora = new HashSet<UnidadProveedora>();      
+        
+        Collections.addAll(setGeneracionDatos, generacionDatos);
+        Collections.addAll(setUnidadProveedora, unidadProveedora);
+        
+        indicadorCargado.setGeneracionDatosCollection(setGeneracionDatos);
+        indicadorCargado.setUnidadProveedoraCollection(setUnidadProveedora);
+        
+        LinkedList<IndicadorMesSemestreAnioBianual> collectionActividades = new LinkedList<IndicadorMesSemestreAnioBianual>();        
+        LinkedHashSet<IndicadorMesSemestreAnioBianual> collectionSet =  new LinkedHashSet<IndicadorMesSemestreAnioBianual>(indicadorCargado.getIndicadorMesSemestreAnioBianualCollection());                                                
+        LinkedList<IndicadorMesSemestreAnioBianual> collection = new LinkedList<IndicadorMesSemestreAnioBianual>(collectionSet);
+        collection.sort(Comparator.comparing(IndicadorMesSemestreAnioBianual::getId));                          
+        
+        IndicadorMesSemestreAnioBianual actividadIMSAB = new IndicadorMesSemestreAnioBianual();
+                    
+        String uRepr = unidadRepresentacion.getUnidadRepresentacion();
+        String fm = frecuenciaMedicion.getFrecuenciaMedicion();
+        
+        Anio anio;
+        BiAnual bianual;
+        Mes mes;
+        Semestre semestre;          
+        int flag = 0;        
+        
+        if(fm.equals("Mensual") || fm.equals("Semestral")){
+            TreeNode root;
+            List<TreeNode> childrenPeriodo;
+            List<TreeNode> childrenActividades;
+            TreeNodeRow periodo;
+            TreeNodeRow actividad;                                
+            bianual = indicadorService.buscarBianualByAnio(0);
+            for(int i = minValue; i <= maxValue; i++){
+                root = listaActividadesMesSemestre.get(i).getRoot();
+                childrenPeriodo = root.getChildren();
+                anio = indicadorService.buscarAnioByAnio(i);
+                for(TreeNode t: childrenPeriodo){
+                    periodo = (TreeNodeRow) t.getData();
+                    if(fm.equals("Mensual")){
+                        mes = indicadorService.buscarMesByMes(periodo.getNombrePeriodo());
+                        semestre = indicadorService.buscarSemestreBySemestre("No Aplica");
+                        flag = 3;                                
+                    }else{
+                        mes = indicadorService.buscarMesByMes("No Aplica");
+                        semestre = indicadorService.buscarSemestreBySemestre(periodo.getNombrePeriodo());
+                        flag = 4;
+                    }
+                                                                                 
+                    childrenActividades = t.getChildren();                                        
+                    
+                    for(TreeNode t1: childrenActividades){                        
+                        actividadIMSAB = new IndicadorMesSemestreAnioBianual();              
+                        actividad = (TreeNodeRow) t1.getData();
+                                                                   
+                        actividadIMSAB.setAnioId(anio);
+                        actividadIMSAB.setBianualId(bianual);
+                        actividadIMSAB.setMesId(mes);
+                        actividadIMSAB.setSemestreId(semestre);
+                        actividadIMSAB.setIndicadorId(indicadorCargado);
+
+                        actividadIMSAB.setCantActividadesPeriodo(periodo.getNumActividades());
+                        actividadIMSAB.setPorcActividadesPeriodo(periodo.getPorcActividad());
+                        actividadIMSAB.setLogroPeriodo(periodo.getLogro());
+                        actividadIMSAB.setMontoPeriodo(periodo.getMonto());
+
+                        actividadIMSAB.setLogroIndicador(Integer.valueOf(logro));
+                        actividadIMSAB.setMeta(Integer.valueOf(metas));                    
+                        actividadIMSAB.setFlag(flag);
+                                                                        
+                        actividadIMSAB.setMonto(actividad.getMonto());                                                  
+                        actividadIMSAB.setNombre("Sin datos");
+                        
+                        if(actividad.getNombreActividad() != null){
+                            if(!actividad.getNombreActividad().isBlank() && !actividad.getNombreActividad().isEmpty()){
+                                actividadIMSAB.setNombre(actividad.getNombreActividad());                                              
+                            }                
+                        }  
+                                                
+                        collectionActividades.add(actividadIMSAB);                        
+                    }
+                    
+                }
+            }                                                
+        }else{                       
+            ActividadAnio actividadAnio;
+            Actividad actividad;
+            List<Actividad> actividadesLista;
+            mes = indicadorService.buscarMesByMes("No Aplica");
+            semestre = indicadorService.buscarSemestreBySemestre("No Aplica");
+            bianual = indicadorService.buscarBianualByAnio(0);
+            
+            if(fm.equals("Anual")){
+                flag = 1;
+            }else{
+                flag = 2;
+            }                                    
+            
+            for(Integer i : listaActividades.keySet()){
+                actividadAnio = listaActividades.get(i);
+                actividadesLista = actividadAnio.getActividades();                                
+                anio = indicadorService.buscarAnioByAnio(i);                                                         
+                for(Actividad a : actividadesLista){
+                    actividadIMSAB = new IndicadorMesSemestreAnioBianual();              
+
+                    actividadIMSAB.setAnioId(anio);
+                    actividadIMSAB.setBianualId(bianual);
+                    actividadIMSAB.setMesId(mes);
+                    actividadIMSAB.setSemestreId(semestre);
+                    actividadIMSAB.setIndicadorId(indicadorCargado);
+
+                    actividadIMSAB.setCantActividadesPeriodo(actividadAnio.getNumActividades());
+                    actividadIMSAB.setPorcActividadesPeriodo(actividadAnio.getPorcActividades());
+                    actividadIMSAB.setLogroPeriodo(actividadAnio.getLogro());
+                    actividadIMSAB.setMontoPeriodo(actividadAnio.getMontoProceso());
+
+                    actividadIMSAB.setLogroIndicador(Integer.valueOf(logro));
+                    actividadIMSAB.setMeta(Integer.valueOf(metas));                    
+                    actividadIMSAB.setFlag(flag);
+
+                    actividadIMSAB.setMonto(a.getMontoActividad());                                                  
+                    actividadIMSAB.setNombre("Sin datos");
+
+                    if(a.getNombre() != null){
+                        if(!a.getNombre().isBlank() && !a.getNombre().isEmpty()){
+                            actividadIMSAB.setNombre(a.getNombre());                                              
+                        }                
+                    }  
+
+                    collectionActividades.add(actividadIMSAB);                        
+                }                
+            }           
+        }        
+        
+        int diferencia = collection.size() - collectionActividades.size();
+
+        System.out.println("Antes: " + collection.size());
+        System.out.println("Antes: " + collectionActividades.size());
+        
+        if(diferencia > 0){
+            for(int i=0; i < diferencia; i++){
+                indicadorService.removerActividad(collection.get(collection.size() - 1).getId());
+                collection.remove(collection.size() - 1);
+            }
+        }        
+        
+        System.out.println("Despues: " + collection.size());
+        System.out.println("Despues: " + collectionActividades.size());
+              
+        for(int i = 0; i < collectionActividades.size(); i++){
+        
+            try{
+                collection.get(i).setAnioId(collectionActividades.get(i).getAnioId());
+                collection.get(i).setBianualId(collectionActividades.get(i).getBianualId());
+                collection.get(i).setMesId(collectionActividades.get(i).getMesId());
+                collection.get(i).setSemestreId(collectionActividades.get(i).getSemestreId());
+                collection.get(i).setIndicadorId(collectionActividades.get(i).getIndicadorId());
+
+                collection.get(i).setCantActividadesPeriodo(collectionActividades.get(i).getCantActividadesPeriodo());
+                collection.get(i).setPorcActividadesPeriodo(collectionActividades.get(i).getPorcActividadesPeriodo());
+                collection.get(i).setLogroPeriodo(collectionActividades.get(i).getLogroPeriodo());
+                collection.get(i).setMontoPeriodo(collectionActividades.get(i).getMontoPeriodo());
+
+                collection.get(i).setLogroIndicador(Integer.valueOf(logro));
+                collection.get(i).setMeta(Integer.valueOf(metas));                    
+                collection.get(i).setFlag(collectionActividades.get(i).getFlag());
+
+                collection.get(i).setMonto(collectionActividades.get(i).getMonto());                                                  
+                collection.get(i).setNombre("Sin datos");
+
+                if(collectionActividades.get(i).getNombre() != null){
+                    if(!collectionActividades.get(i).getNombre().isBlank() && !collectionActividades.get(i).getNombre().isEmpty()){
+                        collection.get(i).setNombre(collectionActividades.get(i).getNombre());                                              
+                    }                
+                }          
+            }catch(Exception e){
+                collection.add(collectionActividades.get(i));
+            }
+            
+        }
+                                           
+        indicadorCargado.setIndicadorMesSemestreAnioBianualCollection(collection);
+        
+        try {
+            indicadorService.actualizarIndicador(indicadorCargado);            
+                                
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN",
+                    "El indicador " + nombreIndicador + " ha sido editado correctamente")
+            );
+
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
+                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha actualizado un indicador.<br/> "
+                        + "<ul>"
+                        + "<li>Tipo indicador: " + indicadorTipoSeleccionadoAntiguo.getNombre() + " ---> " + indicadorTipoSeleccionado.getNombre() + ".</li>"
+                        + "<li>Clasificación: " + clasificacionSeleccionadaAntiguo.getNombre() + " ---> " + clasificacionSeleccionada.getNombre() + ".</li>"
+                        + "<li>N° indicador: " + n_indicadorAntiguo + " ---> " + n_indicador + ".</li>"
+                        + "<li>Nombre indicador: " + nombreIndicadorAntiguo + " ---> " + nombreIndicador + ".</li>"
+                        + "<li>Estado: " + estadoAntiguo + " ---> " + vigencia + ".</li>"
+                        + "<li>Descripción indicador: " + descripcionIndicadorAntiguo + " ---> " + descripcionIndicador + ".</li>"
+                        + "<li>Aplica lineamiento: " + aplicaLineamientoAntiguo + " ---> " + aplicaLineamiento + ".</li>"
+                        + "<li>Aplica objetivo: " + aplicaObjetivoAntiguo + " ---> " + aplicaObjetivo + ".</li>"
+                        + "<li>Descripción objetivo: " + descripcionObjetivoAntiguo + " ---> " + descripcionObjetivo + ".</li>"
+                        + "<li>AjustePDEI: " + ajustePDEIAntiguo.getAjustePdei() + " ---> " + ajustePDEI.getAjustePdei() + ".</li>"
+                        + "<li>Unidad representación: " + unidadRepresentacionAntiguo.getUnidadRepresentacion() + " ---> " + unidadRepresentacion.getUnidadRepresentacion() + ".</li>"
+                        + "<li>Plazo: " + plazoAntiguo.getPlazo() + " ---> " + plazo.getPlazo() + ".</li>"
+                        + "<li>Versión: " + versionAntiguo + " ---> " + version + ".</li>"
+                        + "<li>Línea base: " + lineaBaseAntiguo + " ---> " + lineaBase + ".</li>"
+                        + "<li>Metas: " + (unidadRepresentacionAntiguo.getUnidadRepresentacion().equals("Peso ($)")? "$" + metasAntiguo : metasAntiguo) + " ---> " + (unidadRepresentacion.getUnidadRepresentacion().equals("Peso ($)")? "$" + metas : metas) + ".</li>"
+                        + "<li>Año cumplimiento: " + anioCumplimientoAntiguo.getAnioCumplimiento() + " ---> " + anioCumplimiento.getAnioCumplimiento() + ".</li>"
+                        + "<li>Logro: " + logroAntiguo + "%" + " ---> " + logro + "%" + ".</li>"
+                        + "<li>Frecuencia Medición: " + frecuenciaMedicionAntiguo.getFrecuenciaMedicion() + " ---> " + frecuenciaMedicion.getFrecuenciaMedicion() + ".</li>"
+                        + "<li>Medio verificación: " + medioVerificacionAntiguo + " ---> " + medioVerificacion + ".</li>"
+                        + "<li>Forma cálculo: " + formaCalculoAntiguo + " ---> " + formaCalculo + ".</li>"
+                        + "<li>Fuente información: " + fuenteInformacionAntiguo + " ---> " + fuenteInformacion + ".</li>"
+                        + "<li>Proyecto asociado: " + proyectoAsociadoAntiguo + " ---> " + proyectoAsociado + ".</li>"
+                        + "<li>Comentario: " + comentarioAntiguo + " ---> " + comentario + ".</li>"
+                        + "<li>Actividad comprometida: " + actividadComprometidaAntiguo + " ---> " + actividadComprometida + ".</li>"
+                        + "<li>Estado actividad: " + estadoActividadAntiguo + " ---> " + estadoActividad + ".</li>"
+                        + "<li>Fecha creación: " + formatter.format(indicadorCargado.getFechaCreacion()) + ".</li>"                                
+                        + "<li>Fecha creación: " + formatter.format(indicadorCargado.getFechaActualizacion()) + ".</li>"                                
+                        + "</ul>"
+                        + mensajeListaGD(generacionDatosAntiguo, "Generación de datos antigua: ")
+                        + mensajeListaGD(generacionDatos, "Generación de datos nueva: ")
+                        + mensajeListaUP(unidadProveedoraAntiguo, "Unidades proveedoras antiguas: ")
+                        + mensajeListaUP(unidadProveedora, "Unidades proveedoras nueva: ")
+                        + "<br/><br/>"
+                        + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
+                        + "<br/><br/>"
+                        + "<br/><br/>"
+                        + "Saludos cordiales. <br/><br/>"
+                        + "Sistema de Indicadores."
+                );
+            } catch (NotificacionCorreoException ex) {
+
+                context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
+                        "Ocurrio un error al enviar el correo. Contacte al administrador mediante el correo SOPORTE.DVCME@uantof.cl.")
+                );
+
+                //En caso de capturar algun error se retorna un mensaje y se guarda en el log el error
+                Logger.getLogger(CrearTipoIndicadorBean.class
+                        .getName()).log(Level.SEVERE, "Ocurrio un error al enviar el correo.", ex);
+            }
+
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            context.getExternalContext()
+                    .redirect(context.getExternalContext().getRequestContextPath() + "/faces/administracion/admin-indicador.xhtml");
+
+        } catch (EJBException e) {
+
+            context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN",
+                    "El indicador " + nombreIndicador + " ya existe en los registros")
+            );
+
+        }
     }
 
     public String flujoProceso(FlowEvent event) {
@@ -1007,6 +1163,26 @@ public class EditarIndicadorBean implements Serializable {
         } else {
             return event.getNewStep();
         }
+    }
+    
+    private String mensajeListaGD(GeneracionDatos[] lista, String nombre){
+        String mensaje = nombre;
+        mensaje += "<ul>";
+        for(int i = 0; i < lista.length; i++){
+            mensaje += "<li>" + lista[i].getGeneracionDatos() + "</li>";
+        }
+        mensaje += "</ul><br/>";                       
+        return mensaje;
+    }    
+    
+    private String mensajeListaUP(UnidadProveedora[] lista, String nombre){
+        String mensaje = nombre;
+        mensaje += "<ul>";
+        for(int i = 0; i < lista.length; i++){
+            mensaje += "<li>" + lista[i].getUnidadProveedora() + "</li>";
+        }
+        mensaje += "</ul><br/>";                       
+        return mensaje;
     }
 
     public ClasificacionService getClasificacionService() {

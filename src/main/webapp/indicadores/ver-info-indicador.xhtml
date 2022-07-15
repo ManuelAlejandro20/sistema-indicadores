@@ -132,6 +132,95 @@
                 </div>       
             </div>
             <div class="ui-g-12 ui-md-2"></div>
-        </div>             
+        </div>         
+        <div rendered="#{verIndicadorBean.indicadorSeleccionado ne null}" class="ui-g-12 align-center">
+            <div class="ui-g-12 ui-md-2"></div>
+            <div class="ui-g-12 ui-md-8 ui-g-nopad">
+                <h2>Inicio de evaluación: #{verIndicadorBean.inicioEvaluacion}</h2>
+                <h2>Término de evaluación: #{verIndicadorBean.terminoEvaluacion}</h2>
+                <p:accordionPanel id="panelAnios" widgetVar="panelAnios" value="#{verIndicadorBean.indicadorSeleccionado.frecuenciaMedicionId.frecuenciaMedicion eq 'Mensual' 
+                                                                                  or
+                                                                                  verIndicadorBean.indicadorSeleccionado.frecuenciaMedicionId.frecuenciaMedicion eq 'Semestral'?
+                                                                                  verIndicadorBean.listaActividadesMesSemestre.entrySet().toArray()
+                                                                                  :  
+                                                                                  verIndicadorBean.listaActividades.entrySet().toArray()}" var="item">
+                    <p:tab title="#{item.key}">        
+                        <!--Este treetable se desplegara solo si se trata de una frecuencia de medicion mensual o semestral-->
+                        <p:treeTable rendered="#{item.value.class.simpleName eq 'TreeNodeMesSemestre'}" id="treeTable" value="#{item.value.root}" var="item_2">                                                                                                                
+                            <!--Columna 1-->
+                            <p:column headerText="" style="padding-left: 0px;">
+                                <h:outputText value="#{item_2.nombrePeriodo}"/>
+                                <h:inputHidden id="parentNodeString" value="#{item_2.nombrePadre}"/>
+                            </p:column>
+                            <!--Columna 2-->
+                            <!--Columna que se renderiza si se escoge numero de actividades o peso como u de representacion-->
+                            <p:column rendered="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Número Actividades'
+                                                    or
+                                                  verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Peso ($)'}" headerText="Actividades" styleClass="align-center">
+                                <h:outputText rendered="#{item_2.nombrePadre eq null}" value="#{item_2.numActividades}"/>
+                                <h:outputText rendered="#{item_2.nombrePadre ne null}" value="#{item_2.nombreActividad}"/>                           
+                            </p:column>
+                            <!--Columna que se renderiza si se escoge porcentaje-->                            
+                            <p:column rendered="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Porcentaje (%)'}" headerText="Actividades" styleClass="align-center">
+                                <h:outputText rendered="#{item_2.nombrePadre eq null}" value="#{item_2.porcActividad}%"/>
+                                <h:outputText rendered="#{item_2.nombrePadre ne null}" value="#{item_2.nombreActividad}"/>                               
+                            </p:column>                           
+                            <!--Columna 3-->
+                            <!--Columna que se renderiza en caso de haber escogido numero de actividades como u de representacion-->
+                            <p:column rendered="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Número Actividades'
+                                                    or
+                                                  verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Porcentaje (%)'}" headerText="% Logro" width="40" styleClass="align-center">
+                                <h:outputText rendered="#{item_2.nombrePadre eq null}" value="#{item_2.logro}%"/>
+                                <h:outputText rendered="#{item_2.nombrePadre ne null}" value=""/>
+                            </p:column>       
+                            <!--Columna que se renderiza en caso de haber escogido peso como u de representacion-->
+                            <p:column rendered="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Peso ($)'}" headerText="Logro" styleClass="align-center">                        
+                                <h:outputText value="$#{item_2.monto}"/>                                                                                                                                    
+                            </p:column>                             
+                        </p:treeTable>       
+                        <!--Este datatable se desplegara solo si se trata de una frecuencia de medicion anual o bianual-->
+                        <p:dataTable rendered="#{item.value.class.simpleName eq 'ActividadAnio'}" 
+                                     var="item_3" 
+                                     value="#{item.value.actividades}" 
+                                     id="dataAnios">
+                            
+                            <f:facet name="header">                  
+                                <p:panelGrid rendered="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Número Actividades'}" 
+                                             layout="grid" columns="2" 
+                                             styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">                                                                                                                   
+                                    <h:outputText class="texto-ver-centrado" value="Logro: #{item.value.logro}%"/>
+                                    <h:outputText class="texto-ver-centrado" value="Número de actividades: #{item.value.numActividades}"/>                              
+                                </p:panelGrid>       
+                                <p:panelGrid rendered="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Peso ($)'}" 
+                                             layout="grid" columns="2" 
+                                             styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">                                                                                                                   
+                                    <h:outputText class="texto-ver-centrado" value="Monto: $#{item.value.montoProceso}"/>
+                                    <h:outputText class="texto-ver-centrado" value="Número de actividades: #{item.value.numActividades}"/>                              
+                                </p:panelGrid>   
+                                <p:panelGrid rendered="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Porcentaje (%)'}" 
+                                             layout="grid" columns="2" 
+                                             styleClass="ui-noborder panelgrid-lefttext ui-panelgrid-blank ui-fluid">    
+                                    <h:outputText class="texto-ver-centrado" value="Logro: #{item.value.logro}%"/>
+                                    <h:outputText class="texto-ver-centrado" value="Porcentaje de actividades: #{item.value.porcActividades}%"/>                               
+                                </p:panelGrid>                                   
+                            </f:facet>                             
+                            
+                            <p:column rendered="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Número Actividades'
+                                                    or
+                                                  verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Porcentaje (%)'}">
+                                <h:outputText value="#{item.value.actividades.indexOf(item_3) + 1}"/>
+                            </p:column> 
+                            <p:column headerText="Montos" rendered="#{verIndicadorBean.indicadorSeleccionado.unidadRepresentacionId.unidadRepresentacion eq 'Peso ($)'}">
+                                <h:outputText value="$#{item_3.montoActividad}"/>
+                            </p:column>                                 
+                            <p:column headerText="Actividades">
+                                <h:outputText value="#{item_3.nombre}"/>
+                            </p:column>
+                        </p:dataTable>                        
+                    </p:tab>  
+                </p:accordionPanel>    
+            </div>
+            <div class="ui-g-12 ui-md-2"></div>
+        </div>          
     </ui:define>
 </ui:composition>

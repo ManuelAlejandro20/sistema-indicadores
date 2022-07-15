@@ -87,77 +87,62 @@ public class Indicador implements Serializable {
     @Column(name = "estado")
     private Short estado;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "descripcion_indicador")
     private String descripcionIndicador;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "aplica_lineamiento")
     private String aplicaLineamiento;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "aplica_objetivo")
     private String aplicaObjetivo;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "descripcion_objetivo")
     private String descripcionObjetivo;
-    @Basic(optional = false)
-    @NotNull
+    @Basic(optional = false)    
     @Size(min = 1, max = 255)
     @Column(name = "version")
     private String version;
-    @Basic(optional = false)
-    @NotNull
+    @Basic(optional = false)    
     @Size(min = 1, max = 255)
     @Column(name = "linea_base")
     private String lineaBase;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "metas")
     private String metas;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "porc_logro")
     private String porcLogro;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "medio_verificacion")
     private String medioVerificacion;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "forma_calculo")
     private String formaCalculo;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "fuente_informacion")
     private String fuenteInformacion;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "proyecto_asociado")
     private String proyectoAsociado;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "comentario")
     private String comentario;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "actividad_comprometida")
     private String actividadComprometida;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "estado_actividad")
     private String estadoActividad;
@@ -204,7 +189,7 @@ public class Indicador implements Serializable {
     @JoinColumn(name = "unidad_representacion_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private UnidadRepresentacion unidadRepresentacionId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "indicadorId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "indicadorId", fetch = FetchType.EAGER, orphanRemoval=true)
     private Collection<IndicadorMesSemestreAnioBianual> indicadorMesSemestreAnioBianualCollection;
 
     public Indicador() {

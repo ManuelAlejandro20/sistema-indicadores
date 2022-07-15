@@ -5,6 +5,8 @@
  */
 package com.ua.sistemaindicadores.frontend.classes;
 
+import com.ua.sistemaindicadores.backend.entities.IndicadorMesSemestreAnioBianual;
+import java.util.LinkedList;
 import java.util.List;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -44,6 +46,45 @@ public class TreeNodeMesSemestre {
             primeraFila = new DefaultTreeNode(primeraActividad, key);              
         }                       
     }
+    
+    public TreeNodeMesSemestre(Integer anio, List<String> keys, String uRepr, 
+            LinkedList<IndicadorMesSemestreAnioBianual> actividadesAsociadas) {  
+        this.root = new DefaultTreeNode("Root Node", null);
+        
+        TreeNode key;
+        TreeNode fila;        
+        TreeNodeRow periodo;
+        TreeNodeRow actividad;
+        
+        for(String s: keys){
+            periodo = new TreeNodeRow(s);
+            key = new DefaultTreeNode(periodo, this.root);
+            for(IndicadorMesSemestreAnioBianual i : actividadesAsociadas){  
+                if(anio == i.getAnioId().getAnio()){                    
+                    if(s.equals(i.getMesId().getMes()) || s.equals(i.getSemestreId().getSemestre())){
+                        actividad = new TreeNodeRow(i.getNombre().equals("Sin datos")? "" : i.getNombre(), s);
+                        switch(uRepr){
+                            case "Peso ($)":        
+                                periodo.setNumActividades(i.getCantActividadesPeriodo());
+                                periodo.setMonto(i.getMontoPeriodo());
+                                actividad.setMonto(i.getMonto());
+                                break;                
+                            case "Porcentaje (%)":
+                                periodo.setPorcActividad(i.getPorcActividadesPeriodo());                    
+                                periodo.setLogro(i.getLogroPeriodo());
+                                break;
+                            default:        
+                                periodo.setNumActividades(i.getCantActividadesPeriodo());
+                                periodo.setLogro(i.getLogroPeriodo());                  
+                                break;
+                        }                                                     
+                        fila = new DefaultTreeNode(actividad, key);                           
+
+                    }                                                
+                }
+            }
+        }                   
+    }    
     
     public TreeNode getRoot() {
         return root;

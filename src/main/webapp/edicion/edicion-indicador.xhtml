@@ -193,8 +193,7 @@
                                         id="unidadRepresentacion"                            
                                         value="#{editarIndicadorBean.unidadRepresentacion}"
                                         requiredMessage="Campo unidad de representación es requerido."
-                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="true"
                                         var="uRepr"
                                         converter="unidadRepresentacionConverter" 
                                         styleClass="manymenu-advanced"> 
@@ -286,9 +285,8 @@
                                     <p:outputLabel class="texto-ver-centrado" id="metasLabel" value="Metas: *"/>
                                     <p:inputNumber id="metas"
                                                    value="#{editarIndicadorBean.metas}"
-                                                   required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"                                                   
+                                                   required="true"                                                   
                                                    requiredMessage="Campo metas es requerido."
-                                                   disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                                    symbol="#{editarIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'? '$' : ''}"
                                                    thousandSeparator="."
                                                    minValue="0"
@@ -304,8 +302,7 @@
                                         id="anioCumplimiento"
                                         value="#{editarIndicadorBean.anioCumplimiento}"
                                         requiredMessage="Campo año de cumplimiento es requerido."
-                                        required="#{!editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        disabled="#{editarIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="true"
                                         var="anioCum"
                                         converter="anioCumplimientoConverter"
                                         filter="true" 
@@ -428,7 +425,7 @@
                                     <p:message for="estadoActividadLabel"/>                                     
                                     <p:message for="estadoActividad"/>
                                 </p:panelGrid>
-                            </p:tab>                                  
+                            </p:tab>                             
                             <p:tab id="pag3" title="3">
                                 <p:panelGrid class="crear-tipo-indicadores-table" 
                                              layout="grid"
@@ -491,14 +488,14 @@
                                          
                                          
                                                                              
-<!--                                    <p:commandButton widgetVar="editarButton" 
+                                    <p:commandButton widgetVar="editarButton" 
                                                      value="Editar indicador"   
                                                      class="ui-button-formulario"     
                                                      action="#{editarIndicadorBean.editarIndicador}"   
                                                      onclick="PF('editarButton').disable()"
                                                      disabled="#{editarIndicadorBean.disabled}"                                                     
                                                      update="@form" 
-                                                     process="@this, @form"/>                                                                                                         -->
+                                                     process="@this, @form"/>                                                                                                         
                                 </p:panelGrid>
                             </p:tab>                        
                         </p:wizard> 
@@ -699,6 +696,7 @@
                     </p:tab>  
                 </p:accordionPanel>
                 <f:facet name="footer">
+                    <p:commandButton style="visibility: hidden;" process="@this"/>   
                     <p:commandButton id="guardarLogros"                                                     
                         widgetVar="guardarLogrosButton"
                         class="ui-button-formulario"                                                   

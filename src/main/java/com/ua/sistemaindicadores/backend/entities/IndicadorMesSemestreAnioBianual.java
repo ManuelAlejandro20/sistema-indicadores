@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -40,6 +42,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findByLogroIndicador", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.logroIndicador = :logroIndicador"),
     @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findByMeta", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.meta = :meta"),
     @NamedQuery(name = "IndicadorMesSemestreAnioBianual.findByFlag", query = "SELECT i FROM IndicadorMesSemestreAnioBianual i WHERE i.flag = :flag")})
+@NamedNativeQueries({
+    @NamedNativeQuery(name = "IndicadorMesSemestreAnioBianual.deleteActividad", query = "DELETE FROM indicadores.indicador_mes_semestre_anio_bianual i WHERE i.id=:id", resultClass=IndicadorMesSemestreAnioBianual.class)})
 public class IndicadorMesSemestreAnioBianual implements Serializable {
 
     private static final long serialVersionUID = 1L;

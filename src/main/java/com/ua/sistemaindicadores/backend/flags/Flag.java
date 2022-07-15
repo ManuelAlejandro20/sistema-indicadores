@@ -23,15 +23,10 @@ public class Flag {
         hiddenFlags.put("aplicaObjetivo", false);
         hiddenFlags.put("descripcionObjetivo", false);
         hiddenFlags.put("ajustePDEI", false);
-        hiddenFlags.put("unidadRepresentacion", false);
         hiddenFlags.put("generacionDatos", false);
         hiddenFlags.put("plazo", false);
         hiddenFlags.put("version", false);
         hiddenFlags.put("lineaBase", false);
-        hiddenFlags.put("metas", false);
-        hiddenFlags.put("anioCumplimiento", false);
-        hiddenFlags.put("logro", false);
-        hiddenFlags.put("frecuenciaMedicion", false);
         hiddenFlags.put("medioVerificacion", false);
         hiddenFlags.put("formaCalculo", false);
         hiddenFlags.put("fuenteInformacion", false);

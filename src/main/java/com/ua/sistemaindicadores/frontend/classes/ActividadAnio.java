@@ -5,6 +5,7 @@
  */
 package com.ua.sistemaindicadores.frontend.classes;
 
+import com.ua.sistemaindicadores.backend.entities.IndicadorMesSemestreAnioBianual;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +45,37 @@ public class ActividadAnio {
         this.actividades = new LinkedList<Actividad>();
         this.actividades.add(actividad);        
     }    
+    
+    public ActividadAnio(Integer anio, String uRepr, 
+            LinkedList<IndicadorMesSemestreAnioBianual> actividadesAsociadas) {
+        Actividad actividad;
+        
+        this.actividades = new LinkedList<Actividad>();
+        this.anio = anio;                
+        
+        for(IndicadorMesSemestreAnioBianual i : actividadesAsociadas){
+            if(anio == i.getAnioId().getAnio()){
+                if(uRepr.equals("Número Actividades")){
+                    this.logro = i.getLogroPeriodo();
+                    this.numActividades = i.getCantActividadesPeriodo();
+                    actividad = new Actividad(i.getNombre().equals("Sin datos")? "" : i.getNombre());
+                }
+                else if(uRepr.equals("Peso ($)")){
+                    this.montoProceso = i.getMontoPeriodo();
+                    this.numActividades = i.getCantActividadesPeriodo();
+                    actividad = new Actividad(i.getNombre().equals("Sin datos")? "" : i.getNombre(), 
+                            i.getMonto());
+                }else{
+                    this.porcActividades = i.getPorcActividadesPeriodo();
+                    this.logro = i.getLogroPeriodo();
+                    actividad = new Actividad(i.getNombre().equals("Sin datos")? "" : i.getNombre());
+                }        
+                
+                this.actividades.add(actividad);                           
+            }         
+        }
+            
+    }        
     
     public Integer getNumActividades() {
         return numActividades;

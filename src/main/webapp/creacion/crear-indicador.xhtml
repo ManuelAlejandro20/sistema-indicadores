@@ -192,8 +192,7 @@
                                         id="unidadRepresentacion"                            
                                         value="#{crearIndicadorBean.unidadRepresentacion}"
                                         requiredMessage="Campo unidad de representación es requerido."
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="true"
                                         var="uRepr"
                                         converter="unidadRepresentacionConverter" 
                                         styleClass="manymenu-advanced"> 
@@ -285,9 +284,8 @@
                                     <p:outputLabel class="texto-ver-centrado" id="metasLabel" value="Metas: *"/>
                                     <p:inputNumber id="metas"
                                                    value="#{crearIndicadorBean.metas}"
-                                                   required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"                                                   
+                                                   required="true"                                                   
                                                    requiredMessage="Campo metas es requerido."
-                                                   disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
                                                    symbol="#{crearIndicadorBean.unidadRepresentacion.unidadRepresentacion eq 'Peso ($)'? '$' : ''}"
                                                    thousandSeparator="."
                                                    minValue="0"
@@ -303,8 +301,7 @@
                                         id="anioCumplimiento"
                                         value="#{crearIndicadorBean.anioCumplimiento}"
                                         requiredMessage="Campo año de cumplimiento es requerido."
-                                        required="#{!crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
-                                        disabled="#{crearIndicadorBean.flagsTipoIndicador.getInputFlag(component.id)}"
+                                        required="true"
                                         var="anioCum"
                                         converter="anioCumplimientoConverter"
                                         filter="true" 
@@ -698,6 +695,7 @@
                     </p:tab>  
                 </p:accordionPanel>
                 <f:facet name="footer">
+                    <p:commandButton style="visibility: hidden;" process="@this"/> 
                     <p:commandButton id="guardarLogros"                                                     
                         widgetVar="guardarLogrosButton"
                         class="ui-button-formulario"                                                   

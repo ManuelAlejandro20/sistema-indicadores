@@ -21,12 +21,14 @@ import com.ua.sistemaindicadores.backend.entities.AnioCumplimiento;
 import com.ua.sistemaindicadores.backend.daos.PlazoDAO;
 import com.ua.sistemaindicadores.backend.entities.Plazo;
 import com.ua.sistemaindicadores.backend.daos.FrecuenciaMedicionDAO;
+import com.ua.sistemaindicadores.backend.daos.IndicadorMesSemestreAnioBianualDAO;
 import com.ua.sistemaindicadores.backend.daos.MesDAO;
 import com.ua.sistemaindicadores.backend.daos.SemestreDAO;
 import com.ua.sistemaindicadores.backend.entities.FrecuenciaMedicion;
 import com.ua.sistemaindicadores.backend.daos.UnidadRepresentacionDAO;
 import com.ua.sistemaindicadores.backend.entities.Anio;
 import com.ua.sistemaindicadores.backend.entities.BiAnual;
+import com.ua.sistemaindicadores.backend.entities.IndicadorMesSemestreAnioBianual;
 import com.ua.sistemaindicadores.backend.entities.Mes;
 import com.ua.sistemaindicadores.backend.entities.Semestre;
 import com.ua.sistemaindicadores.backend.entities.UnidadRepresentacion;
@@ -62,6 +64,8 @@ public class IndicadorService {
     private FrecuenciaMedicionDAO frecuenciaMedicionDAO;
     @Inject
     private UnidadRepresentacionDAO unidadRepresentacionDAO;    
+    @Inject
+    private IndicadorMesSemestreAnioBianualDAO actividadDAO;    
     
     @Inject
     private AnioDAO anioDAO;        
@@ -218,12 +222,11 @@ public class IndicadorService {
     @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<Semestre> obtenerSemestre() {
         return semestreDAO.obtenerSemestre();
+    } 
+    
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public void removerActividad(Integer id) {
+        actividadDAO.removeActividad(id);
     }    
-    
-    
-    
-    
-    
-    
-    
+             
 }
