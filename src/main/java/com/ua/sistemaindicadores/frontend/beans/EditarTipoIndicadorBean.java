@@ -6,10 +6,12 @@
 package com.ua.sistemaindicadores.frontend.beans;
 
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
+import com.ua.sistemaindicadores.backend.entities.Indicador;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.exceptions.NotificacionCorreoException;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
 import com.ua.sistemaindicadores.backend.services.CorreoService;
+import com.ua.sistemaindicadores.backend.services.IndicadorService;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
 import java.io.IOException;
 import javax.inject.Named;
@@ -20,6 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;  
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -45,6 +50,8 @@ public class EditarTipoIndicadorBean implements Serializable {
     transient private TipoIndicadorService tipoIndicadorService;
     @Inject
     transient private ClasificacionService clasificacionService;    
+    @Inject
+    transient private IndicadorService indicadorService;    
     @Inject
     transient private CorreoService correoService;  
     
@@ -128,12 +135,16 @@ public class EditarTipoIndicadorBean implements Serializable {
                 );
 
                 String mensaje = "";
+                String mensajeIndicadores = "";
                 
                 //Si el tipo de indicador tiene clasificaciones asociadas y si se hace un cambio de vigencia...
-                if(it.getClasificacionCollection().size() != 0){
-                    ArrayList<String> clasificacionesAfectadas = actualizarClasificaciones(vigenciaAntiguaSh, numVigencia);
-                    if(clasificacionesAfectadas.size() != 0){
-                        mensaje = mensajeClasificacionesAfectadas(clasificacionesAfectadas, it.getNombre(), numVigencia);
+                if(!it.getClasificacionCollection().isEmpty()){
+                    HashMap<String, ArrayList<String>> afectados = actualizarClasificaciones(vigenciaAntiguaSh, numVigencia);                    
+                    if(!afectados.get("clas").isEmpty()){
+                        mensaje = mensajeClasificacionesAfectadas(afectados.get("clas"), it.getNombre(), numVigencia);
+                    }
+                    if(!afectados.get("indicadores").isEmpty()){
+                        mensajeIndicadores = mensajeIndicadoresAfectados(afectados.get("indicadores"), numVigencia);
                     }
                 }
                                                                
@@ -150,12 +161,13 @@ public class EditarTipoIndicadorBean implements Serializable {
                             + "</ul>"
                             + "<br/>"
                             + mensaje
+                            + mensajeIndicadores
                             + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
                             + "<br/>"                                
                             + "<br/>"
                             + "Saludos cordiales. <br/><br/>"
                             + "Sistema de Indicadores."
-                    );   
+                    );    
                 } catch (NotificacionCorreoException ex) {
 
                     context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_WARN, "ATENCIÓN", 
@@ -184,11 +196,27 @@ public class EditarTipoIndicadorBean implements Serializable {
         }
     }    
     
-    private ArrayList<String> actualizarClasificaciones(Short vigenciaAntiguaSh, Short numVigencia){
+    private HashMap<String, ArrayList<String>> actualizarClasificaciones(Short vigenciaAntiguaSh, Short numVigencia){
+        HashMap<String, ArrayList<String>> afectados = new HashMap<String, ArrayList<String>>();
         ArrayList<String> clasificacionesAfectadas = new ArrayList<String>();
+        ArrayList<String> indicadoresAfectados = new ArrayList<String>();
         Collection<Clasificacion> clasificaciones = it.getClasificacionCollection();
+        List<Indicador> indicadores = indicadorService.obtenerIndicadores();
         for(Clasificacion c : clasificaciones){
             c.setTipo(it.getNombre());
+            for(Indicador i : indicadores){
+                
+                //Se le esta intentando cambiar la vigencia al tipo de indicador por lo tanto seria un indicador
+                //afectado
+                if(vigenciaAntiguaSh != numVigencia){
+                    if(i.getClasificacionId().getId() == c.getId()){
+                        i.setEstado(numVigencia);
+                        indicadoresAfectados.add(i.getNombreIndicador());
+                        indicadorService.actualizarIndicador(i);
+                    }                                                            
+                }                                 
+                                           
+            }            
             
             //Se le esta intentando cambiar la vigencia al tipo de indicador por lo tanto seria una clas
             //afectada
@@ -199,7 +227,11 @@ public class EditarTipoIndicadorBean implements Serializable {
             
             clasificacionService.actualizarClasificacion(c);
         }
-        return clasificacionesAfectadas;
+        
+        afectados.put("clas", clasificacionesAfectadas);
+        afectados.put("indicadores", indicadoresAfectados);
+        
+        return afectados;
     }
     
     private String mensajeClasificacionesAfectadas(ArrayList<String> clasificacionesAfectadas, String tipoIndicador, Short numVigencia){        
@@ -216,6 +248,22 @@ public class EditarTipoIndicadorBean implements Serializable {
         mensaje += "</ul><br/>";
         return mensaje;
     }
+    
+    private String mensajeIndicadoresAfectados(ArrayList<String> indicadoresAfectados, Short numVigencia){        
+        String mensaje = "Los siguientes indicadores tambien cambiaron su estado a ";
+        if(numVigencia == 1){
+            mensaje += " VIGENTE:";
+        }else{
+            mensaje += " NO VIGENTE:";
+        }
+        mensaje += "<ul>";
+        for(String s : indicadoresAfectados){
+            mensaje += "<li>" + s + "</li>";
+        }
+        mensaje += "</ul><br/>";
+        return mensaje;
+    }     
+    
     
     public String getNombreTipoIndicador() {
         return nombreTipoIndicador;

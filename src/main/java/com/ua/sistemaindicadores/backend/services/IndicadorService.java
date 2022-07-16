@@ -100,6 +100,11 @@ public class IndicadorService {
     public IndicadorDTO obtenerIndicadorDTO(Integer indicadorId) {
         return indicadorDAO.obtenerIndicadorDTO(indicadorId);
     }
+    
+    @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
+    public List<Indicador> obtenerIndicadorByClasID(Integer clasId) {
+        return indicadorDAO.obtenerIndicadorByClasID(clasId);
+    }      
 
     @RolesAllowed({"ADMINISTRADOR", "USUARIO_ADMINISTRADOR_SEGUIMIENTO", "USUARIO_INTERNO_SEGUIMIENTO", "USUARIO_EXTERNO_SEGUIMIENTO"})
     public List<IndicadorDTO> cargarIndicadores(int first, int pageSize,

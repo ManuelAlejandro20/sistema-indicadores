@@ -6,10 +6,12 @@
 package com.ua.sistemaindicadores.frontend.beans;
 
 import com.ua.sistemaindicadores.backend.entities.Clasificacion;
+import com.ua.sistemaindicadores.backend.entities.Indicador;
 import com.ua.sistemaindicadores.backend.entities.IndicadorTipo;
 import com.ua.sistemaindicadores.backend.exceptions.NotificacionCorreoException;
 import com.ua.sistemaindicadores.backend.services.ClasificacionService;
 import com.ua.sistemaindicadores.backend.services.CorreoService;
+import com.ua.sistemaindicadores.backend.services.IndicadorService;
 import com.ua.sistemaindicadores.backend.services.TipoIndicadorService;
 import java.io.IOException;
 import javax.inject.Named;
@@ -18,6 +20,7 @@ import javax.inject.Inject;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +42,8 @@ public class EditarClasificacionBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String direccionSI = "http://localhost:8080/SistemaIndicadores-1.0-SNAPSHOT/faces/inicio/inicio.xhtml";
 
+    @Inject
+    transient private IndicadorService indicadorService;     
     @Inject
     transient private ClasificacionService clasificacionService;
     @Inject
@@ -128,6 +133,7 @@ public class EditarClasificacionBean implements Serializable {
             //Datos de la clasificacion antes de actualizar
             String nombreAntiguo = clas.getNombre();
             String nombreTipoAntiguo = clas.getTipo();
+            Short vigenciaAntiguaSh = clas.getEstado();
             String vigenciaAntigua = (clas.getEstado() == 1)? "VIGENTE" : "NO VIGENTE";
             String descripcionAntigua = clas.getDescripcion();
             
@@ -146,6 +152,16 @@ public class EditarClasificacionBean implements Serializable {
                 context.addMessage("mensaje", new FacesMessage(FacesMessage.SEVERITY_INFO, "ATENCIÓN", 
                         "La clasificación " + nombreClasificacion + " ha sido actualizado correctamente")
                 );
+                
+                String mensajeIndicadores = "";
+                
+                //Si la clasificacion tiene indicadores asociados...
+                if(indicadorService.obtenerIndicadorByClasID(clas.getId()) != null){
+                    ArrayList<String> afectados = actualizarIndicadores(vigenciaAntiguaSh, numVigencia);                    
+                    if(!afectados.isEmpty()){
+                        mensajeIndicadores = mensajeIndicadoresAfectados(afectados, numVigencia);
+                    }
+                }                
                                                                
                 try {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -160,6 +176,7 @@ public class EditarClasificacionBean implements Serializable {
                             + "<li>Fecha actualización: " + formatter.format(clas.getFechaActualizacion()) + ".</li>"
                             + "</ul>"
                             + "<br/>"
+                            + mensajeIndicadores
                             + "<a href=" + direccionSI + ">Link Sistema de Indicadores</a>"
                             + "<br/>"                                
                             + "<br/>"
@@ -193,6 +210,41 @@ public class EditarClasificacionBean implements Serializable {
             }          
         }
     }
+    
+    private ArrayList<String> actualizarIndicadores(Short vigenciaAntiguaSh, Short numVigencia){
+        ArrayList<String> indicadoresAfectados = new ArrayList<String>();
+        List<Indicador> indicadores = indicadorService.obtenerIndicadores();
+        for(Indicador i : indicadores){
+
+            //Se le esta intentando cambiar la vigencia a la clasificacion por lo tanto seria un indicador
+            //afectado
+            if(vigenciaAntiguaSh != numVigencia){
+                if(i.getClasificacionId().getId() == clas.getId()){
+                    i.setEstado(numVigencia);
+                    indicadoresAfectados.add(i.getNombreIndicador());
+                    indicadorService.actualizarIndicador(i);
+                }                                                            
+            }                                 
+
+        }                
+        
+        return indicadoresAfectados;
+    }
+    
+    private String mensajeIndicadoresAfectados(ArrayList<String> indicadoresAfectados, Short numVigencia){        
+        String mensaje = "Las siguientes indicadores pertenecientes a " + nombreClasificacion + " cambiaron su estado a ";
+        if(numVigencia == 1){
+            mensaje += " VIGENTE:";
+        }else{
+            mensaje += " NO VIGENTE:";
+        }
+        mensaje += "<ul>";
+        for(String s : indicadoresAfectados){
+            mensaje += "<li>" + s + "</li>";
+        }
+        mensaje += "</ul><br/>";
+        return mensaje;
+    }     
 
     public String getId() {
         return id;

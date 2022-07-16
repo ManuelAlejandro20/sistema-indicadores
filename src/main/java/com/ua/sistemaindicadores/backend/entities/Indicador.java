@@ -21,6 +21,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -69,6 +71,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Indicador.findByEstadoActividad", query = "SELECT i FROM Indicador i WHERE i.estadoActividad = :estadoActividad"),
     @NamedQuery(name = "Indicador.findByFechaCreacion", query = "SELECT i FROM Indicador i WHERE i.fechaCreacion = :fechaCreacion"),
     @NamedQuery(name = "Indicador.findByFechaActualizacion", query = "SELECT i FROM Indicador i WHERE i.fechaActualizacion = :fechaActualizacion")})
+@NamedNativeQueries({
+    @NamedNativeQuery(name = "Indicador.findByClas", query = "SELECT * FROM indicadores.indicador i WHERE i.clasificacion_id=:id", resultClass=Indicador.class)})
 public class Indicador implements Serializable {
 
     private static final long serialVersionUID = 1L;

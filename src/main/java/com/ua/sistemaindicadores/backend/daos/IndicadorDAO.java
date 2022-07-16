@@ -103,6 +103,14 @@ public class IndicadorDAO extends AbstractDAO<Indicador> {
         return find(indicadorId);
     }        
     
+    public List<Indicador> obtenerIndicadorByClasID(Integer clasId) {
+        List<Indicador> indicadores = getEntityManager()
+                .createNamedQuery("Indicador.findByClas", Indicador.class)
+                .setParameter("id", clasId)
+                .getResultList();
+        return indicadores.isEmpty() ? null : indicadores;    
+    }
+    
     public IndicadorDTO obtenerIndicadorDTO(Integer indicadorId) {
         List<IndicadorDTO> dtos = getEntityManager()
                 .createNamedQuery("Indicador.obtenerDTO", IndicadorDTO.class)
