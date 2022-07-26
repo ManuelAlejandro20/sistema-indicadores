@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;  
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -62,9 +61,12 @@ public class EditarTipoIndicadorBean implements Serializable {
     
     private boolean disabled;
     
+    private List<Indicador> listaIndicadores;
+    
     @PostConstruct
     public void initalize(){
         disabled = false;
+        listaIndicadores = indicadorService.obtenerIndicadores();
         System.out.println("Inicio Bean Editar Tipo Indicador");
     }
     
@@ -201,10 +203,9 @@ public class EditarTipoIndicadorBean implements Serializable {
         ArrayList<String> clasificacionesAfectadas = new ArrayList<String>();
         ArrayList<String> indicadoresAfectados = new ArrayList<String>();
         Collection<Clasificacion> clasificaciones = it.getClasificacionCollection();
-        List<Indicador> indicadores = indicadorService.obtenerIndicadores();
         for(Clasificacion c : clasificaciones){
             c.setTipo(it.getNombre());
-            for(Indicador i : indicadores){
+            for(Indicador i : listaIndicadores){
                 
                 //Se le esta intentando cambiar la vigencia al tipo de indicador por lo tanto seria un indicador
                 //afectado

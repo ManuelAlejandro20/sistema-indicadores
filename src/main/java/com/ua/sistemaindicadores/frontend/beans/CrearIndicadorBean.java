@@ -139,7 +139,9 @@ public class CrearIndicadorBean implements Serializable {
     private Integer minValue = 2020;
     private Integer maxValue = 2030;
     
+    //Para cuando se escoja una frecuencia de medicion anual o bianual
     private Map<Integer, ActividadAnio> listaActividades;    
+    //Para cuando se escoja una frecuencia de medicion mensual o semestral
     private Map<Integer, TreeNodeMesSemestre> listaActividadesMesSemestre;
     
     private boolean mantenerLogros;    

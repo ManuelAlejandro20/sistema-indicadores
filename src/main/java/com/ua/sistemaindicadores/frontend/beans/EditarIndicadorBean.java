@@ -150,6 +150,8 @@ public class EditarIndicadorBean implements Serializable {
     private IndicadorTipo indicadorTipoSeleccionado;
     private Clasificacion clasificacionSeleccionada;
     private Indicador indicadorCargado;
+    
+    Collection<IndicadorMesSemestreAnioBianual> indicadorMSABCollection;
 
     private boolean disabled;
     
@@ -174,7 +176,7 @@ public class EditarIndicadorBean implements Serializable {
         listaUnidadRepresentacion = indicadorService.obtenerUnidadRepresentacion();
         
         listaActividades = new LinkedHashMap<Integer, ActividadAnio>();        
-        listaActividadesMesSemestre = new LinkedHashMap<Integer, TreeNodeMesSemestre>();
+        listaActividadesMesSemestre = new LinkedHashMap<Integer, TreeNodeMesSemestre>();        
         mantenerLogros = true;        
         mantenerLogrosNewStep = true;        
            
@@ -244,6 +246,8 @@ public class EditarIndicadorBean implements Serializable {
                 actividadComprometida = indicadorCargado.getComentario();
                 estadoActividad = indicadorCargado.getEstadoActividad();
 
+                indicadorMSABCollection = indicadorCargado.getIndicadorMesSemestreAnioBianualCollection();
+                
                 if(indicadorCargado.getEstado() == 1){
                     vigencia = "VIGENTE";
                     listaIndicadorTipo = listaIndicadorTipoVigente;
@@ -260,7 +264,7 @@ public class EditarIndicadorBean implements Serializable {
                                 
                 minValue = 9999;
                 maxValue = indicadorCargado.getAnioCumplimientoId().getAnioCumplimiento();
-                
+                                                
                 for(IndicadorMesSemestreAnioBianual i : actividadesAsociadas){
                     if(i.getAnioId().getAnio() < minValue){
                         minValue = i.getAnioId().getAnio();
@@ -905,8 +909,9 @@ public class EditarIndicadorBean implements Serializable {
         indicadorCargado.setUnidadProveedoraCollection(setUnidadProveedora);
         
         LinkedList<IndicadorMesSemestreAnioBianual> collectionActividades = new LinkedList<IndicadorMesSemestreAnioBianual>();        
-        LinkedHashSet<IndicadorMesSemestreAnioBianual> collectionSet =  new LinkedHashSet<IndicadorMesSemestreAnioBianual>(indicadorCargado.getIndicadorMesSemestreAnioBianualCollection());                                                
+        LinkedHashSet<IndicadorMesSemestreAnioBianual> collectionSet =  new LinkedHashSet<IndicadorMesSemestreAnioBianual>(indicadorMSABCollection);                                                
         LinkedList<IndicadorMesSemestreAnioBianual> collection = new LinkedList<IndicadorMesSemestreAnioBianual>(collectionSet);
+        //Para que la coleccion sea ordenada por ID de menor a mayor
         collection.sort(Comparator.comparing(IndicadorMesSemestreAnioBianual::getId));                          
         
         IndicadorMesSemestreAnioBianual actividadIMSAB = new IndicadorMesSemestreAnioBianual();

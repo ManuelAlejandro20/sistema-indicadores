@@ -63,13 +63,16 @@ public class EditarClasificacionBean implements Serializable {
     private List<IndicadorTipo> listaIndicadorTipoNoVigente;
     private IndicadorTipo indicadorTipoSeleccionado;        
     
+    private List<Indicador> listaIndicadores;    
+    
     private boolean disabled;
-
+        
     @PostConstruct
     public void initalize() {
         listaIndicadorTipoVigente = tipoIndicadorService.obtenerTiposIndicadoresByEstado(Short.valueOf("1"));
         listaIndicadorTipoNoVigente = tipoIndicadorService.obtenerTiposIndicadoresByEstado(Short.valueOf("0"));
         disabled = false;
+        listaIndicadores = indicadorService.obtenerIndicadores();
         System.out.println("Inicio Bean Editar Tipo Indicador");
     }
 
@@ -212,9 +215,8 @@ public class EditarClasificacionBean implements Serializable {
     }
     
     private ArrayList<String> actualizarIndicadores(Short vigenciaAntiguaSh, Short numVigencia){
-        ArrayList<String> indicadoresAfectados = new ArrayList<String>();
-        List<Indicador> indicadores = indicadorService.obtenerIndicadores();
-        for(Indicador i : indicadores){
+        ArrayList<String> indicadoresAfectados = new ArrayList<String>();       
+        for(Indicador i : listaIndicadores){
 
             //Se le esta intentando cambiar la vigencia a la clasificacion por lo tanto seria un indicador
             //afectado
