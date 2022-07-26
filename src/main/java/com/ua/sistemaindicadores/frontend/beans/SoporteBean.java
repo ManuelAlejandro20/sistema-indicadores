@@ -54,7 +54,7 @@ public class SoporteBean implements Serializable{
             Date fecha = Calendar.getInstance().getTime();
             String fecha_ = sf.format(fecha);
             try {
-                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Soporte sistema de indicadores", "Se ha enviado una solicitud de soporte del sistema de indicadores.<br/> "
+                correoService.enviarMensajeTexto("SOPORTE.DVCME@uantof.cl", "Soporte sistema de indicadores", "Se ha enviado una solicitud de soporte del sistema de indicadores.<br/> "
                         +"<br/>"
                         +"<ul>"
                         +"<li>Nombre(s): "+ nombres+".</li>"

@@ -88,7 +88,7 @@ public class CrearTipoIndicadorBean implements Serializable {
             try {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
-                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha creado un registro de un nuevo tipo de indicador.<br/> "
+                correoService.enviarMensajeTexto("SOPORTE.DVCME@uantof.cl", "Sistema de Indicadores", "Se ha creado un registro de un nuevo tipo de indicador.<br/> "
                         + "<ul>"
                         + "<li>Nombre tipo de indicador: " + nuevoIndicadorTipo.getNombre() + ".</li>"
                         + "<li>Estado: " + vigencia + ".</li>"

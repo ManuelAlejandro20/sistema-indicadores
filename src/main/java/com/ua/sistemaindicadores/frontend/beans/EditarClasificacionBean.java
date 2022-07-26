@@ -169,7 +169,7 @@ public class EditarClasificacionBean implements Serializable {
                 try {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                     formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
-                    correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha actualizado una clasificación.<br/> "
+                    correoService.enviarMensajeTexto("SOPORTE.DVCME@uantof.cl", "Sistema de Indicadores", "Se ha actualizado una clasificación.<br/> "
                             + "<ul>"
                             + "<li>Nombre clasificación: " + nombreAntiguo + " ---> " + clas.getNombre() + ".</li>"
                             + "<li>Tipo: " + nombreTipoAntiguo + " ---> " + clas.getTipo() + ".</li>"

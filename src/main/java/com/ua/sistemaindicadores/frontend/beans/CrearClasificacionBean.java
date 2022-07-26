@@ -110,7 +110,7 @@ public class CrearClasificacionBean implements Serializable {
             try {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
-                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha creado un registro de una nueva clasificación.<br/> "
+                correoService.enviarMensajeTexto("SOPORTE.DVCME@uantof.cl", "Sistema de Indicadores", "Se ha creado un registro de una nueva clasificación.<br/> "
                         + "<ul>"
                         + "<li>Nombre clasificación: " + nuevaClasificacion.getNombre() + ".</li>"
                         + "<li>Tipo de indicador asociado: " + nuevaClasificacion.getTipo() + ".</li>"                                    

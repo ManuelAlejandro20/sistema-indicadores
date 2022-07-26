@@ -1092,7 +1092,7 @@ public class EditarIndicadorBean implements Serializable {
             try {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 formatter.setTimeZone(TimeZone.getTimeZone("GMT-4"));
-                correoService.enviarMensajeTexto("manueltrigo.at@gmail.com", "Sistema de Indicadores", "Se ha actualizado un indicador.<br/> "
+                correoService.enviarMensajeTexto("SOPORTE.DVCME@uantof.cl", "Sistema de Indicadores", "Se ha actualizado un indicador.<br/> "
                         + "<ul>"
                         + "<li>Tipo indicador: " + indicadorTipoSeleccionadoAntiguo.getNombre() + " ---> " + indicadorTipoSeleccionado.getNombre() + ".</li>"
                         + "<li>Clasificación: " + clasificacionSeleccionadaAntiguo.getNombre() + " ---> " + clasificacionSeleccionada.getNombre() + ".</li>"
